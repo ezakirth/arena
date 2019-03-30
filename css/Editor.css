@@ -1,0 +1,164 @@
+#Editor {
+    position:fixed;
+    top:0px;
+    left:0px;
+    height: 100%;
+    width: 256px;
+    padding-left:10px;
+    padding-right:10px;
+    background-color: rgba(24, 34, 45, 0.9);
+}
+
+a {
+    text-decoration: none;
+    color: #94c0dc;
+}
+
+#View {
+    position:fixed;
+    top:0px;
+    left:0px;
+    height: 100%;
+    width: 100%;
+}
+
+div.menuItem {
+    clear:both;
+    position: relative;
+    width: 100%;
+    box-sizing : border-box;
+    text-align:center;
+}
+
+label.menuItem {
+    background-color: rgba(41, 128, 185, .7);
+    border-radius: 5px;
+    box-sizing : border-box;
+    border: 1px solid rgba(41, 128, 185, 0.5);
+    padding: 3px 5px 3px;
+    display: block;
+    margin-bottom: 3px;
+    margin-top: 10px;
+    text-align: left;
+    cursor : pointer;
+}
+
+label.menuItem.hiding {
+    background-color: rgba(9, 46, 71, 0.7);    
+}
+
+label.menuItem:before {
+    content : "▼ ";
+}
+
+label.menuItem.hiding:before {
+    content : "▶ ";
+}
+
+label.itemLabel {
+    line-height: 23px;
+    float:left;
+}
+
+input[type="text"], input[type="number"] {
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 2px 5px 2px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 96px;
+    text-align:right;
+    float:right;
+    background-color: rgba(24, 34, 45, 0.7);
+    color: white;
+    border-radius: 15px;
+    box-sizing : border-box;   
+}
+
+input[type="file"] {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+label.file {
+    display: inline-block;
+    border-radius: 15px;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 2px 40px 2px;
+    background-color: transparent;
+    float:none;
+    margin:3px;
+}
+
+input[type="button"]:hover, label.file:hover {
+    background-color: rgba(22, 47, 73, 0.7);
+    cursor: pointer;
+}
+
+input[type="button"] {
+    display: inline-block;
+    border-radius: 15px;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 2px 40px 2px;
+    background-color: transparent;
+    margin: 3px;
+    line-height:23px;
+    font-size: 1em;
+    color: #94c0dc;
+}
+
+input[type="button"]:disabled {
+    cursor: default;
+    color: #2c4657;
+    background-color:transparent;
+}
+
+select:disabled, input:disabled, input:read-only {
+    cursor: default;
+    color: #94c0dc;
+    background-color:transparent;
+}
+
+input[type="color"] {
+    background-color: transparent;
+    width: 96px;
+    padding: 2px 5px 2px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    border-radius: 15px;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    float:right;
+    box-sizing: border-box; 
+    height: 25px;
+}
+
+input[type="checkbox"] {
+    background: inherit;
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    color: #94c0dc;
+    margin-top:7px;
+    float:right;
+}
+
+select {
+    border: 1px solid rgba(41, 128, 185, 0.3);
+    padding: 2px 5px 2px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 128px;
+    text-align:right;
+    float:right;
+    background-color: rgba(24, 34, 45, 0.7);
+    color: white;
+    border-radius: 15px;
+    box-sizing : border-box;   
+}
+
+input:focus, select:focus {
+    outline: none;
+}
+
+
+
