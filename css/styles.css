@@ -20,13 +20,8 @@ body {
     align-items: center;
     justify-content: center;
 }
-#canvas0, #canvas1 {
+#canvas, #canvas0, #canvas1 {
     /*cursor: crosshair;*/
     position:absolute;
     width:100%;
-}
-
-#overlay {
-    position:absolute;
-    background-color:transparent;
 }

@@ -2,9 +2,6 @@
 Editor.map = {
 
     init: function (w, h, forceNew) {
-        this.x = 0;
-        this.y = 0;
-
         this.w = w;
         this.h = h;
 
@@ -36,76 +33,97 @@ Editor.map = {
 
     },
 
+
+
+
     render: function () {
-        this.x = Input.viewPos.x / this.tileSize;
-        this.y = Input.viewPos.y / this.tileSize;
-        var ix = Math.floor(this.x);
-        var fx = this.x - ix;
-        var fx = fx * this.tileSize;
-        var iy = Math.floor(this.y);
-        var fy = this.y - iy;
-        var fy = fy * this.tileSize;
-        var px = 0;
-        var py = 0;
+        let viewSizeX = Math.ceil(gfx.canvas.width / this.tileSize) + 1;
+        let viewSizeY = Math.ceil(gfx.canvas.height / this.tileSize) + 1;
+        let pMapX = Math.floor(Input.view.x);
+        let pMapY = Math.floor(Input.view.y);
 
-        Graphics.pushMatrix();
-        Graphics.translate(this.tileSize / 2 - fx, this.tileSize / 2 - fy);
+        gfx.pushMatrix();
+        gfx.translate(-Input.view.x * this.tileSize, -Input.view.y * this.tileSize);
 
-        this.nb = 0;
-        let maxX = ix + Math.ceil(Graphics.width / this.tileSize) + 1;
-        let maxY = iy + Math.ceil(Graphics.height / this.tileSize) + 1;
+        // on boucle sur toutes les tiles autour du joueur
+        for (let x = pMapX; x < pMapX + viewSizeX; x++) {
+            for (let y = pMapY; y < pMapY + viewSizeY; y++) {
+                // on empeche de regarder en dehors de la map (là où il n'y a pas de tile)
+                if (x >= 0 && x < this.w && y >= 0 && y < this.h) {
+                    let px = x * this.tileSize;
+                    let py = y * this.tileSize;
 
-        for (var x = ix; x < maxX; x++) {
-            for (var y = iy; y < maxY; y++) {
-                if (x < this.w && y < this.h && x >= 0 && y >= 0) {
-                    this.nb++;
                     var block = this.data[x][y];
                     if (block.tex) {
-                        Graphics.sprite(block.tex, px, py, this.tileSize, this.tileSize);
+                        gfx.drawTile(block.tex, px, py);
                     }
                     if (block.shadow) {
-                        Graphics.sprite(block.shadow, px, py, this.tileSize, this.tileSize);
+                        gfx.drawTile(block.shadow, px, py);
                     }
                     if (block.decals) {
-                        for (var i = 0; i < block.decals.length; i++) {
-                            Graphics.sprite(block.decals[i], px, py, this.tileSize, this.tileSize);
+                        for (let i = 0; i < block.decals.length; i++) {
+                            gfx.drawTile(block.decals[i], px, py);
+                        }
+                    }
+                    if (Editor.showGrid) {
+                        if (block.solid) {
+                            gfx.drawTile("red", px, py);
+                        } else {
+                            gfx.drawTile("green", px, py);
                         }
                     }
                     if (block.portal) {
                         if (block.portal.dx) {
-                            //                       tint(block.portal.r, block.portal.g, block.portal.b, 140);
+                            //   tint(block.portal.r, block.portal.g, block.portal.b, 140);
                         }
-                        Graphics.sprite("assets/portal", px, py, this.tileSize);
+                        gfx.drawTile("portal", px, py);
                         //                    tint(255);
                     }
                     if (block.pickup) {
-                        Graphics.sprite("light", px, py, this.tileSize, this.tileSize);
-                        Graphics.sprite(block.pickup, px, py, this.tileSize, this.tileSize);
+                        gfx.drawTile("light", px, py);
+                        gfx.drawTile(block.pickup, px, py);
                     }
-                    if (Editor.showGrid) {
-                        if (block.solid) {
-                            Graphics.fill(255, 0, 0, 30);
-                        } else {
-                            Graphics.fill(0, 255, 0, 30);
-                        }
-                        Graphics.rect(px - this.tileSize / 2, py - this.tileSize / 2, this.tileSize, this.tileSize);
-                    }
-                }
-                py = py + this.tileSize;
-            }
-            px = px + this.tileSize;
-            py = 0;
-        }
 
-        Graphics.popMatrix();
+
+                }
+            }
+        }
+        gfx.popMatrix();
 
     },
+
+
 
     resetData: function () {
         let w = parseInt($("#editor_Width_id").val());
         let h = parseInt($("#editor_Height_id").val());
         this.init(w, h, true);
-    }
+    },
 
+
+    saveData: function (data, filename) {
+        var json = JSON.stringify(data);
+        localStorage.setItem('tileData', json);
+
+        var blob = new Blob([json], { type: "octet/stream" });
+        var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        document.body.append(a);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        $(a).remove();
+        window.URL.revokeObjectURL(url);
+    },
+
+    loadData: function (e) {
+        if (e.target.files[0]) {
+            var tmppath = URL.createObjectURL(e.target.files[0]);
+            $.getJSON(tmppath, function (data) {
+                Editor.map.load(data);
+            });
+        }
+    }
 
 }

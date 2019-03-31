@@ -1,5 +1,5 @@
 
-Editor.addItem = function (type, px, py) {
+Editor.addPickup = function (type, px, py) {
     var tile = this.map.data[px][py];
     if (tile.solid) return;
 
@@ -11,7 +11,7 @@ Editor.addItem = function (type, px, py) {
     Input.mouse.left = false;
 }
 
-Editor.clearItem = function (px, py) {
+Editor.clearPickup = function (px, py) {
     var tile = this.map.data[px][py];
 
     if (tile.pickup && tile.pickup.startsWith('pickup_flag')) {

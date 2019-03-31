@@ -81,7 +81,7 @@ var Input = {
             Input.real.y = event.pageY;
         }
 
-        point.x = Input.real.x * Graphics.ratio.x;
-        point.y = (Input.real.y - Graphics.offset.y) * Graphics.ratio.y;
+        point.x = Input.real.x * gfx.ratio.x;
+        point.y = (Input.real.y - gfx.offset.y) * gfx.ratio.y;
     },
 };

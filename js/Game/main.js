@@ -3,7 +3,7 @@
 var solo = false;
 var Game;
 function init() {
-    Graphics.init();
+    gfx.init();
 
     Game.init();
     Input.init();
@@ -12,13 +12,13 @@ function init() {
 }
 
 function loop() {
+    requestAnimationFrame(loop);
+
     // logic
     Game.update();
 
     // graphics
     Game.render();
-
-    requestAnimationFrame(loop);
 }
 
 

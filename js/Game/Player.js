@@ -13,7 +13,7 @@ class Player {
     }
 
     update() {
-        this.dir = Vector.subtract(new Vector(Graphics.width / 2, Graphics.height / 2), Input.pos).normalize();
+        this.dir = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), Input.pos).normalize();
         this.dirSide = Vector.rotate(this.dir, Math.PI / 2);
 
         let oldX = this.pos.x;
@@ -59,10 +59,10 @@ class Player {
         var iy = Math.floor(my);
         var fy = (my - iy) * tileSize;
 
-        Graphics.pushMatrix();
-        var w = Math.ceil(Graphics.width / tileSize / 2);
-        var h = Math.ceil(Graphics.height / tileSize / 2);
-        Graphics.translate(Graphics.width / 2 + tileSize / 2 - fx, Graphics.height / 2 + tileSize / 2 - fy);
+        gfx.pushMatrix();
+        var w = Math.ceil(gfx.width / tileSize / 2);
+        var h = Math.ceil(gfx.height / tileSize / 2);
+        gfx.translate(gfx.width / 2 + tileSize / 2 - fx, gfx.height / 2 + tileSize / 2 - fy);
 
         var px = -w * tileSize;
         var py = -h * tileSize;
@@ -74,14 +74,14 @@ class Player {
                     block = Game.map.data[x][y];
                     // read && display tile content;
                     if (block.tex) {
-                        Graphics.sprite(block.tex, px, py, tileSize, tileSize);
+                        gfx.sprite(block.tex, px, py, tileSize, tileSize);
                     }
                     if (block.shadow) {
-                        Graphics.sprite(block.shadow, px, py, tileSize, tileSize);
+                        gfx.sprite(block.shadow, px, py, tileSize, tileSize);
                     }
                     if (block.decals) {
                         for (var i = 0; i < block.decals.length; i++) {
-                            Graphics.sprite(block.decals[i], px, py, tileSize, tileSize);
+                            gfx.sprite(block.decals[i], px, py, tileSize, tileSize);
                         }
                     }
 
@@ -95,8 +95,8 @@ class Player {
                         tint(255);
                     }
                     if (block.pickup) {
-                        Graphics.sprite("light", px, py, bigfastmorph, bigfastmorph);
-                        Graphics.sprite(block.pickup, px, py, smallslowmorph, smallslowmorph);
+                        gfx.sprite("light", px, py, bigfastmorph, bigfastmorph);
+                        gfx.sprite(block.pickup, px, py, smallslowmorph, smallslowmorph);
                     }
                 }
                 py = py + tileSize;
@@ -106,19 +106,19 @@ class Player {
         }
 
 
-        Graphics.popMatrix();
+        gfx.popMatrix();
 
 
-        Graphics.pushMatrix();
-        Graphics.translate(Graphics.width / 2, Graphics.height / 2);
+        gfx.pushMatrix();
+        gfx.translate(gfx.width / 2, gfx.height / 2);
 
 
         let ang = Math.atan2(this.dir.y, this.dir.x);
 
-        Graphics.rotate(ang - Math.PI / 2);
-        Graphics.sprite("shadow", 0, 0, Game.map.tileSize * ((320 / 3) / 210), Game.map.tileSize);
-        Graphics.spriteSheet("Toon", 0, 0, 320 / 3, 210, 0, 0, Game.map.tileSize * ((320 / 3) / 210), Game.map.tileSize);
-        Graphics.popMatrix();
+        gfx.rotate(ang - Math.PI / 2);
+        gfx.sprite("shadow", 0, 0, Game.map.tileSize * ((320 / 3) / 210), Game.map.tileSize);
+        gfx.spriteSheet("Toon", 0, 0, 320 / 3, 210, 0, 0, Game.map.tileSize * ((320 / 3) / 210), Game.map.tileSize);
+        gfx.popMatrix();
 
     }
 

@@ -2,7 +2,7 @@ var Editor = {
     active: true,
     elem: null,
     showGrid: true,
-    clearItemsOnErase: false,
+    clearPickupsOnErase: false,
     paintRandomFloor: true,
     map: {},
 
@@ -15,17 +15,10 @@ var Editor = {
     },
 
     update: function () {
-        if (Input.real.x > 276) {
-            let ix = Math.floor(this.map.x);
-            let fx = this.map.x - ix;
-            let iy = Math.floor(this.map.y);
-            let fy = this.map.y - iy;
-            let x = Math.floor(Input.pos.x / this.map.tileSize + fx);
-            let y = Math.floor(Input.pos.y / this.map.tileSize + fy);
+        if (Input.mouse.browser.x > 276) {
 
-            let px = (x + ix).clamp(0, this.map.w - 1);
-            let py = (y + iy).clamp(0, this.map.h - 1);
-
+            let px = Input.mapX;
+            let py = Input.mapY;
             let selected = $("#editor_Brush_type_id").val();
 
             if (selected == "Smart Paint") {
@@ -34,27 +27,26 @@ var Editor = {
             }
             else {
                 if (Input.mouse.left) {
-                    if (selected == "Add Spawn") this.addItem("spawn_" + $("#editor_Spawn_team_id").val(), px, py);
-                    if (selected == "Add Weapons") this.addItem($("#editor_Weapon_id").val(), px, py);
-                    if (selected == "Add Pickups") this.addItem($("#editor_Pickup_id").val(), px, py);
-                    if (selected == "Add Portals") this.addItem($("#editor_Portal_id").val(), px, py);
-                    if (selected == "Add Flag (CTF)") this.addItem("flag_" + $("#editor_Flag_team_id").val(), px, py);
+                    if (selected == "Add Spawn") this.addPickup("spawn_" + $("#editor_Spawn_team_id").val(), px, py);
+                    if (selected == "Add Weapons") this.addPickup($("#editor_Weapon_id").val(), px, py);
+                    if (selected == "Add Pickups") this.addPickup($("#editor_Pickup_id").val(), px, py);
+                    if (selected == "Add Portals") this.addPickup($("#editor_Portal_id").val(), px, py);
+                    if (selected == "Add Flag (CTF)") this.addPickup("flag_" + $("#editor_Flag_team_id").val(), px, py);
                 }
-                if (Input.mouse.right) this.clearItem(px, py);
+                if (Input.mouse.right) this.clearPickup(px, py);
             }
         }
 
-        //       this.overlay.update();
     },
 
     render: function () {
-        Graphics.clear();
+        gfx.clear();
 
-        Graphics.sprite("bg", Graphics.width / 2, Graphics.height / 2, Graphics.width, Graphics.height);
+        gfx.sprite("bg", 0, 0, gfx.width, gfx.height);
 
         this.map.render();
 
-        Graphics.sprite("vignette", Graphics.width / 2, Graphics.height / 2, Graphics.width, Graphics.height);
+        gfx.sprite("vignette", 0, 0, gfx.width, gfx.height);
 
 
     }

@@ -2,7 +2,7 @@
 
 var Editor;
 function init() {
-    Graphics.init();
+    gfx.init();
 
     Editor.init();
     Input.init();
@@ -11,14 +11,14 @@ function init() {
 }
 
 function loop() {
+    requestAnimationFrame(loop);
+
     // logic
     Input.update();
     Editor.update();
 
     // graphics
     Editor.render();
-
-    requestAnimationFrame(loop);
 }
 
 

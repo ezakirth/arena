@@ -35,6 +35,27 @@ Editor.addDecal = function (type) {
 }
 
 /**
+ * add random decals
+ */
+Editor.randomDecals = function () {
+    for (var x = 0; x < this.map.w; x++) {
+        for (var y = 0; y < this.map.h; y++) {
+            var tile = this.map.data[x][y];
+
+            if (tile.tex && tile.tex.startsWith('floor')) {
+                tile.decals = [];
+                if (Math.random() > .90) {
+                    tile.decals.push('blood_' + Math.floor(Math.random() * 6 + 1));
+                }
+                if (Math.random() > .90) {
+                    tile.decals.push('dirt_' + Math.floor(Math.random() * 6 + 1));
+                }
+            }
+        }
+    }
+}
+
+/**
  * paint shadows
  */
 Editor.calculateShadows = function () {

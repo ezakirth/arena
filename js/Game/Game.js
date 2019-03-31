@@ -33,12 +33,12 @@ var Game = {
 
         for (let player of this.players)
         {
-            Graphics.setActiveCanvas(player.id);
-            Graphics.clear();
+            gfx.setActiveCanvas(player.id);
+            gfx.clear();
 
-            Graphics.sprite("bg", Graphics.width / 2, Graphics.height / 2, Graphics.width, Graphics.height);
+            gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
             player.render();
-            Graphics.sprite("vignette", Graphics.width / 2, Graphics.height / 2, Graphics.width, Graphics.height);
+            gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
         }
 
 

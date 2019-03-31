@@ -22,9 +22,10 @@ Editor.menuSetup = function () {
         ]
     }]);
     Editor.addEditorItem([{ block: "Paint", block_id: "block_paint", linked: true }]);
-    Editor.addEditorItem([{ block_id: "block_paint", type: "checkbox", label: "Clear items on erase", onchange: "Editor.clearItemsOnErase = this.checked;", checked: Editor.clearItemsOnErase }]);
+    Editor.addEditorItem([{ block_id: "block_paint", type: "checkbox", label: "Delete items on clearing", onchange: "Editor.clearPickupsOnErase = this.checked;", checked: Editor.clearPickupsOnErase }]);
     Editor.addEditorItem([{ block_id: "block_paint", type: "checkbox", label: "Paint random floor", onchange: "Editor.paintRandomFloor = this.checked;", checked: Editor.paintRandomFloor }]);
     Editor.addEditorItem([{ block_id: "block_paint", type: "button", value: "Randomize floor", onclick: "Editor.randomFloor()" }]);
+    Editor.addEditorItem([{ block_id: "block_paint", type: "button", value: "Randomize decals", onclick: "Editor.randomDecals()" }]);
 
     Editor.addEditorItem([{ block: "Weapons", block_id: "block_weapons", linked: true }]);
     Editor.addEditorItem([{
@@ -61,26 +62,26 @@ Editor.menuSetup = function () {
         ]
     }]);
 
+    /*
+        Editor.addEditorItem([{ block: "Blood", block_id: "block_blood" }]);
+        Editor.addEditorItem([
+            { block_id: "block_blood", type: "button", value: "+", onclick: "Editor.addDecal('blood')" },
+            { block_id: "block_blood", type: "button", value: "-", onclick: "Editor.removeDecal('blood')" }
+        ]);
 
-    Editor.addEditorItem([{ block: "Blood", block_id: "block_blood" }]);
-    Editor.addEditorItem([
-        { block_id: "block_blood", type: "button", value: "+", onclick: "Editor.addDecal('blood')" },
-        { block_id: "block_blood", type: "button", value: "-", onclick: "Editor.removeDecal('blood')" }
-    ]);
-
-    Editor.addEditorItem([{ block: "Decals", block_id: "block_decals" }]);
-    Editor.addEditorItem([
-        { block_id: "block_decals", type: "button", value: "+", onclick: "Editor.addDecal('dirt')" },
-        { block_id: "block_decals", type: "button", value: "-", onclick: "Editor.removeDecal('dirt')" }
-    ]);
-
+        Editor.addEditorItem([{ block: "Decals", block_id: "block_decals" }]);
+        Editor.addEditorItem([
+            { block_id: "block_decals", type: "button", value: "+", onclick: "Editor.addDecal('dirt')" },
+            { block_id: "block_decals", type: "button", value: "-", onclick: "Editor.removeDecal('dirt')" }
+        ]);
+    */
 
 
 
     Editor.addEditorItem([{ block: "File", block_id: "block_file" }]);
     Editor.addEditorItem([
-        { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: Editor.loadData },
-        { block_id: "block_file", type: "button", value: "Save", onclick: "Editor.saveData(Editor.map.data, 'map.json')" }
+        { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: Editor.map.loadData },
+        { block_id: "block_file", type: "button", value: "Save", onclick: "Editor.map.saveData(Editor.map.data, 'map.json')" }
     ]);
 
 

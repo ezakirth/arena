@@ -177,7 +177,7 @@ Editor.clear = function (px, py) {
     BC.decals = [];
     BR.decals = [];
 
-    if (this.clearItemsOnErase) {
+    if (this.clearPickupsOnErase) {
         TL.pickup = null;
         TC.pickup = null;
         TR.pickup = null;

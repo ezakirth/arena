@@ -1,5 +1,5 @@
 "use strict";
-var Graphics = {
+var gfx = {
     width: 1920,
     height: 1080,
     offset: { x: 0, y: 0 },
@@ -11,20 +11,9 @@ var Graphics = {
 
     init() {
         this.setupCanvas();
-
-        this.width = 1920;
         $(this.canvas).css({ width: '100%' });
 
         this.resizeCanvas();
-
-    },
-
-    getWidth: function () {
-        return this.ctx.canvas.width;
-    },
-
-    getHeight: function () {
-        return this.ctx.canvas.height;
     },
 
     setupCanvas: function () {
@@ -47,32 +36,45 @@ var Graphics = {
 
     sprite: function (img, x, y, w, h) {
         img = '/assets/' + img + '.png';
-        let image = Graphics.cachedImages[img];
+        let image = gfx.cachedImages[img];
 
         if (!image) {
-            Graphics.cachedImages[img] = new Image(256, 256);
-            image = Graphics.cachedImages[img];
+            gfx.cachedImages[img] = new Image(256, 256);
+            image = gfx.cachedImages[img];
             image.src = img;
         }
         else {
             let width = w || image.naturalWidth;
             let height = h || image.naturalHeight;
+            gfx.ctx.drawImage(image, x, y, width, height);
+        }
+    },
 
-            Graphics.ctx.drawImage(image, x - width / 2, y - height / 2, width, height);
+    drawTile: function (img, x, y) {
+        img = '/assets/' + img + '.png';
+        let image = gfx.cachedImages[img];
+
+        if (!image) {
+            gfx.cachedImages[img] = new Image(256, 256);
+            image = gfx.cachedImages[img];
+            image.src = img;
+        }
+        else {
+            gfx.ctx.drawImage(image, x, y, Editor.map.tileSize, Editor.map.tileSize);
         }
     },
 
     spriteSheet: function (img, sx, sy, sw, sh, dx, dy, dw, dh) {
         img = '/assets/' + img + '.png';
-        let image = Graphics.cachedImages[img];
+        let image = gfx.cachedImages[img];
 
         if (!image) {
-            Graphics.cachedImages[img] = new Image(256, 256);
-            image = Graphics.cachedImages[img];
+            gfx.cachedImages[img] = new Image(256, 256);
+            image = gfx.cachedImages[img];
             image.src = img;
         }
         else {
-            Graphics.ctx.drawImage(image, sx, sy, sw, sh, dx - dw / 2, dy - dh / 2, dw, dh);
+            gfx.ctx.drawImage(image, sx, sy, sw, sh, dx - dw / 2, dy - dh / 2, dw, dh);
         }
     },
 
@@ -102,3 +104,5 @@ var Graphics = {
     }
 
 }
+
+window.onresize = function () { gfx.resizeCanvas(); }
