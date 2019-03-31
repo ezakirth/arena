@@ -1,7 +1,7 @@
 "use strict";
-
-var solo = false;
-var Game;
+var tileSize = 128;
+var solo = true;
+var Game, Editor;
 function init() {
     gfx.init();
 

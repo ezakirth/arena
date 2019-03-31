@@ -60,7 +60,7 @@ var gfx = {
             image.src = img;
         }
         else {
-            gfx.ctx.drawImage(image, x, y, Editor.map.tileSize, Editor.map.tileSize);
+            gfx.ctx.drawImage(image, x, y, tileSize, tileSize);
         }
     },
 

@@ -44,7 +44,15 @@ Editor.menuSetup = function () {
     Editor.addEditorItem([{ block: "Portals", block_id: "block_portals", linked: true }]);
     Editor.addEditorItem([{
         block_id: "block_portals", type: "select", label: "Portal", list: [
-            { text: "Red" }, { text: "Blue" }, { text: "Green" }, { text: "Tellow" }
+            { text: "green" },
+            { text: "blue" },
+            { text: "orange" },
+            { text: "turquoise" },
+            { text: "yellow" },
+            { text: "pink" },
+            { text: "purple" },
+            { text: "white" },
+            { text: "red" },
         ]
     }]);
 

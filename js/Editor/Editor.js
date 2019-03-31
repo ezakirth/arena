@@ -4,6 +4,8 @@ var Editor = {
     showGrid: true,
     clearPickupsOnErase: false,
     paintRandomFloor: false,
+
+    portalOrigin: null,
     map: {},
 
     init: function () {
@@ -30,10 +32,15 @@ var Editor = {
                     if (selected == "Add Spawn") this.addPickup("spawn_" + $("#editor_Spawn_team_id").val(), px, py);
                     if (selected == "Add Weapons") this.addPickup($("#editor_Weapon_id").val(), px, py);
                     if (selected == "Add Pickups") this.addPickup($("#editor_Pickup_id").val(), px, py);
-                    if (selected == "Add Portals") this.addPickup($("#editor_Portal_id").val(), px, py);
+                    if (selected == "Add Portals") this.addPortal($("#editor_Portal_id").val(), px, py);
                     if (selected == "Add Flag (CTF)") this.addPickup("flag_" + $("#editor_Flag_team_id").val(), px, py);
                 }
-                if (Input.mouse.right) this.clearPickup(px, py);
+                if (Input.mouse.right) {
+                    if (selected == "Add Portals")
+                        this.clearPortal(px, py);
+                    else
+                        this.clearPickup(px, py);
+                }
             }
         }
 

@@ -5,8 +5,6 @@ Editor.map = {
         this.w = w;
         this.h = h;
 
-        this.tileSize = 96;
-
         this.data = JSON.parse(localStorage.getItem('tileData'));
         if (!this.data || forceNew) {
             this.data = Array(this.w);
@@ -37,21 +35,21 @@ Editor.map = {
 
 
     render: function () {
-        let viewSizeX = Math.ceil(gfx.canvas.width / this.tileSize) + 1;
-        let viewSizeY = Math.ceil(gfx.canvas.height / this.tileSize) + 1;
+        let viewSizeX = Math.ceil(gfx.canvas.width / tileSize) + 1;
+        let viewSizeY = Math.ceil(gfx.canvas.height / tileSize) + 1;
         let pMapX = Math.floor(Input.view.x);
         let pMapY = Math.floor(Input.view.y);
 
         gfx.pushMatrix();
-        gfx.translate(-Input.view.x * this.tileSize, -Input.view.y * this.tileSize);
+        gfx.translate(-Input.view.x * tileSize, -Input.view.y * tileSize);
 
         // on boucle sur toutes les tiles autour du joueur
         for (let x = pMapX; x < pMapX + viewSizeX; x++) {
             for (let y = pMapY; y < pMapY + viewSizeY; y++) {
                 // on empeche de regarder en dehors de la map (là où il n'y a pas de tile)
                 if (x >= 0 && x < this.w && y >= 0 && y < this.h) {
-                    let px = x * this.tileSize;
-                    let py = y * this.tileSize;
+                    let px = x * tileSize;
+                    let py = y * tileSize;
 
                     var block = this.data[x][y];
                     if (block.tex) {
@@ -72,12 +70,11 @@ Editor.map = {
                             gfx.drawTile("green", px, py);
                         }
                     }
+                    if (block.spawn) {
+                        gfx.drawTile(block.spawn, px, py);
+                    }
                     if (block.portal) {
-                        if (block.portal.dx) {
-                            //   tint(block.portal.r, block.portal.g, block.portal.b, 140);
-                        }
-                        gfx.drawTile("portal", px, py);
-                        //                    tint(255);
+                        gfx.drawTile("portal_" + block.portal.color, px, py);
                     }
                     if (block.pickup) {
                         gfx.drawTile("light", px, py);

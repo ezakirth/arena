@@ -44,15 +44,7 @@ Editor.paint = function (px, py) {
     var pBC2 = { x: px, y: (py + 2).clamp(0, this.map.h - 1) };
     var pBR = { x: (px + 1).clamp(0, this.map.w - 1), y: (py + 1).clamp(0, this.map.h - 1) };
 
-    var pBC2L = { x: (px - 1).clamp(0, this.map.w - 1), y: (py + 2).clamp(0, this.map.h - 1) };
-    var pBC2R = { x: (px + 1).clamp(0, this.map.w - 1), y: (py + 2).clamp(0, this.map.h - 1) };
-    var pTC2L = { x: (px - 1).clamp(0, this.map.w - 1), y: (py - 2).clamp(0, this.map.h - 1) };
-    var pTC2R = { x: (px + 1).clamp(0, this.map.w - 1), y: (py - 2).clamp(0, this.map.h - 1) };
 
-    var pCR2T = { x: (px + 2).clamp(0, this.map.w - 1), y: (py - 1).clamp(0, this.map.h - 1) };
-    var pCR2B = { x: (px + 2).clamp(0, this.map.w - 1), y: (py + 1).clamp(0, this.map.h - 1) };
-    var pCL2T = { x: (px - 2).clamp(0, this.map.w - 1), y: (py - 1).clamp(0, this.map.h - 1) };
-    var pCL2B = { x: (px - 2).clamp(0, this.map.w - 1), y: (py + 1).clamp(0, this.map.h - 1) };
 
     var TL = this.map.data[pTL.x][pTL.y];
     var TC = this.map.data[pTC.x][pTC.y];
@@ -69,14 +61,7 @@ Editor.paint = function (px, py) {
     var BC2 = this.map.data[pBC2.x][pBC2.y];
     var BR = this.map.data[pBR.x][pBR.y];
 
-    var BC2L = this.map.data[pBC2L.x][pBC2L.y];
-    var BC2R = this.map.data[pBC2R.x][pBC2R.y];
-    var TC2L = this.map.data[pTC2L.x][pTC2L.y];
-    var TC2R = this.map.data[pTC2R.x][pTC2R.y];
-    var CR2T = this.map.data[pCR2T.x][pCR2T.y];
-    var CR2B = this.map.data[pCR2B.x][pCR2B.y];
-    var CL2T = this.map.data[pCL2T.x][pCL2T.y];
-    var CL2B = this.map.data[pCL2B.x][pCL2B.y];
+
 
     if (TL.solid && TL.tex == null) TL.tex = 'wall_TL';
     if (BL.solid && BL.tex == null) BL.tex = 'wall_BL';
@@ -147,6 +132,24 @@ Editor.clear = function (px, py) {
     var pBC2 = { x: px, y: (py + 2).clamp(0, this.map.h - 1) };
     var pBR = { x: (px + 1).clamp(0, this.map.w - 1), y: (py + 1).clamp(0, this.map.h - 1) };
 
+    var pBC2L = { x: (px - 1).clamp(0, this.map.w - 1), y: (py + 2).clamp(0, this.map.h - 1) };
+    var pBC2R = { x: (px + 1).clamp(0, this.map.w - 1), y: (py + 2).clamp(0, this.map.h - 1) };
+    var pTC2L = { x: (px - 1).clamp(0, this.map.w - 1), y: (py - 2).clamp(0, this.map.h - 1) };
+    var pTC2R = { x: (px + 1).clamp(0, this.map.w - 1), y: (py - 2).clamp(0, this.map.h - 1) };
+
+    var pCR2T = { x: (px + 2).clamp(0, this.map.w - 1), y: (py - 1).clamp(0, this.map.h - 1) };
+    var pCR2B = { x: (px + 2).clamp(0, this.map.w - 1), y: (py + 1).clamp(0, this.map.h - 1) };
+    var pCL2T = { x: (px - 2).clamp(0, this.map.w - 1), y: (py - 1).clamp(0, this.map.h - 1) };
+    var pCL2B = { x: (px - 2).clamp(0, this.map.w - 1), y: (py + 1).clamp(0, this.map.h - 1) };
+
+    var BC2L = this.map.data[pBC2L.x][pBC2L.y];
+    var BC2R = this.map.data[pBC2R.x][pBC2R.y];
+    var TC2L = this.map.data[pTC2L.x][pTC2L.y];
+    var TC2R = this.map.data[pTC2R.x][pTC2R.y];
+    var CR2T = this.map.data[pCR2T.x][pCR2T.y];
+    var CR2B = this.map.data[pCR2B.x][pCR2B.y];
+    var CL2T = this.map.data[pCL2T.x][pCL2T.y];
+    var CL2B = this.map.data[pCL2B.x][pCL2B.y];
 
     var TL = this.map.data[pTL.x][pTL.y];
     var TC = this.map.data[pTC.x][pTC.y];

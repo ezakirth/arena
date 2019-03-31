@@ -6,6 +6,7 @@ class Tile {
         this.pickup = null;
         this.decals = [];
         this.shadow = null;
+        this.spawn = null;
         this.portal = null;
     }
 }

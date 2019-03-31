@@ -1,5 +1,5 @@
 "use strict";
-
+var tileSize = 96;
 var Editor;
 function init() {
     gfx.init();

@@ -73,11 +73,11 @@ Editor.calculateShadows = function () {
                 var BC = this.map.data[pBC.x][pBC.y];
 
                 if (CL.solid && BC.solid) tile.shadow = 'shadow_1';
-                if (!BL.solid && BC.solid) tile.shadow = 'shadow_2';
-                if (!BL.solid && !BC.solid && CL.solid) tile.shadow = 'shadow_3';
-                if (BL.solid && BC.solid && !CL.solid) tile.shadow = 'shadow_4';
-                if (CL.solid && BL.solid && !BC.solid) tile.shadow = 'shadow_5';
-                if (BL.solid && !CL.solid && !BC.solid) tile.shadow = 'shadow_6';
+                else if (!BL.solid && BC.solid) tile.shadow = 'shadow_2';
+                else if (!BL.solid && !BC.solid && CL.solid) tile.shadow = 'shadow_3';
+                else if (BL.solid && BC.solid && !CL.solid) tile.shadow = 'shadow_4';
+                else if (CL.solid && BL.solid && !BC.solid) tile.shadow = 'shadow_5';
+                else if (BL.solid && !CL.solid && !BC.solid) tile.shadow = 'shadow_6';
 
             }
         }

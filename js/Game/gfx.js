@@ -107,13 +107,7 @@ var gfx = {
         this.ctx[this.id].translate(x, y);
     },
 
-    fill: function (r, g, b, a) {
-        this.ctx[this.id].fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a / 100 + ')';;
-    },
-
-    rect: function (x, y, w, h) {
-        this.ctx[this.id].strokeRect(x, y, w, h);
-        this.ctx[this.id].fillRect(x, y, w, h);
-    }
 
 }
+
+window.onresize = function () { gfx.resizeCanvas(0); gfx.resizeCanvas(1); }

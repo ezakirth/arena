@@ -1,13 +1,18 @@
 
 Editor.addPickup = function (type, px, py) {
     var tile = this.map.data[px][py];
-    if (tile.solid) return;
+    if (tile.solid || tile.portal || tile.spawn) return;
 
     if (type.startsWith('flag')) {
         tile.tex = 'floor_flag';
     }
 
-    tile.pickup = "pickup_" + type;
+    if (type.startsWith('spawn')) {
+        tile.spawn = type;
+    }
+    else {
+        tile.pickup = "pickup_" + type;
+    }
     Input.mouse.left = false;
 }
 
@@ -18,6 +23,10 @@ Editor.clearPickup = function (px, py) {
         tile.tex = 'floor_1';
     }
 
+    tile.spawn = null;
+
     tile.pickup = null;
+
+
     Input.mouse.left = false;
 }

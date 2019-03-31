@@ -61,7 +61,7 @@ var Input = {
     },
 
     wheelAction: function (e) {
-        Editor.map.tileSize += (e.deltaY / Math.abs(e.deltaY)) * 2;
+        tileSize += (e.deltaY / Math.abs(e.deltaY)) * 2;
     },
 
     rightClick: function (e) {
@@ -75,9 +75,8 @@ var Input = {
         if (e.button == 1) Input.mouse.middle = false;
         if (e.button == 2) Input.mouse.right = false;
 
-        if (e.button == 0) {
-            Editor.calculateShadows();
-        }
+        Editor.calculateShadows();
+
     },
 
     inputDown: function (e) {
@@ -106,11 +105,11 @@ var Input = {
         mouse.y = (mouse.browser.y - gfx.offset.y) * gfx.ratio.y;
 
         // on annule la translation qu'on a fait pour l'affichage (voir drawTile)
-        var offsetX = Input.view.x * Editor.map.tileSize;
-        var offsetY = Input.view.y * Editor.map.tileSize;
+        var offsetX = Input.view.x * tileSize;
+        var offsetY = Input.view.y * tileSize;
 
-        let mapX = Math.floor((mouse.x + offsetX) / Editor.map.tileSize);
-        let mapY = Math.floor((mouse.y + offsetY) / Editor.map.tileSize);
+        let mapX = Math.floor((mouse.x + offsetX) / tileSize);
+        let mapY = Math.floor((mouse.y + offsetY) / tileSize);
         if (Editor.map.data[mapX] !== undefined && Editor.map.data[mapX][mapY] !== undefined) {
             Input.mapX = mapX;
             Input.mapY = mapY;
