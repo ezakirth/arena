@@ -4,7 +4,7 @@ Editor.addPickup = function (type, px, py) {
     if (tile.solid) return;
 
     if (type.startsWith('flag')) {
-        tile.tex = 'flag_floor';
+        tile.tex = 'floor_flag';
     }
 
     tile.pickup = "pickup_" + type;

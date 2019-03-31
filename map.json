@@ -1,1 +1,3279 @@
-[[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"flag_floor","solid":false,"pickup":"pickup_flag_blue","decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_3","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"flag_floor","solid":false,"pickup":"pickup_flag_green","decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_3","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_1"],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_spawn_blue","decals":[],"shadow":null,"portal":null},{"tex":"floor_4","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_spawn_green","decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_7","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_10","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_2","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_5","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_11","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_5","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["blood_1"],"shadow":"shadow_4","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_shotgun","decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_minigun","decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_minigun","decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_6","solid":false,"pickup":"pickup_shotgun","decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_2"],"shadow":null,"portal":null},{"tex":"floor_4","solid":false,"pickup":null,"decals":["dirt_6"],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["blood_6"],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_medkit","decals":["blood_2"],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_8","solid":false,"pickup":"pickup_medkit","decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["blood_2"],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_1"],"shadow":"shadow_4","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_shield","decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_5"],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_2","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_6"],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":"pickup_shield","decals":["dirt_4"],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_3"],"shadow":"shadow_5","portal":null},{"tex":"floor_4","solid":false,"pickup":null,"decals":["dirt_1"],"shadow":"shadow_1","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["blood_2","dirt_3"],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_6_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_1_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_6_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_1","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_9","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_3"],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_6","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["blood_5"],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_6"],"shadow":"shadow_5","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_3","portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_2_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_2","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":["dirt_2"],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_2","portal":null},{"tex":"t1_5_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_5_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"floor_1","solid":false,"pickup":null,"decals":[],"shadow":"shadow_4","portal":null},{"tex":"t1_2_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}],[{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":null,"solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_8","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_7","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null},{"tex":"t1_3_6","solid":true,"pickup":null,"decals":[],"shadow":null,"portal":null}]]
+[
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_flag",
+            "solid": false,
+            "pickup": "pickup_flag_blue",
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_3",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_flag",
+            "solid": false,
+            "pickup": "pickup_flag_green",
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_3",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_1"
+            ],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_spawn_blue",
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_4",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_spawn_green",
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_7",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_10",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_2",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_5",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_11",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_5",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "blood_1"
+            ],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_shotgun",
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_minigun",
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_minigun",
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_6",
+            "solid": false,
+            "pickup": "pickup_shotgun",
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_2"
+            ],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_4",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_6"
+            ],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "blood_6"
+            ],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_medkit",
+            "decals": [
+                "blood_2"
+            ],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_8",
+            "solid": false,
+            "pickup": "pickup_medkit",
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "blood_2"
+            ],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_1"
+            ],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_shield",
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_5"
+            ],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_2",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_6"
+            ],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": "pickup_shield",
+            "decals": [
+                "dirt_4"
+            ],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BL",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_3"
+            ],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_4",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_1"
+            ],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "blood_2",
+                "dirt_3"
+            ],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_BLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_L",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TLC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_1",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_9",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_3"
+            ],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_6",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "blood_5"
+            ],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_6"
+            ],
+            "shadow": "shadow_5",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_3",
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_T",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_2",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [
+                "dirt_2"
+            ],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_2",
+            "portal": null
+        },
+        {
+            "tex": "wall_BRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TRC",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "floor_1",
+            "solid": false,
+            "pickup": null,
+            "decals": [],
+            "shadow": "shadow_4",
+            "portal": null
+        },
+        {
+            "tex": "wall_B",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ],
+    [
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": null,
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_TR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_R",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        },
+        {
+            "tex": "wall_BR",
+            "solid": true,
+            "pickup": null,
+            "decals": [],
+            "shadow": null,
+            "portal": null
+        }
+    ]
+]
