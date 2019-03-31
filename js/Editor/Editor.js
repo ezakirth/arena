@@ -3,7 +3,7 @@ var Editor = {
     elem: null,
     showGrid: true,
     clearPickupsOnErase: false,
-    paintRandomFloor: true,
+    paintRandomFloor: false,
     map: {},
 
     init: function () {
