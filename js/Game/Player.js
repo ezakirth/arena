@@ -102,7 +102,7 @@ class Player {
                     }
 
                     if (block.spawn) {
-                        gfx.sprite(block.spawn, px, py, tileSize, tileSize);
+                        gfx.sprite(block.spawn, px, py, smallfastmorph, smallfastmorph);
                     }
 
                     if (block.portal) {
