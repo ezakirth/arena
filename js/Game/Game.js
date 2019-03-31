@@ -7,6 +7,10 @@ var Game = {
     init: function () {
         this.map.init();
 
+
+    },
+
+    start: function () {
         this.players.push(new Player(this.map.p1spawn.x, this.map.p1spawn.y));
         if (!solo)
             this.players.push(new Player(this.map.p2spawn.x, this.map.p2spawn.y));
@@ -18,23 +22,26 @@ var Game = {
 
     update: function () {
         this.elapsedTime = new Date() - this.startTime;
+        if (this.map.data) {
 
-        for (let player of this.players) {
-            if (player.id == 0) player.update();
+            for (let player of this.players) {
+                if (player.id == 0) player.update();
+            }
         }
     },
 
     render: function () {
+        if (this.map.data) {
 
-        for (let player of this.players) {
-            gfx.setActiveCanvas(player.id);
-            gfx.clear();
+            for (let player of this.players) {
+                gfx.setActiveCanvas(player.id);
+                gfx.clear();
 
-            gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
-            player.render();
-            gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
+                gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
+                player.render();
+                gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
+            }
         }
-
 
 
     }
