@@ -77,6 +77,20 @@ var gfx = {
         }
     },
 
+    drawTile: function (img, x, y) {
+        img = '/assets/' + img + '.png';
+        let image = gfx.cachedImages[img];
+
+        if (!image) {
+            gfx.cachedImages[img] = new Image(256, 256);
+            image = gfx.cachedImages[img];
+            image.src = img;
+        }
+        else {
+            gfx.ctx[this.id].drawImage(image, x - tileSize / 2, y - tileSize / 2, tileSize, tileSize);
+        }
+    },
+
     spriteSheet: function (img, sx, sy, sw, sh, dx, dy, dw, dh) {
         img = '/assets/' + img + '.png';
         let image = gfx.cachedImages[img];

@@ -1,8 +1,11 @@
 "use strict";
 var tileSize = 96;
-var Editor;
+var Game, Editor, map, timer;
 function init() {
     gfx.init();
+
+    timer = new Timer();
+    map = new Map();
 
     Editor.init();
     Input.init();
@@ -12,6 +15,7 @@ function init() {
 
 function loop() {
     requestAnimationFrame(loop);
+    timer.update();
 
     // logic
     Input.update();

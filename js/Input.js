@@ -12,6 +12,9 @@ var Input = {
         mapY: 0,
     },
 
+    view: { x: 0, y: 0 },
+    inertia: { x: 0, y: 0 },
+
     iner: 0,
     keyboard: { active: false },
 
@@ -32,6 +35,29 @@ var Input = {
 
 
     update: function () {
+        if (Input.keyboard.ArrowLeft) {
+            Input.inertia.x += Input.speed;
+            Input.view.x -= Input.speed;
+        }
+        if (Input.keyboard.ArrowRight) {
+            Input.inertia.x -= Input.speed;
+            Input.view.x += Input.speed;
+        }
+
+        if (Input.keyboard.ArrowUp) {
+            Input.inertia.y += Input.speed;
+            Input.view.y -= Input.speed;
+        }
+        if (Input.keyboard.ArrowDown) {
+            Input.inertia.y -= Input.speed;
+            Input.view.y += Input.speed;
+        }
+
+        Input.inertia.x -= (Input.inertia.x / 1.5) * Input.speed;
+        Input.view.x -= Input.inertia.x * Input.speed;
+
+        Input.inertia.y -= (Input.inertia.y / 1.5) * Input.speed;
+        Input.view.y -= Input.inertia.y * Input.speed;
     },
 
     wheelAction: function (e) {
@@ -77,5 +103,14 @@ var Input = {
 
         mouse.x = mouse.browser.x * gfx.ratio.x;
         mouse.y = (mouse.browser.y - gfx.offset.y) * gfx.ratio.y;
+
+        if (Editor) {
+            // on annule la translation qu'on a fait pour l'affichage (voir drawTile)
+            var offsetX = Input.view.x * tileSize - gfx.width / 2;
+            var offsetY = Input.view.y * tileSize - gfx.height / 2;
+
+            Input.mouse.mapX = Math.floor((mouse.x + offsetX) / tileSize);
+            Input.mouse.mapY = Math.floor((mouse.y + offsetY) / tileSize);
+        }
     }
 };

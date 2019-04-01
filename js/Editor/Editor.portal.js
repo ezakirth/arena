@@ -1,6 +1,6 @@
 
 Editor.addPortal = function (type, px, py) {
-    var tile = this.map.data[px][py];
+    var tile = map.data[px][py];
     if (tile.solid || tile.pickup || tile.portal || tile.spawn) return;
 
     // if we have an origin for this portal, link them together
@@ -11,7 +11,7 @@ Editor.addPortal = function (type, px, py) {
             dy: this.portalOrigin.y
         };
 
-        this.map.data[this.portalOrigin.x][this.portalOrigin.y].portal = {
+        map.data[this.portalOrigin.x][this.portalOrigin.y].portal = {
             color: this.portalOrigin.color,
             dx: px,
             dy: py
@@ -39,10 +39,10 @@ Editor.addPortal = function (type, px, py) {
 }
 
 Editor.clearPortal = function (px, py) {
-    var tile = this.map.data[px][py];
+    var tile = map.data[px][py];
 
     if (tile.portal) {
-        this.map.data[tile.portal.dx][tile.portal.dy].portal = null;
+        map.data[tile.portal.dx][tile.portal.dy].portal = null;
         tile.portal = null;
         this.portalOrigin = null;
     }

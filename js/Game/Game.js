@@ -1,19 +1,17 @@
 var Game = {
-    startTime: new Date(),
-    elapsedTime: 0,
-    map: null,
+    timer: new Timer(),
     players: Array(),
 
     init: function () {
-        this.map.init();
+        map.setupGame();
 
 
     },
 
     start: function () {
-        this.players.push(new Player(this.map.p1spawn.x, this.map.p1spawn.y));
+        this.players.push(new Player(map.p1spawn.x, map.p1spawn.y));
         if (!solo)
-            this.players.push(new Player(this.map.p2spawn.x, this.map.p2spawn.y));
+            this.players.push(new Player(map.p2spawn.x, map.p2spawn.y));
     },
 
     getNbPlayers: function () {
@@ -21,8 +19,9 @@ var Game = {
     },
 
     update: function () {
-        this.elapsedTime = new Date() - this.startTime;
-        if (this.map.data) {
+        this.timer.update();
+
+        if (map.data) {
 
             for (let player of this.players) {
                 if (player.id == 0) player.update();
@@ -31,7 +30,7 @@ var Game = {
     },
 
     render: function () {
-        if (this.map.data) {
+        if (map.data) {
 
             for (let player of this.players) {
                 gfx.setActiveCanvas(player.id);

@@ -46,7 +46,8 @@ var gfx = {
         else {
             let width = w || image.naturalWidth;
             let height = h || image.naturalHeight;
-            gfx.ctx.drawImage(image, x, y, width, height);
+
+            gfx.ctx.drawImage(image, x - width / 2, y - height / 2, width, height);
         }
     },
 
@@ -60,7 +61,7 @@ var gfx = {
             image.src = img;
         }
         else {
-            gfx.ctx.drawImage(image, x, y, tileSize, tileSize);
+            gfx.ctx.drawImage(image, x - tileSize / 2, y - tileSize / 2, tileSize, tileSize);
         }
     },
 

@@ -4,7 +4,7 @@ Editor.menuSetup = function () {
     Editor.addEditorItem([{ block: "Terrain", block_id: "block_terrain" }]);
     Editor.addEditorItem([{ block_id: "block_terrain", type: "number", label: "Width", value: 20 }]);
     Editor.addEditorItem([{ block_id: "block_terrain", type: "number", label: "Height", value: 20 }]);
-    Editor.addEditorItem([{ block_id: "block_terrain", type: "button", value: "Create New", onclick: "Editor.map.resetData()" }]);
+    Editor.addEditorItem([{ block_id: "block_terrain", type: "button", value: "Create New", onclick: "map.resetData()" }]);
 
 
 
@@ -88,8 +88,8 @@ Editor.menuSetup = function () {
 
     Editor.addEditorItem([{ block: "File", block_id: "block_file" }]);
     Editor.addEditorItem([
-        { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: Editor.map.loadData },
-        { block_id: "block_file", type: "button", value: "Save", onclick: "Editor.map.saveData(Editor.map.data, 'map.json')" }
+        { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: map.loadData },
+        { block_id: "block_file", type: "button", value: "Save", onclick: "map.saveData(map.data, 'map.json')" }
     ]);
 
 

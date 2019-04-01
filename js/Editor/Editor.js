@@ -6,10 +6,9 @@ var Editor = {
     paintRandomFloor: false,
 
     portalOrigin: null,
-    map: {},
 
     init: function () {
-        this.map.init(20, 20);
+        map.init(20, 20);
 
         this.menuSetup();
 
@@ -19,8 +18,11 @@ var Editor = {
     update: function () {
         if (Input.mouse.browser.x > 276) {
 
-            let px = Input.mapX;
-            let py = Input.mapY;
+            let px = Input.mouse.mapX;
+            let py = Input.mouse.mapY;
+
+            if (!(map.data[px] !== undefined && map.data[px][py] !== undefined)) return;
+
             let selected = $("#editor_Brush_type_id").val();
 
             if (selected == "Smart Paint") {
@@ -49,11 +51,11 @@ var Editor = {
     render: function () {
         gfx.clear();
 
-        gfx.sprite("bg", 0, 0, gfx.width, gfx.height);
+        gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
-        this.map.render();
+        map.renderView(Input.view);
 
-        gfx.sprite("vignette", 0, 0, gfx.width, gfx.height);
+        gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
 
     }
