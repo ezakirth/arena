@@ -3,9 +3,8 @@ Editor.addPickup = function (type, px, py) {
     var tile = map.data[px][py];
     if (tile.solid || tile.portal || tile.spawn) return;
 
-    if (type.startsWith('flag')) {
-        tile.tex = 'floor_flag';
-    }
+    tile.tex = 'floor_' + type;
+
 
     if (type.startsWith('spawn')) {
         tile.spawn = type;
@@ -19,9 +18,7 @@ Editor.addPickup = function (type, px, py) {
 Editor.clearPickup = function (px, py) {
     var tile = map.data[px][py];
 
-    if (tile.pickup && tile.pickup.startsWith('pickup_flag')) {
-        tile.tex = 'floor_1';
-    }
+    tile.tex = 'floor_1';
 
     tile.spawn = null;
 

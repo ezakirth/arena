@@ -45,7 +45,16 @@ var gfx = {
     setupCanvas: function (id) {
         this.canvas[id] = document.getElementById("canvas" + id);
         this.ctx[id] = this.canvas[id].getContext("2d");
+    },
+
+    setStyles: function (id) {
         this.ctx[id].imageSmoothingEnabled = false;
+        this.ctx[id].strokeStyle = "black";
+        this.ctx[id].strokeSize = "3px";
+        this.ctx[id].fillStyle = "white";
+        this.ctx[id].textAlign = "center";
+        this.ctx[id].font = "bold 28px Impact";
+
     },
 
     resizeCanvas: function (id) {
@@ -54,6 +63,8 @@ var gfx = {
         this.ratio.x = this.width / $(this.canvas[id]).width();
         this.ratio.y = this.height / $(this.canvas[id]).height();
         this.offset.y = (window.innerHeight - $("#canvas" + id).height()) / 2;
+
+        this.setStyles(id);
     },
 
     clear: function () {
@@ -75,6 +86,11 @@ var gfx = {
 
             gfx.ctx[this.id].drawImage(image, x - width / 2, y - height / 2, width, height);
         }
+    },
+
+    drawText: function (text, x, y) {
+        gfx.ctx[this.id].fillText(text, x, y);
+        gfx.ctx[this.id].strokeText(text, x, y);
     },
 
     drawTile: function (img, x, y) {

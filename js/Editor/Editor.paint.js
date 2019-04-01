@@ -8,7 +8,7 @@ Editor.randomFloor = function () {
         for (var y = 0; y < map.h; y++) {
             var tile = map.data[x][y];
             if (tile.tex && tile.tex.startsWith('floor')) {
-                if (tile.pickup && tile.pickup.startsWith('pickup_flag')) continue;
+                if (tile.pickup) continue;
                 tile.tex = 'floor_1';
                 if (Math.random() > .8) tile.tex = 'floor_' + Math.floor(Math.random() * 12 + 1);
             }
@@ -24,9 +24,12 @@ Editor.paint = function (px, py) {
     var tile = map.data[px][py];
     tile.solid = false;
 
-    tile.tex = 'floor_1';
-    if (this.paintRandomFloor) {
-        if (Math.random() > .8) tile.tex = 'floor_' + Math.floor(Math.random() * 12 + 1);
+    if (!(tile.tex && tile.tex.startsWith('floor'))) {
+
+        tile.tex = 'floor_1';
+        if (this.paintRandomFloor) {
+            if (Math.random() > .8) tile.tex = 'floor_' + Math.floor(Math.random() * 12 + 1);
+        }
     }
 
     var pTL = { x: (px - 1).clamp(0, map.w - 1), y: (py - 1).clamp(0, map.h - 1) };
