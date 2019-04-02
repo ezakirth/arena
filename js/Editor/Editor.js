@@ -12,7 +12,6 @@ var Editor = {
 
         this.menuSetup();
 
-        this.updateMenu("editor_Brush_type_id");
     },
 
     /**
@@ -20,7 +19,6 @@ var Editor = {
      */
     update: function () {
         if (Input.mouse.browser.x > 276) {
-
             let px = Input.mouse.mapX;
             let py = Input.mouse.mapY;
 

@@ -7,6 +7,7 @@ function init() {
 
     timer = new Timer();
     map = new Map();
+
     Game.init();
     Input.init();
     loop();
@@ -21,13 +22,12 @@ function loop() {
     timer.update();
 
     // logic
+
     Game.update();
 
     // graphics
     Game.render();
 }
-
-
 
 
 (function () {

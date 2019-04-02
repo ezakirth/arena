@@ -66,7 +66,7 @@ var gfx = {
             this.ctx[id].canvas.height = this.height;
             this.ratio.x = this.width / $(this.canvas[id]).width();
             this.ratio.y = this.height / $(this.canvas[id]).height();
-            this.offset.y = (window.innerHeight - $("#canvas" + id).height()) / 2;
+            this.offset.y = (window.innerHeight - $(this.canvas[id]).height()) / 2;
 
             this.setStyles(id);
         }

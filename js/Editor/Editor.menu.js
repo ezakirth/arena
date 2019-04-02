@@ -107,6 +107,8 @@ Editor.menuSetup = function () {
             $(this).parent().find("div").hide();
         }
     });
+
+    this.updateMenu("editor_Brush_type_id");
 }
 
 
