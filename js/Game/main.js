@@ -1,6 +1,6 @@
 "use strict";
 var tileSize = 128;
-var solo = true;
+var nbPlayers = 1;
 var Game, Editor, map, timer;
 function init() {
     gfx.init();

@@ -10,7 +10,7 @@ var Game = {
 
     start: function () {
         this.players.push(new Player(map.p1spawn.x, map.p1spawn.y));
-        if (!solo)
+        if (nbPlayers == 2)
             this.players.push(new Player(map.p2spawn.x, map.p2spawn.y));
     },
 

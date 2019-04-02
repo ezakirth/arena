@@ -15,9 +15,6 @@ class Player {
 
         this.moving = false;
         this.frame = 1;
-        if (solo) {
-
-        }
     }
 
     /**

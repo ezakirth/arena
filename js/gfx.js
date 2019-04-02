@@ -5,8 +5,8 @@ var gfx = {
     offset: { x: 0, y: 0 },
     ratio: { x: 0, y: 0 },
     id: 0,
-    canvas: Array(2),
-    ctx: Array(2),
+    canvas: new Array(),
+    ctx: new Array(),
     cachedImages: {},
 
     setActiveCanvas(id) {
@@ -14,14 +14,13 @@ var gfx = {
     },
 
     init() {
-        this.setupCanvas(0);
-        this.setupCanvas(1);
+        this.setupCanvas(nbPlayers);
 
-        if (solo) {
+        if (nbPlayers == 1) {
             this.width = 1920;
             $(this.canvas[0]).css({ width: '100%' });
         }
-        else {
+        else if (nbPlayers == 2) {
             this.width = 1920 / 2;
             $(this.canvas[0]).css({ width: '50%' });
             $(this.canvas[0]).css({ left: 0 });
@@ -29,8 +28,7 @@ var gfx = {
             $(this.canvas[1]).css({ right: 0 });
         }
 
-        this.resizeCanvas(0);
-        this.resizeCanvas(1);
+        this.resizeCanvas();
 
     },
 
@@ -42,9 +40,13 @@ var gfx = {
         return this.ctx[this.id].canvas.height;
     },
 
-    setupCanvas: function (id) {
-        this.canvas[id] = document.getElementById("canvas" + id);
-        this.ctx[id] = this.canvas[id].getContext("2d");
+    setupCanvas: function (nb) {
+        for (let i = 0; i < nb; i++) {
+            this.id = this.canvas.length;
+            this.canvas[this.id] = document.createElement('canvas');
+            this.ctx[this.id] = this.canvas[this.id].getContext("2d");
+            $("body").append(this.canvas[this.id]);
+        }
     },
 
     setStyles: function (id) {
@@ -57,14 +59,17 @@ var gfx = {
 
     },
 
-    resizeCanvas: function (id) {
-        this.ctx[id].canvas.width = this.width;
-        this.ctx[id].canvas.height = this.height;
-        this.ratio.x = this.width / $(this.canvas[id]).width();
-        this.ratio.y = this.height / $(this.canvas[id]).height();
-        this.offset.y = (window.innerHeight - $("#canvas" + id).height()) / 2;
+    resizeCanvas: function () {
+        for (let id = 0; id < this.ctx.length; id++) {
 
-        this.setStyles(id);
+            this.ctx[id].canvas.width = this.width;
+            this.ctx[id].canvas.height = this.height;
+            this.ratio.x = this.width / $(this.canvas[id]).width();
+            this.ratio.y = this.height / $(this.canvas[id]).height();
+            this.offset.y = (window.innerHeight - $("#canvas" + id).height()) / 2;
+
+            this.setStyles(id);
+        }
     },
 
     clear: function () {
@@ -140,4 +145,4 @@ var gfx = {
 
 }
 
-window.onresize = function () { gfx.resizeCanvas(0); gfx.resizeCanvas(1); }
+window.onresize = function () { gfx.resizeCanvas(); }

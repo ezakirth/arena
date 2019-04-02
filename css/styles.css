@@ -20,7 +20,7 @@ body {
     align-items: center;
     justify-content: center;
 }
-#canvas, #canvas0, #canvas1 {
+canvas {
     /*cursor: crosshair;*/
     position:absolute;
     width:100%;

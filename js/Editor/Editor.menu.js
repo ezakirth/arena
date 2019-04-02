@@ -2,6 +2,7 @@
  * Adds items to the editor menu
  */
 Editor.menuSetup = function () {
+    $('body').append($('<div id="Editor">'));
     Editor.elem = document.getElementById("Editor");
 
     Editor.addEditorItem([{ block: "Terrain", block_id: "block_terrain" }]);
