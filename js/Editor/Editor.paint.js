@@ -1,7 +1,5 @@
-
-
 /**
- * Fills floor
+ * Fills the map floor with random floor tiles
  */
 Editor.randomFloor = function () {
     for (var x = 0; x < map.w; x++) {
@@ -16,10 +14,9 @@ Editor.randomFloor = function () {
     }
 }
 
-
-
-
-
+/**
+ * Paints the map with floor and attempt to match surrounding tiles
+ */
 Editor.paint = function (px, py) {
     var tile = map.data[px][py];
     tile.solid = false;
@@ -115,7 +112,9 @@ Editor.paint = function (px, py) {
 }
 
 
-
+/**
+ * Clears the map at location and attemps to match surrounding tiles
+ */
 Editor.clear = function (px, py) {
     var pickupBackup = map.data[px][py].pickup;
     var tile = map.data[px][py] = new Tile();

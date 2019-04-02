@@ -1,9 +1,11 @@
-
+/**
+ * Adds a portal to the map (in two steps: origin then destination)
+ */
 Editor.addPortal = function (type, px, py) {
     var tile = map.data[px][py];
     if (tile.solid || tile.pickup || tile.portal || tile.spawn) return;
 
-    // if we have an origin for this portal, link them together
+    // if we have an origin for this portal (meaning this is the destination), link them together
     if (this.portalOrigin) {
         tile.portal = {
             color: this.portalOrigin.color,
@@ -19,7 +21,7 @@ Editor.addPortal = function (type, px, py) {
 
         this.portalOrigin = null;
     }
-    // else this is the portal origin, save it for now
+    // else this is the portal origin, addit and save origin info for later
     else {
         tile.portal = {
             color: type,
@@ -38,6 +40,10 @@ Editor.addPortal = function (type, px, py) {
     Input.mouse.left = false;
 }
 
+
+/**
+ * Remove portal origin and destination
+ */
 Editor.clearPortal = function (px, py) {
     var tile = map.data[px][py];
 

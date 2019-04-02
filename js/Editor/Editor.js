@@ -15,6 +15,9 @@ var Editor = {
         this.updateMenu("editor_Brush_type_id");
     },
 
+    /**
+     * perform user interactions with the map
+     */
     update: function () {
         if (Input.mouse.browser.x > 276) {
 
@@ -48,18 +51,14 @@ var Editor = {
 
     },
 
+    /**
+     * Renders the map
+     */
     render: function () {
         gfx.clear();
 
         gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
-
         map.renderView(Input.view);
-
         gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
-
-
     }
-
-
-
 };

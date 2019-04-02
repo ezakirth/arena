@@ -1,3 +1,6 @@
+/**
+ * Adds items to the editor menu
+ */
 Editor.menuSetup = function () {
     Editor.elem = document.getElementById("Editor");
 
@@ -106,6 +109,9 @@ Editor.menuSetup = function () {
 }
 
 
+/**
+ * Creates the added items to the editor
+ */
 Editor.addEditorItem = function (items) {
     var div = document.createElement("div");
     div.className = "menuItem";
@@ -217,7 +223,9 @@ Editor.addEditorItem = function (items) {
     }
 };
 
-
+/**
+ * Event call when using linked buttons
+ */
 Editor.updateMenu = function (id) {
     var link = $("#" + id).find(":selected").data("link");
     $(".linked").hide();

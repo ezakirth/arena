@@ -1,3 +1,6 @@
+/**
+ * If player walks on a portal, use it
+ */
 Player.prototype.checkPortal = function (tile) {
     if (tile.portal) {
         if (!this.justUsedPortal) {

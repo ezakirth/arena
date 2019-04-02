@@ -13,6 +13,9 @@ function init() {
 
 }
 
+/** 
+ * Game loop
+ */
 function loop() {
     requestAnimationFrame(loop);
     timer.update();

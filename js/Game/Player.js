@@ -20,6 +20,11 @@ class Player {
         }
     }
 
+    /**
+     * Checks the tile the player is on
+     * @param {int} x 
+     * @param {int} y 
+     */
     checkTile(x, y) {
         let tile = map.data[x][y];
 
@@ -27,6 +32,9 @@ class Player {
         this.checkPickup(tile, x, y);
     }
 
+    /**
+     * update the player position 
+     */
     update() {
         this.dir = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(Input.mouse.x, Input.mouse.y)).normalize();
         this.dirSide = Vector.rotate(this.dir, Math.PI / 2);
@@ -76,7 +84,11 @@ class Player {
 
     }
 
-
+    /**
+     * Renders the player and his view of the map
+     * first map pass renders the floor, decals, spawn and portals
+     * second map pass renders walls, shadows and pickups
+     */
     render() {
         // first pass
         map.renderView(this.pos, 1);
@@ -89,6 +101,9 @@ class Player {
         this.drawStats();
     }
 
+    /**
+     * Draws the player
+     */
     drawPlayer() {
         let ang = Math.atan2(this.dir.y, this.dir.x);
 
@@ -101,10 +116,13 @@ class Player {
         gfx.popMatrix();
     }
 
+    /**
+     * Displays all the player stats (name, life, shield)
+     */
     drawStats() {
-        let shield = (tileSize / 2) / 100 * this.shield + .1;
-        let life = (tileSize / 2) / 100 * this.life + .1;
         let lifeVal = '100';
+        let life = (tileSize / 2) / 100 * this.life + .1;
+        let shield = (tileSize / 2) / 100 * this.shield + .1;
         if (this.life < 100) lifeVal = 75;
         if (this.life < 75) lifeVal = 50;
         if (this.life < 50) lifeVal = 25;

@@ -35,7 +35,7 @@ Editor.addDecal = function (type) {
 }
 
 /**
- * add random decals
+ * add random decals to the floor on the map
  */
 Editor.randomDecals = function () {
     for (var x = 0; x < map.w; x++) {
@@ -56,7 +56,7 @@ Editor.randomDecals = function () {
 }
 
 /**
- * paint shadows
+ * calculate all shadows on the map
  */
 Editor.calculateShadows = function () {
     for (var x = 0; x < map.w; x++) {
