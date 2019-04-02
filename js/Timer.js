@@ -27,7 +27,9 @@ class Timer {
         this.morphs.smallslow = tileSize - Math.abs(Math.sin(this.elapsed * 4) * 10);
     }
 
-    // go through all items to be respawned and respawn them if the delay has expired
+    /**
+     * Goes through all items to be respawned and respawn them if the delay has expired
+     */
     checkRespawns() {
         for (let index = this.respawns.length - 1; index >= 0; index--) {
             let item = this.respawns[index];
@@ -40,6 +42,10 @@ class Timer {
         }
     }
 
+    /**
+     * Adds a pickup to the list of respawn timers
+     * @param {Object} item 
+     */
     addRespawn(item) {
         this.respawns.push(item);
     }
