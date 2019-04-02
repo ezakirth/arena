@@ -117,7 +117,7 @@ Editor.paint = function (px, py) {
  */
 Editor.clear = function (px, py) {
     var pickupBackup = map.data[px][py].pickup;
-    var tile = map.data[px][py] = new Tile();
+    var tile = map.data[px][py];
 
     var pTL = { x: (px - 1).clamp(0, map.w - 1), y: (py - 1).clamp(0, map.h - 1) };
     var pTC = { x: px, y: (py - 1).clamp(0, map.h - 1) };
@@ -168,103 +168,97 @@ Editor.clear = function (px, py) {
     var BC2 = map.data[pBC2.x][pBC2.y];
     var BR = map.data[pBR.x][pBR.y];
 
+    this.clearTile(tile);
 
-    TL.solid = true;
-    TC.solid = true;
-    TR.solid = true;
-    CL.solid = true;
-    CR.solid = true;
-    BL.solid = true;
-    BC.solid = true;
-    BR.solid = true;
+    if (!TL.solid) this.clearTile(TL, 'wall_BRC');
+    if (!TC.solid) this.clearTile(TC, 'wall_B');
+    if (!TR.solid) this.clearTile(TR, 'wall_BLC');
+    if (!CL.solid) this.clearTile(CL, 'wall_R');
+    if (!CR.solid) this.clearTile(CR, 'wall_L');
+    if (!BL.solid) this.clearTile(BL, 'wall_TRC');
+    if (!BC.solid) this.clearTile(BC, 'wall_T');
+    if (!BR.solid) this.clearTile(BR, 'wall_TLC');
 
-    TL.shadow = null;
-    TC.shadow = null;
-    TR.shadow = null;
-    CL.shadow = null;
-    CR.shadow = null;
-    BL.shadow = null;
-    BC.shadow = null;
-    BR.shadow = null;
+    if (TC.tex == 'wall_L') {
+        TC.tex = 'wall_B';
+        if (TL.tex == null || TL.solid) TC.tex = 'wall_BL';
+        if (BL.tex == null || BL.solid) BC.tex = 'wall_TL';
+    }
+    if (TC.tex == 'wall_R') {
+        TC.tex = 'wall_B';
+        if (TR.tex == null || TR.solid) TC.tex = 'wall_BR';
+        if (BR.tex == null || BR.solid) BC.tex = 'wall_TR';
+    }
 
-    TL.decals = [];
-    TC.decals = [];
-    TR.decals = [];
-    CL.decals = [];
-    CR.decals = [];
-    BL.decals = [];
-    BC.decals = [];
-    BR.decals = [];
+    /*
+        if (TL.tex) TL.tex = 'wall_BRC';
+        if (TC.tex) TC.tex = 'wall_B';
+        if (TR.tex) TR.tex = 'wall_BLC';
+        if (CL.tex) CL.tex = 'wall_R';
+        if (CR.tex) CR.tex = 'wall_L';
+        if (BL.tex) BL.tex = 'wall_TRC';
+        if (BC.tex) BC.tex = 'wall_T';
+        if (BR.tex) BR.tex = 'wall_TLC';
+    
+        if (!BC2.tex && BC.tex) BC.tex = null;
+        if (!TC2.tex && TC.tex) TC.tex = null;
+        if (!CL2.tex && CL.tex) CL.tex = null;
+        if (!CR2.tex && CR.tex) CR.tex = null;
+    
+        if (!CL.tex && TL.tex) TL.tex = 'wall_B';
+        if (!CL.tex && BL.tex) BL.tex = 'wall_T';
+        if (!CR.tex && TR.tex) TR.tex = 'wall_B';
+        if (!CR.tex && BR.tex) BR.tex = 'wall_T';
+        if (!BC.tex && BL.tex) BL.tex = 'wall_R';
+    
+        if (!BC.tex && BR.tex) BR.tex = 'wall_L';
+        if (!TC.tex && TL.tex) TL.tex = 'wall_R';
+        if (!TC.tex && TR.tex) TR.tex = 'wall_L';
+    
+    
+    
+        if (!BL.tex && CL.tex) CL.tex = 'wall_BR';
+        if (!BR.tex && CR.tex) CR.tex = 'wall_BL';
+    
+        if (!TL.tex && TC.tex) TC.tex = 'wall_BL';
+        if (!TR.tex && TC.tex) TC.tex = 'wall_BR';
+    
+        if (!BL.tex && BC.tex) BC.tex = 'wall_TL';
+        if (!BR.tex && BC.tex) BC.tex = 'wall_TR';
+    
+        if (!TC.tex && !CR.tex && TR.tex) TR.tex = 'wall_BL';
+        if (!TC.tex && !CL.tex && TL.tex) TL.tex = 'wall_BR';
+        if (!CL.tex && !BC.tex && BL.tex) BL.tex = 'wall_TR';
+        if (!CR.tex && !BC.tex && BR.tex) BR.tex = 'wall_TL';
+    
+        if (!TL.tex && CL.tex) CL.tex = 'wall_TR';
+        if (!TR.tex && CR.tex) CR.tex = 'wall_TL';
+    
+        if (!BC2L.tex && !BC.tex && BL.tex) BL.tex = 'wall_BR';
+        if (!BC2R.tex && !BC.tex && BR.tex) BR.tex = 'wall_BL';
+    
+        if (!BC2L.tex && !BC.tex && BL.tex) BL.tex = 'wall_BR';
+    
+        if (!TC2L.tex && !TC.tex && TL.tex) TL.tex = 'wall_TR';
+        if (!TC2R.tex && !TC.tex && TR.tex) TR.tex = 'wall_TL';
+    
+        if (!CR2T.tex && !CR.tex && TR.tex) TR.tex = 'wall_BR';
+        if (!CR2B.tex && !CR.tex && BR.tex) BR.tex = 'wall_TR';
+    
+        if (!CL2T.tex && !CL.tex && TL.tex) TL.tex = 'wall_BL';
+        if (!CL2B.tex && !CL.tex && BL.tex) BL.tex = 'wall_TL';
+    */
+
+
+}
+
+Editor.clearTile = function (tile, tex) {
+    tile.tex = tex;
+    tile.solid = true;
+    tile.shadow = null;
+    tile.decals = [];
 
     if (this.clearPickupsOnErase) {
-        TL.pickup = null;
-        TC.pickup = null;
-        TR.pickup = null;
-        CL.pickup = null;
-        CR.pickup = null;
-        BL.pickup = null;
-        BC.pickup = null;
-        BR.pickup = null;
+        tile.pickup = null;
     }
-    else {
-        tile.pickup = pickupBackup;
-    }
-
-    if (TL.tex) TL.tex = 'wall_BRC';
-    if (TC.tex) TC.tex = 'wall_B';
-    if (TR.tex) TR.tex = 'wall_BLC';
-    if (CL.tex) CL.tex = 'wall_R';
-    if (CR.tex) CR.tex = 'wall_L';
-    if (BL.tex) BL.tex = 'wall_TRC';
-    if (BC.tex) BC.tex = 'wall_T';
-    if (BR.tex) BR.tex = 'wall_TLC';
-
-    if (!BC2.tex && BC.tex) BC.tex = null;
-    if (!TC2.tex && TC.tex) TC.tex = null;
-    if (!CL2.tex && CL.tex) CL.tex = null;
-    if (!CR2.tex && CR.tex) CR.tex = null;
-
-    if (!CL.tex && TL.tex) TL.tex = 'wall_B';
-    if (!CL.tex && BL.tex) BL.tex = 'wall_T';
-    if (!CR.tex && TR.tex) TR.tex = 'wall_B';
-    if (!CR.tex && BR.tex) BR.tex = 'wall_T';
-    if (!BC.tex && BL.tex) BL.tex = 'wall_R';
-
-    if (!BC.tex && BR.tex) BR.tex = 'wall_L';
-    if (!TC.tex && TL.tex) TL.tex = 'wall_R';
-    if (!TC.tex && TR.tex) TR.tex = 'wall_L';
-
-
-
-    if (!BL.tex && CL.tex) CL.tex = 'wall_BR';
-    if (!BR.tex && CR.tex) CR.tex = 'wall_BL';
-
-    if (!TL.tex && TC.tex) TC.tex = 'wall_BL';
-    if (!TR.tex && TC.tex) TC.tex = 'wall_BR';
-
-    if (!BL.tex && BC.tex) BC.tex = 'wall_TL';
-    if (!BR.tex && BC.tex) BC.tex = 'wall_TR';
-
-    if (!TC.tex && !CR.tex && TR.tex) TR.tex = 'wall_BL';
-    if (!TC.tex && !CL.tex && TL.tex) TL.tex = 'wall_BR';
-    if (!CL.tex && !BC.tex && BL.tex) BL.tex = 'wall_TR';
-    if (!CR.tex && !BC.tex && BR.tex) BR.tex = 'wall_TL';
-
-    if (!TL.tex && CL.tex) CL.tex = 'wall_TR';
-    if (!TR.tex && CR.tex) CR.tex = 'wall_TL';
-
-    if (!BC2L.tex && !BC.tex && BL.tex) BL.tex = 'wall_BR';
-    if (!BC2R.tex && !BC.tex && BR.tex) BR.tex = 'wall_BL';
-
-    if (!BC2L.tex && !BC.tex && BL.tex) BL.tex = 'wall_BR';
-
-    if (!TC2L.tex && !TC.tex && TL.tex) TL.tex = 'wall_TR';
-    if (!TC2R.tex && !TC.tex && TR.tex) TR.tex = 'wall_TL';
-
-    if (!CR2T.tex && !CR.tex && TR.tex) TR.tex = 'wall_BR';
-    if (!CR2B.tex && !CR.tex && BR.tex) BR.tex = 'wall_TR';
-
-    if (!CL2T.tex && !CL.tex && TL.tex) TL.tex = 'wall_BL';
-    if (!CL2B.tex && !CL.tex && BL.tex) BL.tex = 'wall_TL';
-
 }

@@ -10,6 +10,7 @@ var Editor = {
     init: function () {
         map.init(20, 20);
 
+        Input.view = { x: map.w / 2, y: map.h / 2 };
         this.menuSetup();
 
     },
