@@ -26,8 +26,6 @@ Editor.menuSetup = function () {
         ]
     }]);
     Editor.addEditorItem([{ block: "Paint", block_id: "block_paint", linked: true }]);
-    Editor.addEditorItem([{ block_id: "block_paint", type: "checkbox", label: "Delete items on clearing", onchange: "Editor.clearPickupsOnErase = this.checked;", checked: Editor.clearPickupsOnErase }]);
-    Editor.addEditorItem([{ block_id: "block_paint", type: "checkbox", label: "Paint random floor", onchange: "Editor.paintRandomFloor = this.checked;", checked: Editor.paintRandomFloor }]);
     Editor.addEditorItem([{ block_id: "block_paint", type: "button", value: "Randomize floor", onclick: "Editor.randomFloor()" }]);
     Editor.addEditorItem([{ block_id: "block_paint", type: "button", value: "Randomize decals", onclick: "Editor.randomDecals()" }]);
 
@@ -92,7 +90,7 @@ Editor.menuSetup = function () {
 
     Editor.addEditorItem([{ block: "File", block_id: "block_file" }]);
     Editor.addEditorItem([
-        { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: map.loadData },
+        { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: function (e) { map.loadData(e) } },
         { block_id: "block_file", type: "button", value: "Save", onclick: "map.saveData(map.data, 'map.json')" }
     ]);
 

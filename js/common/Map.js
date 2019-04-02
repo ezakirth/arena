@@ -6,9 +6,9 @@ class Map {
 
     /**
      * Sets up the map in editor mode
-     * @param {integer} w 
-     * @param {integer} h 
-     * @param {boolean} forceNew 
+     * @param {integer} w
+     * @param {integer} h
+     * @param {boolean} forceNew
      */
     init(w, h, forceNew) {
         this.w = w;
@@ -70,8 +70,8 @@ class Map {
      * Render the map based on position
      * first pass renders the floor, decals, spawn and portals
      * second pass renders walls, shadows and pickups
-     * @param {vector2} view 
-     * @param {integer} pass 
+     * @param {vector2} view
+     * @param {integer} pass
      */
     renderView(view, pass) {
         let block = null;
@@ -186,12 +186,13 @@ class Map {
     loadData(e) {
         if (e.target.files[0]) {
             var tmppath = URL.createObjectURL(e.target.files[0]);
+            var _this = this;
             $.getJSON(tmppath, function (data) {
-                this.data = data;
-                this.w = this.data.length;
-                this.h = this.data[0].length;
-                $("#editor_Width_id").val(this.w);
-                $("#editor_Height_id").val(this.h);
+                _this.data = data;
+                _this.w = _this.data.length;
+                _this.h = _this.data[0].length;
+                $("#editor_Width_id").val(_this.w);
+                $("#editor_Height_id").val(_this.h);
             });
         }
     }

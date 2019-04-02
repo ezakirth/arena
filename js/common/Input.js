@@ -35,6 +35,9 @@ var Input = {
 
 
     update: function () {
+        Input.updateMapPosition();
+
+
         if (Input.keyboard.ArrowLeft) {
             Input.inertia.x += Input.speed;
             Input.view.x -= Input.speed;
@@ -58,6 +61,17 @@ var Input = {
 
         Input.inertia.y -= (Input.inertia.y / 1.5) * Input.speed;
         Input.view.y -= Input.inertia.y * Input.speed;
+
+
+        if (Input.mouse.browser.x > gfx.browser.width - 30) Input.view.x += timer.delta * 10;
+        if (Input.mouse.browser.x < 30) Input.view.x -= timer.delta * 10;
+        if (Input.mouse.browser.y > gfx.browser.height - 30) Input.view.y += timer.delta * 10;
+        if (Input.mouse.browser.y < 30) Input.view.y -= timer.delta * 10;
+
+        // make sure we don't lose sight of the map ^^
+        Input.view.x = Input.view.x.clamp(0, map.w - 5);
+        Input.view.y = Input.view.y.clamp(0, map.h);
+
     },
 
     wheelAction: function (e) {
@@ -68,7 +82,6 @@ var Input = {
         e.preventDefault();
         return false;
     },
-
 
     inputUp: function (e) {
         if (e.button == 0) Input.mouse.left = false;
@@ -103,14 +116,14 @@ var Input = {
 
         mouse.x = mouse.browser.x * gfx.ratio.x;
         mouse.y = (mouse.browser.y - gfx.offset.y) * gfx.ratio.y;
+    },
 
-        if (Editor) {
-            // on annule la translation qu'on a fait pour l'affichage (voir drawTile)
-            var offsetX = Input.view.x * tileSize - gfx.width / 2;
-            var offsetY = Input.view.y * tileSize - gfx.height / 2;
+    updateMapPosition: function () {
+        // on annule la translation qu'on a fait pour l'affichage (voir drawTile)
+        var offsetX = Input.view.x * tileSize - gfx.width / 2;
+        var offsetY = Input.view.y * tileSize - gfx.height / 2;
 
-            Input.mouse.mapX = Math.floor((mouse.x + offsetX) / tileSize);
-            Input.mouse.mapY = Math.floor((mouse.y + offsetY) / tileSize);
-        }
+        Input.mouse.mapX = Math.floor((Input.mouse.x + offsetX) / tileSize);
+        Input.mouse.mapY = Math.floor((Input.mouse.y + offsetY) / tileSize);
     }
 };

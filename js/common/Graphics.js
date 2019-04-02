@@ -3,7 +3,8 @@ class Graphics {
     constructor() {
         this.width = 1920;
         this.height = 1080;
-        this.offset = { x: 0, y: 0 };
+        this.browser = { width: 1920, height: 1080 },
+            this.offset = { x: 0, y: 0 };
         this.ratio = { x: 0, y: 0 };
         this.id = 0;
         this.canvas = new Array();
@@ -73,6 +74,10 @@ class Graphics {
 
             this.setStyles(id);
         }
+
+        this.browser.height = window.innerHeight;
+        this.browser.width = window.innerWidth;
+
     }
 
     clear() {
@@ -147,4 +152,3 @@ class Graphics {
 
 
 }
-

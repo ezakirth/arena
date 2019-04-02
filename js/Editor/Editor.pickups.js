@@ -22,11 +22,11 @@ Editor.addPickup = function (type, px, py) {
 Editor.clearPickup = function (px, py) {
     var tile = map.data[px][py];
 
-    // reapply basic floor texture
-    tile.tex = 'floor_1';
-
     tile.spawn = null;
-    tile.pickup = null;
-
-    Input.mouse.left = false;
+    if (tile.pickup) {
+        // reapply basic floor texture
+        this.randomFloorTile(tile);
+        tile.pickup = null;
+    }
+    Input.mouse.right = false;
 }

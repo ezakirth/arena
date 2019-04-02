@@ -2,8 +2,6 @@ var Editor = {
     active: true,
     elem: null,
     showGrid: true,
-    clearPickupsOnErase: false,
-    paintRandomFloor: false,
 
     portalOrigin: null,
 
