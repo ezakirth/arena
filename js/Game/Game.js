@@ -1,5 +1,4 @@
 var Game = {
-    timer: new Timer(),
     players: Array(),
 
     init: function () {
@@ -9,9 +8,9 @@ var Game = {
     },
 
     start: function () {
-        this.players.push(new Player(map.p1spawn.x, map.p1spawn.y));
+        this.players.push(new Player(this.players.length, map.p1spawn.x, map.p1spawn.y));
         if (nbPlayers == 2)
-            this.players.push(new Player(map.p2spawn.x, map.p2spawn.y));
+            this.players.push(new Player(this.players.length, map.p2spawn.x, map.p2spawn.y));
     },
 
     getNbPlayers: function () {
@@ -19,8 +18,6 @@ var Game = {
     },
 
     update: function () {
-        this.timer.update();
-
         if (map.data) {
 
             for (let player of this.players) {

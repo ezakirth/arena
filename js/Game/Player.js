@@ -1,5 +1,5 @@
 class Player {
-    constructor(x, y) {
+    constructor(id, x, y) {
         this.life = 100;
         this.shield = 100;
         this.ammo = 10;
@@ -9,7 +9,7 @@ class Player {
         this.dir = new Vector(1, 0);
         this.speed = .05;
 
-        this.id = Game.players.length;
+        this.id = id;
 
         this.justUsedPortal = false;
 
