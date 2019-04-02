@@ -1,17 +1,20 @@
 "use strict";
-var gfx = {
-    width: 1920,
-    height: 1080,
-    offset: { x: 0, y: 0 },
-    ratio: { x: 0, y: 0 },
-    id: 0,
-    canvas: new Array(),
-    ctx: new Array(),
-    cachedImages: {},
+class Graphics {
+    constructor() {
+        this.width = 1920;
+        this.height = 1080;
+        this.offset = { x: 0, y: 0 };
+        this.ratio = { x: 0, y: 0 };
+        this.id = 0;
+        this.canvas = new Array();
+        this.ctx = new Array();
+        this.cachedImages = {};
+
+    }
 
     setActiveCanvas(id) {
         this.id = id;
-    },
+    }
 
     init() {
         this.setupCanvas(nbPlayers);
@@ -29,27 +32,27 @@ var gfx = {
         }
 
         this.resizeCanvas();
+        window.onresize = function () { gfx.resizeCanvas(); }
+    }
 
-    },
-
-    getWidth: function () {
+    getWidth() {
         return this.ctx[this.id].canvas.width;
-    },
+    }
 
-    getHeight: function () {
+    getHeight() {
         return this.ctx[this.id].canvas.height;
-    },
+    }
 
-    setupCanvas: function (nb) {
+    setupCanvas(nb) {
         for (let i = 0; i < nb; i++) {
             this.id = this.canvas.length;
             this.canvas[this.id] = document.createElement('canvas');
             this.ctx[this.id] = this.canvas[this.id].getContext("2d");
             $("body").append(this.canvas[this.id]);
         }
-    },
+    }
 
-    setStyles: function (id) {
+    setStyles(id) {
         this.ctx[id].imageSmoothingEnabled = false;
         this.ctx[id].strokeStyle = "black";
         this.ctx[id].strokeSize = "3px";
@@ -57,9 +60,9 @@ var gfx = {
         this.ctx[id].textAlign = "center";
         this.ctx[id].font = "bold 28px Impact";
 
-    },
+    }
 
-    resizeCanvas: function () {
+    resizeCanvas() {
         for (let id = 0; id < this.ctx.length; id++) {
 
             this.ctx[id].canvas.width = this.width;
@@ -70,13 +73,13 @@ var gfx = {
 
             this.setStyles(id);
         }
-    },
+    }
 
-    clear: function () {
+    clear() {
         this.ctx[this.id].clearRect(0, 0, this.canvas[this.id].width, this.canvas[this.id].height);
-    },
+    }
 
-    sprite: function (img, x, y, w, h) {
+    sprite(img, x, y, w, h) {
         img = '/assets/' + img + '.png';
         let image = gfx.cachedImages[img];
 
@@ -91,14 +94,14 @@ var gfx = {
 
             gfx.ctx[this.id].drawImage(image, x - width / 2, y - height / 2, width, height);
         }
-    },
+    }
 
-    drawText: function (text, x, y) {
+    drawText(text, x, y) {
         gfx.ctx[this.id].fillText(text, x, y);
         gfx.ctx[this.id].strokeText(text, x, y);
-    },
+    }
 
-    drawTile: function (img, x, y) {
+    drawTile(img, x, y) {
         img = '/assets/' + img + '.png';
         let image = gfx.cachedImages[img];
 
@@ -110,9 +113,9 @@ var gfx = {
         else {
             gfx.ctx[this.id].drawImage(image, x - tileSize / 2, y - tileSize / 2, tileSize, tileSize);
         }
-    },
+    }
 
-    spriteSheet: function (img, sx, sy, sw, sh, dx, dy, dw, dh) {
+    spriteSheet(img, sx, sy, sw, sh, dx, dy, dw, dh) {
         img = '/assets/' + img + '.png';
         let image = gfx.cachedImages[img];
 
@@ -124,25 +127,24 @@ var gfx = {
         else {
             gfx.ctx[this.id].drawImage(image, sx, sy, sw, sh, dx - dw / 2, dy - dh / 2, dw, dh);
         }
-    },
+    }
 
-    rotate: function (angle) {
+    rotate(angle) {
         this.ctx[this.id].rotate(angle);// * Math.PI / 180);
-    },
+    }
 
-    pushMatrix: function () {
+    pushMatrix() {
         this.ctx[this.id].save();
-    },
+    }
 
-    popMatrix: function () {
+    popMatrix() {
         this.ctx[this.id].restore();
-    },
+    }
 
-    translate: function (x, y) {
+    translate(x, y) {
         this.ctx[this.id].translate(x, y);
-    },
+    }
 
 
 }
 
-window.onresize = function () { gfx.resizeCanvas(); }
