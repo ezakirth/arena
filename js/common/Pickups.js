@@ -19,7 +19,7 @@ Pickups = {
             name: 'speed',
             life: 0,
             shield: 0,
-            speed: 1
+            speed: .05
         }
     },
 
@@ -102,6 +102,3 @@ Pickups = {
         }
     }
 }
-
-
-

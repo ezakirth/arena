@@ -9,6 +9,8 @@ class Player {
         this.ammo = 10;
         this.name = name;
         this.team = map.assignPlayer(this);
+        if (this.team == 'blue') this.enemyTeam = "green";
+        if (this.team == 'green') this.enemyTeam = "blue";
         this.hasEnemyFlag = false;
 
         this.pos = map.assignSpawn(this);
@@ -17,14 +19,15 @@ class Player {
 
         this.justUsedPortal = false;
 
+        this.dead = false;
         this.moving = false;
         this.frame = 1;
     }
 
     /**
      * Checks the tile the player is on
-     * @param {int} x 
-     * @param {int} y 
+     * @param {int} x
+     * @param {int} y
      */
     checkTile(x, y) {
         let tile = map.data[x][y];
@@ -34,55 +37,65 @@ class Player {
     }
 
     /**
-     * update the player position 
+     * update the player position
      */
     update() {
-        this.dir = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(Input.mouse.x, Input.mouse.y)).normalize();
-        this.dirSide = Vector.rotate(this.dir, Math.PI / 2);
+        if (!this.dead) {
+            this.dir = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(Input.mouse.x, Input.mouse.y)).normalize();
+            this.dirSide = Vector.rotate(this.dir, Math.PI / 2);
 
-        let oldX = this.pos.x;
-        let oldY = this.pos.y;
-        let oldPx = Math.floor(this.pos.x);
-        let oldPy = Math.floor(this.pos.y);
+            let oldX = this.pos.x;
+            let oldY = this.pos.y;
+            let oldPx = Math.floor(this.pos.x);
+            let oldPy = Math.floor(this.pos.y);
 
-        this.checkTile(oldPx, oldPy);
-        this.moving = false;
+            this.checkTile(oldPx, oldPy);
+            this.moving = false;
 
 
 
-        if (Input.keyboard.ArrowLeft) {
-            this.moving = true;
-            this.pos.add(this.dirSide.multiply(this.speed));
+            if (Input.keyboard.ArrowLeft) {
+                this.moving = true;
+                this.pos.add(this.dirSide.multiply(this.speed));
+            }
+            if (Input.keyboard.ArrowRight) {
+                this.moving = true;
+                this.pos.subtract(this.dirSide.multiply(this.speed));
+            }
+
+            if (Input.keyboard.ArrowUp) {
+                this.moving = true;
+                this.pos.subtract(this.dir.multiply(this.speed));
+            }
+            if (Input.keyboard.ArrowDown) {
+                this.moving = true;
+                this.pos.add(this.dir.multiply(this.speed));
+            }
+
+            let px = Math.floor(this.pos.x);
+            let py = Math.floor(this.pos.y);
+
+            if (map.data[oldPx][py].solid) this.pos.y = oldY;
+            if (map.data[px][oldPy].solid) this.pos.x = oldX;
+
+
+            if (this.moving)
+                this.frame += timer.delta * 6;
+            else
+                this.frame = 1;
+
+            if (this.frame >= 3) this.frame = 0;
         }
-        if (Input.keyboard.ArrowRight) {
-            this.moving = true;
-            this.pos.subtract(this.dirSide.multiply(this.speed));
+
+    }
+
+    die() {
+        if (this.hasEnemyFlag) {
+            let px = Math.floor(this.pos.x);
+            let py = Math.floor(this.pos.y);
+            map.data[px][py].pickup = 'pickup_flag_' + this.enemyTeam;
         }
-
-        if (Input.keyboard.ArrowUp) {
-            this.moving = true;
-            this.pos.subtract(this.dir.multiply(this.speed));
-        }
-        if (Input.keyboard.ArrowDown) {
-            this.moving = true;
-            this.pos.add(this.dir.multiply(this.speed));
-        }
-
-        let px = Math.floor(this.pos.x);
-        let py = Math.floor(this.pos.y);
-
-        if (map.data[oldPx][py].solid) this.pos.y = oldY;
-        if (map.data[px][oldPy].solid) this.pos.x = oldX;
-
-
-        if (this.moving)
-            this.frame += timer.delta * 6;
-        else
-            this.frame = 1;
-
-        if (this.frame >= 3) this.frame = 0;
-
-
+        this.dead = true;
     }
 
     /**
