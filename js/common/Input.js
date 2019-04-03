@@ -25,6 +25,10 @@ var Input = {
         window.addEventListener('mouseup', Input.inputUp);
         window.addEventListener('mousemove', Input.inputMove);
 
+        document.addEventListener('touchstart', Input.inputDown);
+        document.addEventListener('touchend', Input.inputUp);
+        document.addEventListener('touchmove', Input.inputMove);
+
         window.addEventListener('keyup', Input.keyHandler);
         window.addEventListener('keydown', Input.keyHandler);
 
@@ -84,15 +88,16 @@ var Input = {
     },
 
     inputUp: function (e) {
+        Input.mouse.active = false;
         if (e.button == 0) Input.mouse.left = false;
         if (e.button == 1) Input.mouse.middle = false;
         if (e.button == 2) Input.mouse.right = false;
-
+        Input.getPosition(Input.mouse, e);
         if (Editor) Editor.calculateShadows();
-
     },
 
     inputDown: function (e) {
+        Input.mouse.active = true;
         Input.mouse.left = (e.button == 0);
         Input.mouse.middle = (e.button == 1);
         Input.mouse.right = (e.button == 2);
@@ -111,8 +116,20 @@ var Input = {
 
 
     getPosition: function (mouse, event) {
-        mouse.browser.x = event.clientX;
-        mouse.browser.y = event.clientY;
+        let x, y;
+
+        if (event.touches) {
+            x = (event.touches[0] ? event.touches[0].pageX : Input.mouse.browser.x);
+            y = (event.touches[0] ? event.touches[0].pageY : Input.mouse.browser.y);
+            Input.keyboard.ArrowUp = Input.mouse.active;
+        }
+        else {
+            x = event.clientX;
+            y = event.clientY;
+        }
+
+        mouse.browser.x = x;
+        mouse.browser.y = y;
 
         mouse.x = mouse.browser.x * gfx.ratio.x;
         mouse.y = (mouse.browser.y - gfx.offset.y) * gfx.ratio.y;
