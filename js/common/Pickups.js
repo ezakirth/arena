@@ -19,7 +19,7 @@ Pickups = {
             name: 'speed',
             life: 0,
             shield: 0,
-            speed: .05
+            speed: 0.05
         }
     },
 
@@ -39,7 +39,7 @@ Pickups = {
             type: 'weapon',
             name: 'gun',
             dmg: 20,
-            rate: .4,
+            rate: 0.4,
             speed: 10,
             range: 500,
             ammo: 1 / 0,
@@ -50,7 +50,7 @@ Pickups = {
             type: 'weapon',
             name: 'minigun',
             dmg: 8,
-            rate: .1,
+            rate: 0.1,
             speed: 15,
             range: 800,
             ammo: 60,
@@ -61,7 +61,7 @@ Pickups = {
             type: 'weapon',
             name: 'blastgun',
             dmg: 15,
-            rate: .2,
+            rate: 0.2,
             speed: 10,
             range: 1000,
             ammo: 60,

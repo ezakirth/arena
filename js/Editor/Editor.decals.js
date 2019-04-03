@@ -8,7 +8,7 @@ Editor.removeDecal = function (type) {
 
             if (tile.tex && tile.tex.startsWith('floor')) {
                 for (var i = tile.decals.length - 1; i >= 0; i--) {
-                    if (Math.random() > .5 && tile.decals[i].startsWith(type)) {
+                    if (Math.random() > 0.5 && tile.decals[i].startsWith(type)) {
                         tile.decals.splice(i, 1);
                     }
                 }
@@ -26,7 +26,7 @@ Editor.addDecal = function (type) {
             var tile = map.data[x][y];
 
             if (tile.tex && tile.tex.startsWith('floor')) {
-                if (Math.random() > .95) {
+                if (Math.random() > 0.95) {
                     tile.decals.push(type + '_' + Math.floor(Math.random() * 6 + 1));
                 }
             }
@@ -44,10 +44,10 @@ Editor.randomDecals = function () {
 
             if (tile.tex && tile.tex.startsWith('floor')) {
                 tile.decals = [];
-                if (Math.random() > .90) {
+                if (Math.random() > 0.90) {
                     tile.decals.push('blood_' + Math.floor(Math.random() * 6 + 1));
                 }
-                if (Math.random() > .90) {
+                if (Math.random() > 0.90) {
                     tile.decals.push('dirt_' + Math.floor(Math.random() * 6 + 1));
                 }
             }

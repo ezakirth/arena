@@ -1,39 +1,35 @@
+/**
+ * Handles a player
+ * @param {string} name
+ */
 class Player {
+    /**
+     * Creates a player instance
+     * @param {string} name 
+     */
     constructor(name) {
         this.id = Game.players.length;
 
-        this.weapon = Pickups.weapons.gun;
-
-        this.life = 100;
-        this.shield = 100;
-        this.ammo = 10;
-        this.name = name;
-        this.team = map.assignPlayer(this);
-        if (this.team == 'blue') this.enemyTeam = "green";
-        if (this.team == 'green') this.enemyTeam = "blue";
-        this.hasEnemyFlag = false;
-
-        this.pos = map.assignSpawn(this);
-        this.dir = new Vector(1, 0);
-        this.speed = .05;
+        this.infos = {
+            name: name,
+            life: 100,
+            shield: 100,
+            weapon: Pickups.weapons.gun,
+            ammo: 10,
+            speed: 0.05,
+            hasEnemyFlag: false,
+            team: map.assignPlayer(this),
+        }
+        this.infos.enemyTeam = (this.infos.team == 'green' ? 'blue' : 'green');
 
         this.justUsedPortal = false;
-
         this.dead = false;
         this.moving = false;
         this.frame = 1;
-    }
 
-    /**
-     * Checks the tile the player is on
-     * @param {int} x
-     * @param {int} y
-     */
-    checkTile(x, y) {
-        let tile = map.data[x][y];
+        this.pos = map.assignSpawn(this);
+        this.dir = new Vector(1, 0);
 
-        this.checkPortal(tile);
-        this.checkPickup(tile, x, y);
     }
 
     /**
@@ -41,6 +37,7 @@ class Player {
      */
     update() {
         if (!this.dead) {
+
             this.dir = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(Input.mouse.x, Input.mouse.y)).normalize();
             this.dirSide = Vector.rotate(this.dir, Math.PI / 2);
 
@@ -49,27 +46,28 @@ class Player {
             let oldPx = Math.floor(this.pos.x);
             let oldPy = Math.floor(this.pos.y);
 
-            this.checkTile(oldPx, oldPy);
+            let currentTile = map.data[oldPx][oldPy];
+            this.checkTile(currentTile, oldPx, oldPy);
+
+
             this.moving = false;
-
-
 
             if (Input.keyboard.ArrowLeft) {
                 this.moving = true;
-                this.pos.add(this.dirSide.multiply(this.speed));
+                this.pos.add(this.dirSide.multiply(this.infos.speed));
             }
             if (Input.keyboard.ArrowRight) {
                 this.moving = true;
-                this.pos.subtract(this.dirSide.multiply(this.speed));
+                this.pos.subtract(this.dirSide.multiply(this.infos.speed));
             }
 
             if (Input.keyboard.ArrowUp) {
                 this.moving = true;
-                this.pos.subtract(this.dir.multiply(this.speed));
+                this.pos.subtract(this.dir.multiply(this.infos.speed));
             }
             if (Input.keyboard.ArrowDown) {
                 this.moving = true;
-                this.pos.add(this.dir.multiply(this.speed));
+                this.pos.add(this.dir.multiply(this.infos.speed));
             }
 
             let px = Math.floor(this.pos.x);
@@ -80,7 +78,7 @@ class Player {
 
 
             if (this.moving)
-                this.frame += timer.delta * 6;
+                this.frame += time.delta * 6;
             else
                 this.frame = 1;
 
@@ -89,11 +87,15 @@ class Player {
 
     }
 
+    /**
+     * Kills the player (drops flag if he was carrying)
+     */
     die() {
-        if (this.hasEnemyFlag) {
+        if (this.infos.hasEnemyFlag) {
             let px = Math.floor(this.pos.x);
             let py = Math.floor(this.pos.y);
-            map.data[px][py].pickup = 'pickup_flag_' + this.enemyTeam;
+            map.data[px][py].pickup = 'pickup_flag_' + this.infos.enemyTeam;
+            this.infos.hasEnemyFlag = false;
         }
         this.dead = true;
     }
@@ -126,7 +128,7 @@ class Player {
         gfx.rotate(ang - Math.PI / 2);
         gfx.sprite("shadow", 0, 0, tileSize, tileSize);
 
-        gfx.spriteSheet("toon_" + this.team, 320 / 3 * Math.floor(this.frame), 0, 320 / 3, 210, 0, 0, tileSize * ((320 / 3) / 210), tileSize);
+        gfx.spriteSheet("toon_" + this.infos.team, 320 / 3 * Math.floor(this.frame), 0, 320 / 3, 210, 0, 0, tileSize * ((320 / 3) / 210), tileSize);
         gfx.popMatrix();
     }
 
@@ -135,19 +137,97 @@ class Player {
      */
     drawStats() {
         let lifeVal = '100';
-        let life = (tileSize / 2) / 100 * this.life + .1;
-        let shield = (tileSize / 2) / 100 * this.shield + .1;
-        if (this.life < 100) lifeVal = 75;
-        if (this.life < 75) lifeVal = 50;
-        if (this.life < 50) lifeVal = 25;
-        if (this.life < 25) lifeVal = 0;
+        let life = (tileSize / 2) / 100 * this.infos.life + 0.1;
+        let shield = (tileSize / 2) / 100 * this.infos.shield + 0.1;
+        if (this.infos.life < 100) lifeVal = 75;
+        if (this.infos.life < 75) lifeVal = 50;
+        if (this.infos.life < 50) lifeVal = 25;
+        if (this.infos.life < 25) lifeVal = 0;
 
         gfx.pushMatrix();
         gfx.translate(gfx.width / 2, gfx.height / 2);
         gfx.sprite('stat_life_' + lifeVal, 0, -55, life, 8);
         gfx.sprite('stat_shield', 0, -45, shield, 8);
-        gfx.drawText(this.name, 0, -68);
+        gfx.drawText(this.infos.name, 0, -68);
         gfx.popMatrix();
     }
+
+
+    /**
+     * Checks the tile the player is walking on
+     * @param {Tile} tile 
+     * @param {Number} x 
+     * @param {Number} y 
+     */
+    checkTile(tile, x, y) {
+
+        // if it's a rogue flag (flag dropped by player)
+        if (tile.flag) {
+            let pickup = Pickups.flags[tile.flag];
+
+            // if it's enemy flag, we take it
+            if (pickup.name == 'flag_' + this.infos.enemyTeam) {
+                this.infos.hasEnemyFlag = true;
+            }
+            // else it's our flag, so we return it
+            else {
+                time.addTimer('respawn', 0, { pickup: 'pickup_flag_' + this.infos.team, x: map.flags[this.infos.team].x, y: map.flags[this.infos.team].y });
+            }
+            tile.flag = null;
+        }
+
+        // if it's a pickup (weapon, buff, flag)
+        if (tile.pickup) {
+            let name = tile.pickup.replace('pickup_', '');
+            let pickup = Pickups.buffs[name] || Pickups.weapons[name] || Pickups.flags[name]
+            if (pickup) {
+                // if player walks on a weapon, equip it and trigger respawn timer
+                if (pickup.type == 'weapon') {
+                    this.infos.weapon = pickup;
+                    this.infos.ammo = pickup.ammo;
+                    time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y });
+                    tile.pickup = null;
+                }
+                // if player walks on a buff, consume it and trigger respawn timer
+                if (pickup.type == 'buff') {
+                    this.infos.life += pickup.life;
+                    this.infos.shield += pickup.shield;
+                    if (pickup.speed != 0) time.addTimer('buff', 3, { stat: 'speed', value: this.infos.speed, player: this });
+                    this.infos.speed += pickup.speed;
+                    time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y });
+                    tile.pickup = null;
+                }
+                // if player walks on a flag, process it 
+                if (pickup.type == 'flag') {
+                    // if it's the enemy team's flag, the player takes it
+                    if (pickup.name == 'flag_' + this.infos.enemyTeam) {
+                        this.infos.hasEnemyFlag = true;
+                        tile.pickup = null;
+                    }
+                    // else it's the player's flag
+                    else {
+                        // If we are at our flag spawn location and have the enemy flag, capture it
+                        if (map.flags[this.infos.team].x == x && map.flags[this.infos.team].y == y && this.infos.hasEnemyFlag) {
+                            time.addTimer('respawn', 10, { pickup: 'pickup_flag_' + this.infos.enemyTeam, x: map.flags[this.infos.enemyTeam].x, y: map.flags[this.infos.enemyTeam].y });
+                            this.infos.hasEnemyFlag = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        // if it's a portal
+        if (tile.portal) {
+            if (!this.justUsedPortal) {
+                this.pos.x = tile.portal.dx + 0.5;
+                this.pos.y = tile.portal.dy + 0.5;
+                this.justUsedPortal = true;
+            }
+        }
+        else {
+            this.justUsedPortal = false;
+        }
+    }
+
 
 }

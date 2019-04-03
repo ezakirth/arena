@@ -7,7 +7,7 @@ class Timer {
 
         this.morphs = {}
 
-        this.respawns = [];
+        this.timers = [];
     }
 
     update() {
@@ -16,7 +16,7 @@ class Timer {
         this.last = this.now;
         this.elapsed += this.delta;
 
-        this.checkRespawns();
+        this.checkTimers();
         this.updateMorphs();
     }
 
@@ -30,23 +30,30 @@ class Timer {
     /**
      * Goes through all items to be respawned and respawn them if the delay has expired
      */
-    checkRespawns() {
-        for (let index = this.respawns.length - 1; index >= 0; index--) {
-            let item = this.respawns[index];
+    checkTimers() {
+        for (let index = this.timers.length - 1; index >= 0; index--) {
+            let timer = this.timers[index];
+            timer.delay -= this.delta;
+            if (timer.delay <= 0) {
+                if (timer.type == 'respawn') {
+                    map.data[timer.info.x][timer.info.y].pickup = timer.info.pickup;
+                }
 
-            item.delay -= this.delta;
-            if (item.delay <= 0) {
-                item.map[item.x][item.y].pickup = item.pickup;
-                this.respawns.splice(index, 1);
+                if (timer.type == 'buff') {
+                    timer.info.player.infos[timer.info.stat] = timer.info.value;
+                }
+                this.timers.splice(index, 1);
             }
         }
     }
 
     /**
      * Adds a pickup to the list of respawn timers
-     * @param {Object} item 
+     * @param {string} type 
+     * @param {number} delay 
+     * @param {Object} info 
      */
-    addRespawn(item) {
-        this.respawns.push(item);
+    addTimer(type, delay, info) {
+        this.timers.push({ type, delay, info });
     }
 }

@@ -18,7 +18,7 @@ var Input = {
     iner: 0,
     keyboard: { active: false },
 
-    speed: .1,
+    speed: 0.1,
 
     init: function () {
         window.addEventListener('mousedown', Input.inputDown);
@@ -67,10 +67,10 @@ var Input = {
         Input.view.y -= Input.inertia.y * Input.speed;
 
 
-        if (Input.mouse.browser.x > gfx.browser.width - 30) Input.view.x += timer.delta * 10;
-        if (Input.mouse.browser.x < 30) Input.view.x -= timer.delta * 10;
-        if (Input.mouse.browser.y > gfx.browser.height - 30) Input.view.y += timer.delta * 10;
-        if (Input.mouse.browser.y < 30) Input.view.y -= timer.delta * 10;
+        if (Input.mouse.browser.x > gfx.browser.width - 30) Input.view.x += time.delta * 10;
+        if (Input.mouse.browser.x < 30) Input.view.x -= time.delta * 10;
+        if (Input.mouse.browser.y > gfx.browser.height - 30) Input.view.y += time.delta * 10;
+        if (Input.mouse.browser.y < 30) Input.view.y -= time.delta * 10;
 
         // make sure we don't lose sight of the map ^^
         Input.view.x = Input.view.x.clamp(0, map.w - 5);

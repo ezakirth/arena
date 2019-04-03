@@ -18,7 +18,7 @@ Editor.randomFloor = function () {
  */
 Editor.randomFloorTile = function (tile) {
     tile.tex = 'floor_1';
-    if (Math.random() > .7) tile.tex = 'floor_' + Math.floor(Math.random() * 12 + 1);
+    if (Math.random() > 0.7) tile.tex = 'floor_' + Math.floor(Math.random() * 12 + 1);
 }
 
 Editor.clearTile = function (tile, tex) {

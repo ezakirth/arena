@@ -1,7 +1,7 @@
 "use strict";
 var tileSize = 128;
 var nbPlayers = 2;
-var Game, Editor, map = new Map(), timer = new Timer(), gfx = new Graphics();
+var Game, Editor, map = new Map(), time = new Timer(), gfx = new Graphics();
 function init() {
     gfx.init();
     Game.init();
@@ -15,7 +15,7 @@ function init() {
  */
 function loop() {
     requestAnimationFrame(loop);
-    timer.update();
+    time.update();
 
     // logic
 

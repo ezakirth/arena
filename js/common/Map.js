@@ -48,7 +48,7 @@ class Map {
 
 
     assignSpawn(player) {
-        let spawnPoints = this.spawns[player.team];
+        let spawnPoints = this.spawns[player.infos.team];
 
         let spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
 
@@ -75,10 +75,10 @@ class Map {
                         map.flags.green = new Vector(x, y)
                     }
                     if (block.spawn == "spawn_blue") {
-                        map.spawns.blue.push(new Vector(x + .5, y + .5));
+                        map.spawns.blue.push(new Vector(x + 0.5, y + 0.5));
                     }
                     if (block.spawn == "spawn_green") {
-                        map.spawns.green.push(new Vector(x + .5, y + .5));
+                        map.spawns.green.push(new Vector(x + 0.5, y + 0.5));
                     }
 
 
@@ -133,14 +133,14 @@ class Map {
                         }
 
                         if (block.spawn) {
-                            gfx.sprite(block.spawn, px, py, timer.morphs.smallfast, timer.morphs.smallfast);
+                            gfx.sprite(block.spawn, px, py, time.morphs.smallfast, time.morphs.smallfast);
                         }
 
                         if (block.portal) {
                             gfx.pushMatrix();
                             gfx.translate(px, py);
-                            gfx.rotate(timer.elapsed / 10 * Math.PI / 180);
-                            gfx.sprite("portal_" + block.portal.color, 0, 0, timer.morphs.bigslow, timer.morphs.bigslow);
+                            gfx.rotate(time.elapsed / 10 * Math.PI / 180);
+                            gfx.sprite("portal_" + block.portal.color, 0, 0, time.morphs.bigslow, time.morphs.bigslow);
                             gfx.popMatrix();
                         }
                     }
@@ -155,8 +155,12 @@ class Map {
                         }
 
                         if (block.pickup) {
-                            gfx.sprite("light", px, py, timer.morphs.bigfast, timer.morphs.bigfast);
-                            gfx.sprite(block.pickup, px, py, timer.morphs.smallslow, timer.morphs.smallslow);
+                            gfx.sprite("light", px, py, time.morphs.bigfast, time.morphs.bigfast);
+                            gfx.sprite(block.pickup, px, py, time.morphs.smallslow, time.morphs.smallslow);
+                        }
+                        if (block.flag) {
+                            gfx.sprite("light", px, py, time.morphs.bigfast, time.morphs.bigfast);
+                            gfx.sprite(block.flag, px, py, time.morphs.smallslow, time.morphs.smallslow);
                         }
                     }
 
