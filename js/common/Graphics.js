@@ -85,7 +85,7 @@ class Graphics {
     }
 
     sprite(img, x, y, w, h) {
-        img = '/assets/' + img + '.png';
+        img = './assets/' + img + '.png';
         let image = gfx.cachedImages[img];
 
         if (!image) {
@@ -107,7 +107,7 @@ class Graphics {
     }
 
     drawTile(img, x, y) {
-        img = '/assets/' + img + '.png';
+        img = './assets/' + img + '.png';
         let image = gfx.cachedImages[img];
 
         if (!image) {
@@ -121,7 +121,7 @@ class Graphics {
     }
 
     spriteSheet(img, sx, sy, sw, sh, dx, dy, dw, dh) {
-        img = '/assets/' + img + '.png';
+        img = './assets/' + img + '.png';
         let image = gfx.cachedImages[img];
 
         if (!image) {
