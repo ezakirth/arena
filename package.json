@@ -1,0 +1,9 @@
+{
+    "name": "server",
+    "version": "0.0.1",
+    "description": "game server",
+    "dependencies": {
+        "express": "^4.16.4",
+        "socket.io": "^2.2.0"
+    }
+}

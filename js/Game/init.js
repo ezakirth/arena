@@ -1,26 +1,24 @@
 "use strict";
 var tileSize = 128;
-var nbPlayers = 2;
-var Game, Editor, map = new Map(), time = new Timer(), gfx = new Graphics();
+var Game, Editor, map = new Map(), time = new Timer(), gfx = new Graphics(), network = new Network();
 function init() {
     gfx.init();
-    Game.init();
-    Input.init();
-    loop();
 
+    Input.init();
+
+    // load map, call loop when ready
+    map.setupGame(loop);
+    Game.init();
 }
 
-/** 
+/**
  * Game loop
  */
 function loop() {
     requestAnimationFrame(loop);
     time.update();
-
     // logic
-
     Game.update();
-
     // graphics
     Game.render();
 }

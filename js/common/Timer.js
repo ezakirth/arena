@@ -8,6 +8,15 @@ class Timer {
         this.morphs = {}
 
         this.timers = [];
+
+
+        this.networkData = {
+            renderTimestamp: 0,
+            serverDelay: 100,
+            serverUpdateTimeStamps: [],
+            serverUpdateDelay: 0,
+            lastServerUpdate: 0,
+        }
     }
 
     update() {
@@ -18,6 +27,8 @@ class Timer {
 
         this.checkTimers();
         this.updateMorphs();
+
+        this.networkUpdate();
     }
 
     updateMorphs() {
@@ -36,11 +47,11 @@ class Timer {
             timer.delay -= this.delta;
             if (timer.delay <= 0) {
                 if (timer.type == 'respawn') {
-                    map.data[timer.info.x][timer.info.y].pickup = timer.info.pickup;
+                    map.data[timer.data.x][timer.data.y].pickup = timer.data.pickup;
                 }
 
                 if (timer.type == 'buff') {
-                    timer.info.player.infos[timer.info.stat] = timer.info.value;
+                    timer.data.client.infos[timer.data.stat] = timer.data.value;
                 }
                 this.timers.splice(index, 1);
             }
@@ -49,11 +60,23 @@ class Timer {
 
     /**
      * Adds a pickup to the list of respawn timers
-     * @param {string} type 
-     * @param {number} delay 
-     * @param {Object} info 
+     * @param {string} type
+     * @param {number} delay
+     * @param {Object} info
      */
-    addTimer(type, delay, info) {
-        this.timers.push({ type, delay, info });
+    addTimer(type, delay, data) {
+        this.timers.push({ type: type, delay: delay, data: data });
+    }
+
+
+
+    networkUpdate() {
+        this.networkData.renderTimestamp = this.now + this.networkData.serverUpdateDelay;
+        this.networkData.lastServerUpdate += this.delta;
+    }
+    setServerDelay(timestamp) {
+        this.networkData.serverUpdateTimeStamps.push(timestamp);
+        if (this.networkData.serverUpdateTimeStamps.length > 2) this.networkData.serverUpdateTimeStamps.shift();
+        this.networkData.serverUpdateDelay = this.networkData.serverUpdateTimeStamps[0] - this.networkData.serverUpdateTimeStamps[1];
     }
 }

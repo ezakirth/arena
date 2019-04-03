@@ -1,44 +1,40 @@
 var Game = {
-    players: Array(),
+    onlineMode: true,
+    clients: {},
+    localClientId: null,
+    localClient: null,
 
-
-    init: function () {
-        map.setupGame();
-    },
+    init: function () { },
 
     start: function () {
-        this.players.push(new Player('-=BDN=- CHARpie'));
-
-        if (nbPlayers == 2)
-            this.players.push(new Player('-=BDN=- Toto'));
+        if (this.onlineMode) {
+            network.init();
+        }
+        else {
+            this.localClientId = 'local';
+            this.clients[this.localClientId] = new Client('-=BDN=- CHARpie', this.localClientId);
+            this.localClient = this.clients[this.localClientId];
+        }
     },
 
-    getNbPlayers: function () {
-        return this.players.length;
+    getNbClients: function () {
+        return this.clients.length;
     },
 
     update: function () {
-        if (map.data) {
-
-            for (let player of this.players) {
-                if (player.id == 0) player.update();
-            }
+        for (let clientId in this.clients) {
+            this.clients[clientId].update();
         }
     },
 
     render: function () {
-        if (map.data) {
+        gfx.clear();
+        gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
-            for (let player of this.players) {
-                gfx.setActiveCanvas(player.id);
-                gfx.clear();
-
-                gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
-                player.render();
-                gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
-            }
-        }
+        if (this.localClient) this.localClient.render();
 
 
+
+        gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
     }
 };

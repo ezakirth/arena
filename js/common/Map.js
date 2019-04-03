@@ -35,30 +35,36 @@ class Map {
     }
 
 
-    assignPlayer(player) {
-        if (this.teams.blue.length > this.teams.green.length) {
-            this.teams.green.push(player);
+    /**
+     * Assign the client to a team (keeping them evenly matched)
+     * @param {object} client
+     */
+    assignClientToTeam(client) {
+        if (this.teams.blue.length >= this.teams.green.length) {
+            this.teams.green.push(client);
             return 'green';
         }
         else {
-            this.teams.blue.push(player);
+            this.teams.blue.push(client);
             return 'blue';
         }
     }
 
-
-    assignSpawn(player) {
-        let spawnPoints = this.spawns[player.infos.team];
-
-        let spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
+    /**
+     * Pick a random spawn point to a client
+     * @param {string} team
+     */
+    assignSpawnToClient(team) {
+        let spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];
 
         return new Vector(spawnPoint.x, spawnPoint.y);
     }
 
     /**
-     * setups the map in game mode
+     * setups the map in game mode, calls callback function (main loop) when done
+     * @param {function} callback
      */
-    setupGame() {
+    setupGame(callback) {
         $.getJSON("map.json", function (data) {
             map.data = data;
             map.w = map.data.length;
@@ -80,11 +86,10 @@ class Map {
                     if (block.spawn == "spawn_green") {
                         map.spawns.green.push(new Vector(x + 0.5, y + 0.5));
                     }
-
-
                 }
             };
             Game.start();
+            callback();
         });
         //  this.data = JSON.parse(localStorage.getItem('tileData'));
     }
