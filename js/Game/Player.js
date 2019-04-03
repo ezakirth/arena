@@ -1,15 +1,19 @@
 class Player {
-    constructor(id, x, y) {
+    constructor(name) {
+        this.id = Game.players.length;
+
+        this.weapon = Pickups.weapons.gun;
+
         this.life = 100;
         this.shield = 100;
         this.ammo = 10;
-        this.name = '-=BDN=- CHARpie';
+        this.name = name;
+        this.team = map.assignPlayer(this);
+        this.hasEnemyFlag = false;
 
-        this.pos = new Vector(x, y);
+        this.pos = map.assignSpawn(this);
         this.dir = new Vector(1, 0);
         this.speed = .05;
-
-        this.id = id;
 
         this.justUsedPortal = false;
 
@@ -109,7 +113,7 @@ class Player {
         gfx.rotate(ang - Math.PI / 2);
         gfx.sprite("shadow", 0, 0, tileSize, tileSize);
 
-        gfx.spriteSheet("Toon" + this.id, 320 / 3 * Math.floor(this.frame), 0, 320 / 3, 210, 0, 0, tileSize * ((320 / 3) / 210), tileSize);
+        gfx.spriteSheet("toon_" + this.team, 320 / 3 * Math.floor(this.frame), 0, 320 / 3, 210, 0, 0, tileSize * ((320 / 3) / 210), tileSize);
         gfx.popMatrix();
     }
 

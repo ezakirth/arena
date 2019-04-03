@@ -1,16 +1,16 @@
 var Game = {
     players: Array(),
 
+
     init: function () {
         map.setupGame();
-
-
     },
 
     start: function () {
-        this.players.push(new Player(this.players.length, map.p1spawn.x, map.p1spawn.y));
+        this.players.push(new Player('-=BDN=- CHARpie'));
+
         if (nbPlayers == 2)
-            this.players.push(new Player(this.players.length, map.p2spawn.x, map.p2spawn.y));
+            this.players.push(new Player('-=BDN=- Toto'));
     },
 
     getNbPlayers: function () {

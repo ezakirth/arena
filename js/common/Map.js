@@ -2,6 +2,9 @@
 class Map {
     constructor() {
         this.data = null;
+        this.teams = { blue: [], green: [] };
+        this.spawns = { blue: [], green: [] };
+        this.flags = { blue: null, green: null };
     }
 
     /**
@@ -31,6 +34,27 @@ class Map {
         $("#editor_Height_id").val(this.h);
     }
 
+
+    assignPlayer(player) {
+        if (this.teams.blue.length > this.teams.green.length) {
+            this.teams.green.push(player);
+            return 'green';
+        }
+        else {
+            this.teams.blue.push(player);
+            return 'blue';
+        }
+    }
+
+
+    assignSpawn(player) {
+        let spawnPoints = this.spawns[player.team];
+
+        let spawnPoint = spawnPoints[Math.floor(Math.random() * spawnPoints.length)];
+
+        return new Vector(spawnPoint.x, spawnPoint.y);
+    }
+
     /**
      * setups the map in game mode
      */
@@ -45,16 +69,16 @@ class Map {
                     let block = map.data[x][y];
 
                     if (block.pickup == "pickup_flag_blue") {
-                        map.p1flag = new Vector(x, y)
+                        map.flags.blue = new Vector(x, y)
                     }
                     if (block.pickup == "pickup_flag_green") {
-                        map.p2flag = new Vector(x, y)
+                        map.flags.green = new Vector(x, y)
                     }
                     if (block.spawn == "spawn_blue") {
-                        map.p1spawn = new Vector(x + .5, y + .5)
+                        map.spawns.blue.push(new Vector(x + .5, y + .5));
                     }
                     if (block.spawn == "spawn_green") {
-                        map.p2spawn = new Vector(x + .5, y + .5)
+                        map.spawns.green.push(new Vector(x + .5, y + .5));
                     }
 
 
