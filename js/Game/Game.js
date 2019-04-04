@@ -1,12 +1,13 @@
-var Game = {
-    onlineMode: true,
-    clients: {},
-    localClientId: null,
-    localClient: null,
+class Game {
+    constructor(onlineMode) {
+        this.onlineMode = onlineMode;
+        this.clients = {};
+        this.localClientId = null;
+        this.localClient = null;
+    }
+    init() { }
 
-    init: function () { },
-
-    start: function () {
+    start() {
         if (this.onlineMode) {
             network.init();
         }
@@ -15,19 +16,19 @@ var Game = {
             this.clients[this.localClientId] = new Client('-=BDN=- CHARpie', this.localClientId);
             this.localClient = this.clients[this.localClientId];
         }
-    },
+    }
 
-    getNbClients: function () {
+    getNbClients() {
         return this.clients.length;
-    },
+    }
 
-    update: function () {
+    update() {
         for (let clientId in this.clients) {
             this.clients[clientId].update();
         }
-    },
+    }
 
-    render: function () {
+    render() {
         gfx.clear();
         gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
@@ -37,4 +38,4 @@ var Game = {
 
         gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
     }
-};
+}

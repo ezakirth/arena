@@ -37,7 +37,7 @@ Editor.addPortal = function (type, px, py) {
     }
 
 
-    Input.mouse.left = false;
+    input.mouse.left = false;
 }
 
 
@@ -52,5 +52,5 @@ Editor.clearPortal = function (px, py) {
         tile.portal = null;
         this.portalOrigin = null;
     }
-    Input.mouse.left = false;
+    input.mouse.left = false;
 }

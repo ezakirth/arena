@@ -32,10 +32,10 @@ class Timer {
     }
 
     updateMorphs() {
-        this.morphs.bigfast = tileSize - Math.abs(Math.sin(this.elapsed * 8) * 20);
-        this.morphs.bigslow = tileSize - Math.abs(Math.sin(this.elapsed * 4) * 20);
-        this.morphs.smallfast = tileSize - Math.abs(Math.sin(this.elapsed * 8) * 10);
-        this.morphs.smallslow = tileSize - Math.abs(Math.sin(this.elapsed * 4) * 10);
+        this.morphs.bigfast = Math.abs(Math.sin(this.elapsed * 8) * 20);
+        this.morphs.bigslow = Math.abs(Math.sin(this.elapsed * 4) * 20);
+        this.morphs.smallfast = Math.abs(Math.sin(this.elapsed * 8) * 10);
+        this.morphs.smallslow = Math.abs(Math.sin(this.elapsed * 4) * 10);
     }
 
     /**

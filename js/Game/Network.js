@@ -1,5 +1,5 @@
 
-/*module.exports =*/ class Network {
+class Network {
     constuctor() {
         this.network.startTime = 0;
         this.network.latency = 0;
@@ -8,41 +8,43 @@
     }
 
     init() {
+        let _this = this;
+
         this.socket = io('http://localhost:3000');
         setInterval(function () {
-            network.startTime = Date.now();
-            network.socket.emit('pingtest');
+            _this.startTime = Date.now();
+            _this.socket.emit('pingtest');
         }, 2000);
 
         setInterval(function () {
-            let client = Game.clients[Game.localClientId];
+            let client = game.clients[game.localClientId];
             if (client) {
-                network.sendMovementData(client);
+                _this.sendMovementData(client);
             }
         }, 100);
 
 
         this.socket.on('pongtest', function () {
-            network.latency = Date.now() - network.startTime;
+            _this.latency = Date.now() - _this.startTime;
             // document.getElementById('ping').innerText = network.latency + 'ms';
         });
 
 
 
         this.socket.on('init', function (client) {
-            Game.localClientId = client.networkData.clientId;
-            Game.localClient = Game.clients[Game.localClientId] = new Client('Local player', Game.localClientId, client.infos.team, client.position);
+            game.localClientId = client.networkData.clientId;
+            game.localClient = game.clients[game.localClientId] = new Client('Local player', game.localClientId, client.infos.team, client.position);
         });
 
         this.socket.on('disconnected', function (clientId) {
-            let team = map.teams[Game.clients[clientId].infos.team];
+            let team = map.teams[game.clients[clientId].infos.team];
             for (let index = 0; index < team.length; index++) {
                 if (team[index].clientId = clientId) {
                     team.splice(index, 1);
                     break;
                 }
             }
-            delete Game.clients[clientId];
+            delete game.clients[clientId];
 
         });
 
@@ -50,20 +52,20 @@
             let timestamp = +new Date();
             time.setServerDelay(timestamp);
 
-            network.lastServerTimestamp = data.timestamp;
+            _this.lastServerTimestamp = data.timestamp;
             let serverUsers = data.clients;
             for (let clientId in serverUsers) {
                 let playerData = serverUsers[clientId];
-                if (!Game.clients[clientId]) {
-                    Game.clients[clientId] = new Client('Network player ' + Object.keys(Game.clients).length, playerData.networkData.clientId, playerData.infos.team, playerData.position);
+                if (!game.clients[clientId]) {
+                    game.clients[clientId] = new Client('Network player ' + Object.keys(game.clients).length, playerData.networkData.clientId, playerData.infos.team, playerData.position);
                 }
 
-                let client = Game.clients[clientId];
+                let client = game.clients[clientId];
 
-                if (clientId == Game.localClientId) {
+                if (clientId == game.localClientId) {
 
                     // if there was movement since the last server update, send it now
-                    network.sendMovementData(client)
+                    _this.sendMovementData(client)
 
                     // Received the authoritative position of this client's client.
                     client.position.x = playerData.position.x;

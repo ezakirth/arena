@@ -8,10 +8,10 @@ class Client {
      * @param {string} name
      */
     constructor(name, clientId, team, position) {
-        this.canvasId = Game.clients.length;
+        this.canvasId = game.clients.length;
         this.direction = new Vector(1, 0);
 
-        if (Game.onlineMode) {
+        if (game.onlineMode) {
             map.teams[team].push(this);
             this.position = new Vector(position.x, position.y);
         }
@@ -55,7 +55,7 @@ class Client {
      */
     applyInputs() {
         if (!this.dead) {
-            this.direction = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(Input.mouse.x, Input.mouse.y)).normalize();
+            this.direction = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(input.mouse.x, input.mouse.y)).normalize();
             this.dirSide = Vector.rotate(this.direction, Math.PI / 2);
 
             let oldX = this.position.x;
@@ -69,20 +69,20 @@ class Client {
 
             this.moving = false;
 
-            if (Input.keyboard.ArrowLeft) {
+            if (input.keyboard.ArrowLeft) {
                 this.moving = true;
                 this.position.add(this.dirSide.multiply(this.infos.speed));
             }
-            if (Input.keyboard.ArrowRight) {
+            if (input.keyboard.ArrowRight) {
                 this.moving = true;
                 this.position.subtract(this.dirSide.multiply(this.infos.speed));
             }
 
-            if (Input.keyboard.ArrowUp) {
+            if (input.keyboard.ArrowUp) {
                 this.moving = true;
                 this.position.subtract(this.direction.multiply(this.infos.speed));
             }
-            if (Input.keyboard.ArrowDown) {
+            if (input.keyboard.ArrowDown) {
                 this.moving = true;
                 this.position.add(this.direction.multiply(this.infos.speed));
             }
@@ -100,7 +100,7 @@ class Client {
      */
     update() {
         // if the client is the client, update position based on input
-        if (this.networkData.clientId == Game.localClientId) {
+        if (this.networkData.clientId == game.localClientId) {
             this.applyInputs();
         }
         // if the client is not the client (coming from network), interpolate its positions
@@ -175,9 +175,9 @@ class Client {
         this.renderCharacter();
 
         // render network clients
-        for (let clientId in Game.clients) {
-            if (clientId != Game.localClientId) {
-                Game.clients[clientId].renderNetworkClientCharacter();
+        for (let clientId in game.clients) {
+            if (clientId != game.localClientId) {
+                game.clients[clientId].renderNetworkClientCharacter();
             }
         }
         // second pass
@@ -186,9 +186,9 @@ class Client {
         this.renderStats();
 
         // render network clients' stats
-        for (let clientId in Game.clients) {
-            if (clientId != Game.localClientId) {
-                Game.clients[clientId].renderNetworkClientStats();
+        for (let clientId in game.clients) {
+            if (clientId != game.localClientId) {
+                game.clients[clientId].renderNetworkClientStats();
             }
         }
 
@@ -197,8 +197,8 @@ class Client {
     renderNetworkClientCharacter() {
 
         gfx.pushMatrix();
-        let offsetX = (this.position.x * tileSize - Game.clients[Game.localClientId].position.x * tileSize);
-        let offsetY = (this.position.y * tileSize - Game.clients[Game.localClientId].position.y * tileSize);
+        let offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize);
+        let offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize);
         gfx.translate(offsetX, offsetY);
 
         this.renderCharacter();
@@ -208,8 +208,8 @@ class Client {
 
     renderNetworkClientStats() {
         gfx.pushMatrix();
-        let offsetX = (this.position.x * tileSize - Game.clients[Game.localClientId].position.x * tileSize);
-        let offsetY = (this.position.y * tileSize - Game.clients[Game.localClientId].position.y * tileSize);
+        let offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize);
+        let offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize);
         gfx.translate(offsetX, offsetY);
         this.renderStats();
         gfx.popMatrix();

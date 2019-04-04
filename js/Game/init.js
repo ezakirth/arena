@@ -1,14 +1,22 @@
 "use strict";
 var tileSize = 128;
-var Game, Editor, map = new Map(), time = new Timer(), gfx = new Graphics(), network = new Network();
+var Editor;
+var game = new Game(false); // true if multiplayer
+var map = new Map();
+var time = new Timer();
+var gfx = new Graphics();
+var network = new Network();
+var input = new Input();
+
+
 function init() {
     gfx.init();
 
-    Input.init();
+    input.init();
 
     // load map, call loop when ready
     map.setupGame(loop);
-    Game.init();
+    game.init();
 }
 
 /**
@@ -18,22 +26,7 @@ function loop() {
     requestAnimationFrame(loop);
     time.update();
     // logic
-    Game.update();
+    game.update();
     // graphics
-    Game.render();
+    game.render();
 }
-
-
-(function () {
-    var script = document.createElement('script');
-    script.onload = function () {
-        var stats = new Stats();
-        document.body.appendChild(stats.dom);
-        requestAnimationFrame(function loop() {
-            stats.update();
-            requestAnimationFrame(loop)
-        });
-    };
-    script.src = 'lib/stats.js';
-    document.head.appendChild(script);
-})()

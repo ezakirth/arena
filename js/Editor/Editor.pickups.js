@@ -13,7 +13,7 @@ Editor.addPickup = function (type, px, py) {
         tile.tex = 'floor_' + type;
         tile.pickup = "pickup_" + type;
     }
-    Input.mouse.left = false;
+    input.mouse.left = false;
 }
 
 /**
@@ -28,5 +28,5 @@ Editor.clearPickup = function (px, py) {
         this.randomFloorTile(tile);
         tile.pickup = null;
     }
-    Input.mouse.right = false;
+    input.mouse.right = false;
 }

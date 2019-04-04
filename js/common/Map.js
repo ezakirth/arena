@@ -65,35 +65,39 @@ class Map {
      * @param {function} callback
      */
     setupGame(callback) {
+        let _this = this;
         $.getJSON("map.json", function (data) {
-            map.data = data;
-            map.w = map.data.length;
-            map.h = map.data[0].length;
-
-            for (let x = 0; x < map.w; x++) {
-                for (let y = 0; y < map.h; y++) {
-                    let block = map.data[x][y];
-
-                    if (block.pickup == "pickup_flag_blue") {
-                        map.flags.blue = new Vector(x, y)
-                    }
-                    if (block.pickup == "pickup_flag_green") {
-                        map.flags.green = new Vector(x, y)
-                    }
-                    if (block.spawn == "spawn_blue") {
-                        map.spawns.blue.push(new Vector(x + 0.5, y + 0.5));
-                    }
-                    if (block.spawn == "spawn_green") {
-                        map.spawns.green.push(new Vector(x + 0.5, y + 0.5));
-                    }
-                }
-            };
-            Game.start();
+            _this.parseMap(data);
+            game.start();
             callback();
         });
         //  this.data = JSON.parse(localStorage.getItem('tileData'));
     }
 
+    parseMap(data) {
+        this.data = data;
+        this.w = this.data.length;
+        this.h = this.data[0].length;
+
+        for (let x = 0; x < this.w; x++) {
+            for (let y = 0; y < this.h; y++) {
+                let block = this.data[x][y];
+
+                if (block.pickup == "pickup_flag_blue") {
+                    this.flags.blue = new Vector(x, y)
+                }
+                if (block.pickup == "pickup_flag_green") {
+                    this.flags.green = new Vector(x, y)
+                }
+                if (block.spawn == "spawn_blue") {
+                    this.spawns.blue.push(new Vector(x + 0.5, y + 0.5));
+                }
+                if (block.spawn == "spawn_green") {
+                    this.spawns.green.push(new Vector(x + 0.5, y + 0.5));
+                }
+            }
+        };
+    }
 
     /**
      * Render the map based on position
@@ -120,8 +124,8 @@ class Map {
         // on boucle sur toutes les tiles autour du joueur
         for (let x = pMapX - viewSizeX; x < pMapX + viewSizeX + 1; x++) {
             for (let y = pMapY - viewSizeY - 1; y < pMapY + viewSizeY + 1; y++) {
-                if (x < map.w && y < map.h && x >= 0 && y >= 0) {
-                    block = map.data[x][y];
+                if (x < this.w && y < this.h && x >= 0 && y >= 0) {
+                    block = this.data[x][y];
                     let px = x * tileSize;
                     let py = y * tileSize;
 
@@ -138,14 +142,14 @@ class Map {
                         }
 
                         if (block.spawn) {
-                            gfx.sprite(block.spawn, px, py, time.morphs.smallfast, time.morphs.smallfast);
+                            gfx.sprite(block.spawn, px, py, tileSize - time.morphs.smallfast, tileSize - time.morphs.smallfast);
                         }
 
                         if (block.portal) {
                             gfx.pushMatrix();
                             gfx.translate(px, py);
                             gfx.rotate(time.elapsed / 10 * Math.PI / 180);
-                            gfx.sprite("portal_" + block.portal.color, 0, 0, time.morphs.bigslow, time.morphs.bigslow);
+                            gfx.sprite("portal_" + block.portal.color, 0, 0, tileSize - time.morphs.bigslow, tileSize - time.morphs.bigslow);
                             gfx.popMatrix();
                         }
                     }
@@ -160,12 +164,12 @@ class Map {
                         }
 
                         if (block.pickup) {
-                            gfx.sprite("light", px, py, time.morphs.bigfast, time.morphs.bigfast);
-                            gfx.sprite(block.pickup, px, py, time.morphs.smallslow, time.morphs.smallslow);
+                            gfx.sprite("light", px, py, tileSize - time.morphs.bigfast, tileSize - time.morphs.bigfast);
+                            gfx.sprite(block.pickup, px, py, tileSize - time.morphs.smallslow, tileSize - time.morphs.smallslow);
                         }
                         if (block.flag) {
-                            gfx.sprite("light", px, py, time.morphs.bigfast, time.morphs.bigfast);
-                            gfx.sprite(block.flag, px, py, time.morphs.smallslow, time.morphs.smallslow);
+                            gfx.sprite("light", px, py, tileSize - time.morphs.bigfast, tileSize - time.morphs.bigfast);
+                            gfx.sprite(block.flag, px, py, tileSize - time.morphs.smallslow, tileSize - time.morphs.smallslow);
                         }
                     }
 
@@ -221,9 +225,7 @@ class Map {
             var tmppath = URL.createObjectURL(e.target.files[0]);
             var _this = this;
             $.getJSON(tmppath, function (data) {
-                _this.data = data;
-                _this.w = _this.data.length;
-                _this.h = _this.data[0].length;
+                _this.parseMap(data);
                 $("#editor_Width_id").val(_this.w);
                 $("#editor_Height_id").val(_this.h);
             });

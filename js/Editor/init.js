@@ -1,12 +1,18 @@
 "use strict";
 var tileSize = 96;
-var Game, Editor, map = new Map(), time = new Timer(), gfx = new Graphics();
+
+var Editor;
+var map = new Map();
+var time = new Timer();
+var gfx = new Graphics();
+var input = new Input();
+
+
 function init() {
     gfx.init();
     Editor.init();
-    Input.init();
+    input.init();
     loop();
-
 }
 
 /**
@@ -17,24 +23,9 @@ function loop() {
     time.update();
 
     // logic
-    Input.update();
+    input.update();
     Editor.update();
 
     // graphics
     Editor.render();
 }
-
-
-(function () {
-    var script = document.createElement('script');
-    script.onload = function () {
-        var stats = new Stats();
-        document.body.appendChild(stats.dom);
-        requestAnimationFrame(function loop() {
-            stats.update();
-            requestAnimationFrame(loop)
-        });
-    };
-    script.src = 'lib/stats.js';
-    document.head.appendChild(script);
-})()

@@ -10,12 +10,14 @@ class Graphics {
         this.ctx = new Array();
         this.cachedImages = {};
 
+        this.tileSize = 1;
     }
 
     init() {
+        let _this = this;
         this.setupCanvas();
         this.resizeCanvas();
-        window.onresize = function () { gfx.resizeCanvas(); }
+        window.onresize = function () { _this.resizeCanvas(); }
     }
 
     getWidth() {
@@ -29,7 +31,7 @@ class Graphics {
     setupCanvas() {
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext("2d");
-        $("body").append(this.canvas);
+        document.body.appendChild(this.canvas);
     }
 
     setStyles(id) {
@@ -43,12 +45,11 @@ class Graphics {
     }
 
     resizeCanvas() {
-
         this.ctx.canvas.width = this.width;
         this.ctx.canvas.height = this.height;
-        this.ratio.x = this.width / $(this.canvas).width();
-        this.ratio.y = this.height / $(this.canvas).height();
-        this.offset.y = (window.innerHeight - $(this.canvas).height()) / 2;
+        this.ratio.x = this.width / this.canvas.clientWidth;
+        this.ratio.y = this.height / this.canvas.clientHeight;
+        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
 
         this.setStyles();
 
@@ -62,51 +63,51 @@ class Graphics {
 
     sprite(img, x, y, w, h) {
         img = './assets/' + img + '.png';
-        let image = gfx.cachedImages[img];
+        let image = this.cachedImages[img];
 
         if (!image) {
-            gfx.cachedImages[img] = new Image(256, 256);
-            image = gfx.cachedImages[img];
+            this.cachedImages[img] = new Image(256, 256);
+            image = this.cachedImages[img];
             image.src = img;
         }
         else {
             let width = w || image.naturalWidth;
             let height = h || image.naturalHeight;
 
-            gfx.ctx.drawImage(image, x - width / 2, y - height / 2, width, height);
+            this.ctx.drawImage(image, x * this.tileSize - width / 2, y * this.tileSize - height / 2, width * this.tileSize, height * this.tileSize);
         }
     }
 
     drawText(text, x, y) {
-        gfx.ctx.fillText(text, x, y);
-        gfx.ctx.strokeText(text, x, y);
+        this.ctx.fillText(text, x * this.tileSize, y * this.tileSize);
+        this.ctx.strokeText(text, x * this.tileSize, y * this.tileSize);
     }
 
     drawTile(img, x, y) {
         img = './assets/' + img + '.png';
-        let image = gfx.cachedImages[img];
+        let image = this.cachedImages[img];
 
         if (!image) {
-            gfx.cachedImages[img] = new Image(256, 256);
-            image = gfx.cachedImages[img];
+            this.cachedImages[img] = new Image(256, 256);
+            image = this.cachedImages[img];
             image.src = img;
         }
         else {
-            gfx.ctx.drawImage(image, x - tileSize / 2, y - tileSize / 2, tileSize, tileSize);
+            this.ctx.drawImage(image, x - tileSize / 2, y - tileSize / 2, tileSize, tileSize);
         }
     }
 
     spriteSheet(img, sx, sy, sw, sh, dx, dy, dw, dh) {
         img = './assets/' + img + '.png';
-        let image = gfx.cachedImages[img];
+        let image = this.cachedImages[img];
 
         if (!image) {
-            gfx.cachedImages[img] = new Image(256, 256);
-            image = gfx.cachedImages[img];
+            this.cachedImages[img] = new Image(256, 256);
+            image = this.cachedImages[img];
             image.src = img;
         }
         else {
-            gfx.ctx.drawImage(image, sx, sy, sw, sh, dx - dw / 2, dy - dh / 2, dw, dh);
+            this.ctx.drawImage(image, sx, sy, sw, sh, dx - dw / 2, dy - dh / 2, dw, dh);
         }
     }
 
