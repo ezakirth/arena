@@ -83,19 +83,6 @@ class Graphics {
         this.ctx.strokeText(text, x * this.tileSize, y * this.tileSize);
     }
 
-    drawTile(img, x, y) {
-        img = './assets/' + img + '.png';
-        let image = this.cachedImages[img];
-
-        if (!image) {
-            this.cachedImages[img] = new Image(256, 256);
-            image = this.cachedImages[img];
-            image.src = img;
-        }
-        else {
-            this.ctx.drawImage(image, x - tileSize / 2, y - tileSize / 2, tileSize, tileSize);
-        }
-    }
 
     spriteSheet(img, sx, sy, sw, sh, dx, dy, dw, dh) {
         img = './assets/' + img + '.png';

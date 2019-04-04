@@ -175,9 +175,9 @@ class Map {
 
                     if (Editor && Editor.showGrid) {
                         if (block.solid) {
-                            gfx.drawTile("red", px, py);
+                            gfx.sprite("red", px, py, tileSize, tileSize);
                         } else {
-                            gfx.drawTile("green", px, py);
+                            gfx.sprite("green", px, py, tileSize, tileSize);
                         }
                     }
                 }
