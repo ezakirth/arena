@@ -1,4 +1,4 @@
-Pickups = {
+module.exports = Pickups = {
     buffs: {
         medkit: {
             type: 'buff',

@@ -1,5 +1,7 @@
-"use strict";
-class Map {
+var Vector = require('../../lib/Vector');
+var Tile = require('../common/Tile');
+
+module.exports = class Map {
     constructor() {
         this.data = null;
         this.teams = { blue: [], green: [] };
@@ -61,19 +63,9 @@ class Map {
     }
 
     /**
-     * setups the map in game mode, calls callback function (main loop) when done
-     * @param {function} callback
+     * Loads the map 
+     * @param {Object} data 
      */
-    setupGame(callback) {
-        let _this = this;
-        $.getJSON("map.json", function (data) {
-            _this.parseMap(data);
-            game.start();
-            callback();
-        });
-        //  this.data = JSON.parse(localStorage.getItem('tileData'));
-    }
-
     parseMap(data) {
         this.data = data;
         this.w = this.data.length;

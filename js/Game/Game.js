@@ -1,6 +1,5 @@
-class Game {
-    constructor(onlineMode) {
-        this.onlineMode = onlineMode;
+module.exports = class Game {
+    constructor() {
         this.clients = {};
         this.localClientId = null;
         this.localClient = null;
@@ -8,14 +7,10 @@ class Game {
     init() { }
 
     start() {
-        if (this.onlineMode) {
-            network.init();
-        }
-        else {
-            this.localClientId = 'local';
-            this.clients[this.localClientId] = new Client('-=BDN=- CHARpie', this.localClientId);
-            this.localClient = this.clients[this.localClientId];
-        }
+        network.init();
+        //            this.localClientId = 'local';
+        //          this.clients[this.localClientId] = new Client('-=BDN=- CHARpie', this.localClientId);
+        //        this.localClient = this.clients[this.localClientId];
     }
 
     getNbClients() {

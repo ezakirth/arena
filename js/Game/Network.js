@@ -1,5 +1,7 @@
+var io = require('../../lib/socket.io.slim');
+var Client = require('./Client');
 
-class Network {
+module.exports = class Network {
     constuctor() {
         this.network.startTime = 0;
         this.network.latency = 0;
@@ -7,15 +9,15 @@ class Network {
         this.socket = null;
     }
 
-    init() {
+    init(callback) {
+        this.socket = io('http://localhost:3000');
+
         let _this = this;
 
-        this.socket = io('http://localhost:3000');
         setInterval(function () {
             _this.startTime = Date.now();
             _this.socket.emit('pingtest');
         }, 2000);
-
         setInterval(function () {
             let client = game.clients[game.localClientId];
             if (client) {
@@ -24,16 +26,23 @@ class Network {
         }, 100);
 
 
+
         this.socket.on('pongtest', function () {
             _this.latency = Date.now() - _this.startTime;
             // document.getElementById('ping').innerText = network.latency + 'ms';
         });
 
 
+        // Connected to the server
+        // load map from server and add local client 
+        this.socket.on('init', function (serverData) {
+            let client = serverData.client;
+            let mapData = serverData.map;
 
-        this.socket.on('init', function (client) {
+            map.parseMap(mapData);
             game.localClientId = client.networkData.clientId;
             game.localClient = game.clients[game.localClientId] = new Client('Local player', game.localClientId, client.infos.team, client.position);
+            callback();
         });
 
         this.socket.on('disconnected', function (clientId) {

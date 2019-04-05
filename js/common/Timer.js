@@ -1,4 +1,4 @@
-class Timer {
+module.exports = class Timer {
     constructor() {
         this.now = +new Date();
         this.last = this.now;

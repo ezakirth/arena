@@ -1,8 +1,10 @@
+var Vector = require('../../lib/Vector');
+
 /**
  * Handles a client
  * @param {string} name
  */
-class Client {
+module.exports = class Client {
     /**
      * Creates a client instance
      * @param {string} name
@@ -11,14 +13,10 @@ class Client {
         this.canvasId = game.clients.length;
         this.direction = new Vector(1, 0);
 
-        if (game.onlineMode) {
-            map.teams[team].push(this);
-            this.position = new Vector(position.x, position.y);
-        }
-        else {
-            team = map.assignClientToTeam(this);
-            this.position = map.assignSpawnToClient(team);
-        }
+        map.teams[team].push(this);
+        this.position = new Vector(position.x, position.y);
+        //            team = map.assignClientToTeam(this);
+        //           this.position = map.assignSpawnToClient(team);
 
         this.infos = {
             name: name,
@@ -55,8 +53,8 @@ class Client {
      */
     applyInputs() {
         if (!this.dead) {
-            this.direction = Vector.subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(input.mouse.x, input.mouse.y)).normalize();
-            this.dirSide = Vector.rotate(this.direction, Math.PI / 2);
+            this.direction = Vector._subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(input.mouse.x, input.mouse.y)).normalize();
+            this.dirSide = Vector._rotate(this.direction, Math.PI / 2);
 
             let oldX = this.position.x;
             let oldY = this.position.y;

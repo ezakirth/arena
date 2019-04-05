@@ -1,5 +1,4 @@
-"use strict";
-class Input {
+module.exports = class Input {
     constructor() {
         this.mouse = {
             left: false,

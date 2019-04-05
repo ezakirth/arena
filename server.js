@@ -86,7 +86,9 @@ const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 
 const server = express()
-  .use((req, res) => res.sendFile(INDEX))
+  .use(express.static('/*'))
+  .get('/', (req, res) => res.sendFile(INDEX))
+  .get('/*', (req, res, next) => res.sendFile(__dirname + '/' + req.params[0]))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server);
@@ -94,7 +96,7 @@ const io = socketIO(server);
 io.on('connection', function (socket) {
   let client = new Client(socket.id);
   clients[client.networkData.clientId] = client;
-  socket.emit('init', client);
+  socket.emit('init', { client: client, map: map.data });
 
   socket.on('update', function (movementData) {
     let client = clients[socket.id];

@@ -1,5 +1,4 @@
-"use strict";
-class Tile {
+module.exports = class Tile {
     constructor() {
         // contains the texture name (floor, etc.)
         this.tex = null;

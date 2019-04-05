@@ -1,5 +1,4 @@
-"use strict";
-class Graphics {
+module.exports = class Graphics {
     constructor() {
         this.width = 1920;
         this.height = 1080;
@@ -10,7 +9,6 @@ class Graphics {
         this.ctx = new Array();
         this.cachedImages = {};
 
-        this.tileSize = 1;
     }
 
     init() {
@@ -74,13 +72,13 @@ class Graphics {
             let width = w || image.naturalWidth;
             let height = h || image.naturalHeight;
 
-            this.ctx.drawImage(image, x * this.tileSize - width / 2, y * this.tileSize - height / 2, width * this.tileSize, height * this.tileSize);
+            this.ctx.drawImage(image, x - width / 2, y - height / 2, width, height);
         }
     }
 
     drawText(text, x, y) {
-        this.ctx.fillText(text, x * this.tileSize, y * this.tileSize);
-        this.ctx.strokeText(text, x * this.tileSize, y * this.tileSize);
+        this.ctx.fillText(text, x, y);
+        this.ctx.strokeText(text, x, y);
     }
 
 
