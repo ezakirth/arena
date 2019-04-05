@@ -3,7 +3,20 @@
     "version": "0.0.1",
     "description": "game server",
     "dependencies": {
+        "browserify": "^16.2.3",
         "express": "^4.16.4",
-        "socket.io": "^2.2.0"
+        "socket.io": "^2.2.0",
+        "uglifyify": "^5.0.1",
+        "watchify": "^3.11.1"
+    },
+    "scripts": {
+        "build:game_dev": "browserify initGame.js > bundleGame.js",
+        "build:editor_dev": "browserify initEditor.js > bundleEditor.js",
+        "build:game_prod": "browserify -g uglifyify initGame.js > bundleGame.js",
+        "build:editor_prod": "browserify -g uglifyify initEditor.js > bundleEditor.js",
+        "build:dev": "npm run build:game_dev && npm run build:editor_dev",
+        "build:prod": "npm run build:game_prod && npm run build:editor_prod",
+        "live:game": "watchify initGame.js -o bundleGame.js -v",
+        "live:editor": "watchify initEditor.js -o bundleEditor.js -v"
     }
 }
