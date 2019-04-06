@@ -1,5 +1,5 @@
-var Vector = require('../../lib/Vector');
-var Pickups = require('./Pickups');
+var Vector = require('../common/Vector');
+var Pickups = require('../common/Pickups');
 /**
  * Handles a client
  * @param {string} name
@@ -11,15 +11,7 @@ module.exports = class Client {
      */
     constructor(name, clientId, team, position) {
         this.direction = new Vector(1, 0);
-
-        if (team) {
-            map.teams[team].push(this);
-            this.position = new Vector(position.x, position.y);
-        }
-        else {
-            team = map.assignClientToTeam(this);
-            this.position = map.assignSpawnToClient(team);
-        }
+        this.position = new Vector(position.x, position.y);
 
         this.infos = {
             name: name,

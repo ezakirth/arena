@@ -1,10 +1,9 @@
-var Vector = require('../../lib/Vector');
-var Tile = require('../Editor/Tile');
+var Vector = require('./Vector');
+var Tile = require('./Tile');
 
 module.exports = class Map {
     constructor() {
         this.data = null;
-        this.teams = { blue: [], green: [] };
         this.spawns = { blue: [], green: [] };
         this.flags = { blue: null, green: null };
 
@@ -60,21 +59,6 @@ module.exports = class Map {
         }
 
         this.updates = [];
-    }
-
-    /**
-     * Assign the client to a team (keeping them evenly matched)
-     * @param {object} client
-     */
-    assignClientToTeam(client) {
-        if (this.teams.blue.length >= this.teams.green.length) {
-            this.teams.green.push(client);
-            return 'green';
-        }
-        else {
-            this.teams.blue.push(client);
-            return 'blue';
-        }
     }
 
     /**

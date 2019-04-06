@@ -6,14 +6,6 @@ module.exports = class Game {
         this.localClient = null;
 
     }
-    init() { }
-
-    start() {
-        network.init();
-        //            this.localClientId = 'local';
-        //          this.clients[this.localClientId] = new Client('-=BDN=- CHARpie', this.localClientId);
-        //        this.localClient = this.clients[this.localClientId];
-    }
 
     getNbClients() {
         return this.clients.length;

@@ -38,7 +38,6 @@ module.exports = class Network {
         this.socket.on('init', function (serverData) {
             let client = serverData.client;
             let mapData = serverData.map;
-
             map.parseMap(mapData);
             game.localClientId = client.networkData.clientId;
             game.localClient = game.clients[game.localClientId] = new Client('Local player', game.localClientId, client.infos.team, client.position);
@@ -46,15 +45,7 @@ module.exports = class Network {
         });
 
         this.socket.on('disconnected', function (clientId) {
-            let team = map.teams[game.clients[clientId].infos.team];
-            for (let index = 0; index < team.length; index++) {
-                if (team[index].clientId = clientId) {
-                    team.splice(index, 1);
-                    break;
-                }
-            }
             delete game.clients[clientId];
-
         });
 
         this.socket.on('update', function (data) {

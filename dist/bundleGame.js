@@ -1,28 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-module.exports = class Tile {
-    constructor() {
-        // contains the texture name (floor, etc.)
-        this.tex = null;
-        // true if not walkable, else false
-        this.solid = true;
-        // contains the pickup name (medkit, weapon, flags, etc.) (flag gathered on map load)
-        this.pickup = null;
-        // contains a list of decal texture names
-        this.decals = [];
-        // contains shadow texture name
-        this.shadow = null;
-        // contains spawn texture (gathered on map load)
-        this.spawn = null;
-        // contains portal information (color and destination)
-        this.portal = null;
-        // contains dropped flag texture, only used during game
-        // this.flag = null;
-    }
-}
-
-},{}],2:[function(require,module,exports){
-var Vector = require('../../lib/Vector');
-var Pickups = require('./Pickups');
+var Vector = require('../common/Vector');
+var Pickups = require('../common/Pickups');
 /**
  * Handles a client
  * @param {string} name
@@ -34,15 +12,7 @@ module.exports = class Client {
      */
     constructor(name, clientId, team, position) {
         this.direction = new Vector(1, 0);
-
-        if (team) {
-            map.teams[team].push(this);
-            this.position = new Vector(position.x, position.y);
-        }
-        else {
-            team = map.assignClientToTeam(this);
-            this.position = map.assignSpawnToClient(team);
-        }
+        this.position = new Vector(position.x, position.y);
 
         this.infos = {
             name: name,
@@ -354,7 +324,7 @@ module.exports = class Client {
 
 }
 
-},{"../../lib/Vector":12,"./Pickups":5}],3:[function(require,module,exports){
+},{"../common/Pickups":7,"../common/Vector":10}],2:[function(require,module,exports){
 
 module.exports = class Game {
     constructor() {
@@ -362,14 +332,6 @@ module.exports = class Game {
         this.localClientId = null;
         this.localClient = null;
 
-    }
-    init() { }
-
-    start() {
-        network.init();
-        //            this.localClientId = 'local';
-        //          this.clients[this.localClientId] = new Client('-=BDN=- CHARpie', this.localClientId);
-        //        this.localClient = this.clients[this.localClientId];
     }
 
     getNbClients() {
@@ -393,7 +355,7 @@ module.exports = class Game {
     }
 }
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var io = require('../../lib/socket.io.slim');
 var Client = require('./Client');
 
@@ -434,7 +396,6 @@ module.exports = class Network {
         this.socket.on('init', function (serverData) {
             let client = serverData.client;
             let mapData = serverData.map;
-
             map.parseMap(mapData);
             game.localClientId = client.networkData.clientId;
             game.localClient = game.clients[game.localClientId] = new Client('Local player', game.localClientId, client.infos.team, client.position);
@@ -442,15 +403,7 @@ module.exports = class Network {
         });
 
         this.socket.on('disconnected', function (clientId) {
-            let team = map.teams[game.clients[clientId].infos.team];
-            for (let index = 0; index < team.length; index++) {
-                if (team[index].clientId = clientId) {
-                    team.splice(index, 1);
-                    break;
-                }
-            }
             delete game.clients[clientId];
-
         });
 
         this.socket.on('update', function (data) {
@@ -552,113 +505,7 @@ module.exports = class Network {
 }
 //var socket = io('https://charpie.herokuapp.com/');
 
-},{"../../lib/socket.io.slim":13,"./Client":2}],5:[function(require,module,exports){
-module.exports = Pickups = {
-    buffs: {
-        medkit: {
-            type: 'buff',
-            name: 'medkit',
-            life: 30,
-            shield: 0,
-            speed: 0
-        },
-        shield: {
-            type: 'buff',
-            name: 'shield',
-            life: 0,
-            shield: 25,
-            speed: 0
-        },
-        speed: {
-            type: 'buff',
-            name: 'speed',
-            life: 0,
-            shield: 0,
-            speed: 0.05
-        }
-    },
-
-    flags: {
-        flag_blue: {
-            type: 'flag',
-            name: 'flag_blue'
-        },
-        flag_green: {
-            type: 'flag',
-            name: 'flag_green'
-        }
-    },
-
-    weapons: {
-        gun: {
-            type: 'weapon',
-            name: 'gun',
-            dmg: 20,
-            rate: 0.4,
-            speed: 10,
-            range: 500,
-            ammo: 1 / 0,
-            weight: 1.0
-        },
-
-        minigun: {
-            type: 'weapon',
-            name: 'minigun',
-            dmg: 8,
-            rate: 0.1,
-            speed: 15,
-            range: 800,
-            ammo: 60,
-            weight: 2.0
-        },
-
-        blastgun: {
-            type: 'weapon',
-            name: 'blastgun',
-            dmg: 15,
-            rate: 0.2,
-            speed: 10,
-            range: 1000,
-            ammo: 60,
-            weight: 2.5
-        },
-
-        railgun: {
-            type: 'weapon',
-            name: 'railgun',
-            dmg: 150,
-            rate: 2,
-            speed: 40,
-            range: 1000,
-            ammo: 5,
-            weight: 3
-        },
-
-        shotgun: {
-            type: 'weapon',
-            name: 'shotgun',
-            dmg: 10,
-            rate: 1.5,
-            speed: 10,
-            range: 300,
-            ammo: 15,
-            weight: 1.5
-        },
-
-        rpg: {
-            type: 'weapon',
-            name: 'rpg',
-            dmg: 100,
-            rate: 1,
-            speed: 10,
-            range: 3000,
-            ammo: 10,
-            weight: 3
-        }
-    }
-}
-
-},{}],6:[function(require,module,exports){
+},{"../../lib/socket.io.slim":12,"./Client":1}],4:[function(require,module,exports){
 module.exports = class Graphics {
     constructor() {
         this.width = 1920;
@@ -776,7 +623,7 @@ module.exports = class Graphics {
 
 }
 
-},{}],7:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 module.exports = class Input {
     constructor() {
         this.mouse = {
@@ -925,14 +772,13 @@ module.exports = class Input {
     }
 }
 
-},{}],8:[function(require,module,exports){
-var Vector = require('../../lib/Vector');
-var Tile = require('../Editor/Tile');
+},{}],6:[function(require,module,exports){
+var Vector = require('./Vector');
+var Tile = require('./Tile');
 
 module.exports = class Map {
     constructor() {
         this.data = null;
-        this.teams = { blue: [], green: [] };
         this.spawns = { blue: [], green: [] };
         this.flags = { blue: null, green: null };
 
@@ -988,21 +834,6 @@ module.exports = class Map {
         }
 
         this.updates = [];
-    }
-
-    /**
-     * Assign the client to a team (keeping them evenly matched)
-     * @param {object} client
-     */
-    assignClientToTeam(client) {
-        if (this.teams.blue.length >= this.teams.green.length) {
-            this.teams.green.push(client);
-            return 'green';
-        }
-        else {
-            this.teams.blue.push(client);
-            return 'blue';
-        }
     }
 
     /**
@@ -1144,16 +975,135 @@ module.exports = class Map {
 
 }
 
-},{"../../lib/Vector":12,"../Editor/Tile":1}],9:[function(require,module,exports){
-module.exports = class Menu {
-    constructor() {
-        this.views = {
-
+},{"./Tile":8,"./Vector":10}],7:[function(require,module,exports){
+module.exports = Pickups = {
+    buffs: {
+        medkit: {
+            type: 'buff',
+            name: 'medkit',
+            life: 30,
+            shield: 0,
+            speed: 0
+        },
+        shield: {
+            type: 'buff',
+            name: 'shield',
+            life: 0,
+            shield: 25,
+            speed: 0
+        },
+        speed: {
+            type: 'buff',
+            name: 'speed',
+            life: 0,
+            shield: 0,
+            speed: 0.05
         }
-        this.view = 'home';
+    },
+
+    flags: {
+        flag_blue: {
+            type: 'flag',
+            name: 'flag_blue'
+        },
+        flag_green: {
+            type: 'flag',
+            name: 'flag_green'
+        }
+    },
+
+    weapons: {
+        gun: {
+            type: 'weapon',
+            name: 'gun',
+            dmg: 20,
+            rate: 0.4,
+            speed: 10,
+            range: 500,
+            ammo: 1 / 0,
+            weight: 1.0
+        },
+
+        minigun: {
+            type: 'weapon',
+            name: 'minigun',
+            dmg: 8,
+            rate: 0.1,
+            speed: 15,
+            range: 800,
+            ammo: 60,
+            weight: 2.0
+        },
+
+        blastgun: {
+            type: 'weapon',
+            name: 'blastgun',
+            dmg: 15,
+            rate: 0.2,
+            speed: 10,
+            range: 1000,
+            ammo: 60,
+            weight: 2.5
+        },
+
+        railgun: {
+            type: 'weapon',
+            name: 'railgun',
+            dmg: 150,
+            rate: 2,
+            speed: 40,
+            range: 1000,
+            ammo: 5,
+            weight: 3
+        },
+
+        shotgun: {
+            type: 'weapon',
+            name: 'shotgun',
+            dmg: 10,
+            rate: 1.5,
+            speed: 10,
+            range: 300,
+            ammo: 15,
+            weight: 1.5
+        },
+
+        rpg: {
+            type: 'weapon',
+            name: 'rpg',
+            dmg: 100,
+            rate: 1,
+            speed: 10,
+            range: 3000,
+            ammo: 10,
+            weight: 3
+        }
     }
 }
-},{}],10:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
+module.exports = class Tile {
+    constructor() {
+        // contains the texture name (floor, etc.)
+        this.tex = null;
+        // true if not walkable, else false
+        this.solid = true;
+        // contains the pickup name (medkit, weapon, flags, etc.) (flag gathered on map load)
+        this.pickup = null;
+        // contains a list of decal texture names
+        this.decals = [];
+        // contains shadow texture name
+        this.shadow = null;
+        // contains spawn texture (gathered on map load)
+        this.spawn = null;
+        // contains portal information (color and destination)
+        this.portal = null;
+        // contains dropped flag texture, only used during game
+        // this.flag = null;
+    }
+}
+
+},{}],9:[function(require,module,exports){
 module.exports = class Timer {
     constructor() {
         this.now = +new Date();
@@ -1237,57 +1187,7 @@ module.exports = class Timer {
     }
 }
 
-},{}],11:[function(require,module,exports){
-// browserify initGame.js -o bundleGame.js
-
-var Network = require('./Game/Network');
-var Game = require('./Game/Game');
-var Map = require('./common/Map');
-var Graphics = require('./common/Graphics');
-var Input = require('./common/Input');
-var Pickups = require('./Game/Pickups');
-var Timer = require('./common/Timer');
-var Menu = require('./common/Menu');
-
-
-
-window.tileSize = 128;
-window.Editor = null;
-
-
-
-window.gfx = new Graphics();
-window.time = new Timer();
-window.map = new Map();
-window.input = new Input();
-window.network = new Network();
-window.game = new Game();
-window.menu = new Menu();
-
-Number.prototype.clamp = function (min, max) {
-    return Math.min(Math.max(this, min), max);
-};
-
-
-window.loop = function () {
-    requestAnimationFrame(loop);
-    time.update();
-    // logic
-    game.update();
-    // graphics
-    game.render();
-}
-
-
-gfx.init();
-input.init();
-
-// attempts to connect to the server.
-// once connected, server sends us the map data and our client info 
-network.init(loop);
-
-
-},{"./Game/Game":3,"./Game/Network":4,"./Game/Pickups":5,"./common/Graphics":6,"./common/Input":7,"./common/Map":8,"./common/Menu":9,"./common/Timer":10}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*
 Simple 2D JavaScript Vector Class
 Hacked from evanw's lightgl.js
@@ -1440,7 +1340,54 @@ module.exports = class Vector {
         return v;
     }
 }
-},{}],13:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
+// browserify initGame.js -o bundleGame.js
+
+var Network = require('./Game/Network');
+var Game = require('./Game/Game');
+var Map = require('./common/Map');
+var Graphics = require('./common/Graphics');
+var Input = require('./common/Input');
+var Pickups = require('./common/Pickups');
+var Timer = require('./common/Timer');
+
+
+window.tileSize = 128;
+window.Editor = null;
+
+
+
+window.gfx = new Graphics();
+window.time = new Timer();
+window.map = new Map();
+window.input = new Input();
+window.network = new Network();
+window.game = new Game();
+
+Number.prototype.clamp = function (min, max) {
+    return Math.min(Math.max(this, min), max);
+};
+
+
+window.loop = function () {
+    requestAnimationFrame(loop);
+    time.update();
+    // logic
+    game.update();
+    // graphics
+    game.render();
+}
+
+
+gfx.init();
+input.init();
+
+// attempts to connect to the server.
+// once connected, server sends us the map data and our client info 
+network.init(loop);
+
+
+},{"./Game/Game":2,"./Game/Network":3,"./common/Graphics":4,"./common/Input":5,"./common/Map":6,"./common/Pickups":7,"./common/Timer":9}],12:[function(require,module,exports){
 (function (Buffer){
 /*!
  * Socket.IO v2.2.0
@@ -1452,7 +1399,7 @@ module.exports = class Vector {
 var u,f,l,d=String.fromCharCode;t.exports={version:"2.1.2",encode:a,decode:h}},function(t,e){!function(){"use strict";for(var t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",r=new Uint8Array(256),n=0;n<t.length;n++)r[t.charCodeAt(n)]=n;e.encode=function(e){var r,n=new Uint8Array(e),o=n.length,i="";for(r=0;r<o;r+=3)i+=t[n[r]>>2],i+=t[(3&n[r])<<4|n[r+1]>>4],i+=t[(15&n[r+1])<<2|n[r+2]>>6],i+=t[63&n[r+2]];return o%3===2?i=i.substring(0,i.length-1)+"=":o%3===1&&(i=i.substring(0,i.length-2)+"=="),i},e.decode=function(t){var e,n,o,i,s,a=.75*t.length,c=t.length,p=0;"="===t[t.length-1]&&(a--,"="===t[t.length-2]&&a--);var h=new ArrayBuffer(a),u=new Uint8Array(h);for(e=0;e<c;e+=4)n=r[t.charCodeAt(e)],o=r[t.charCodeAt(e+1)],i=r[t.charCodeAt(e+2)],s=r[t.charCodeAt(e+3)],u[p++]=n<<2|o>>4,u[p++]=(15&o)<<4|i>>2,u[p++]=(3&i)<<6|63&s;return h}}()},function(t,e){function r(t){return t.map(function(t){if(t.buffer instanceof ArrayBuffer){var e=t.buffer;if(t.byteLength!==e.byteLength){var r=new Uint8Array(t.byteLength);r.set(new Uint8Array(e,t.byteOffset,t.byteLength)),e=r.buffer}return e}return t})}function n(t,e){e=e||{};var n=new i;return r(t).forEach(function(t){n.append(t)}),e.type?n.getBlob(e.type):n.getBlob()}function o(t,e){return new Blob(r(t),e||{})}var i="undefined"!=typeof i?i:"undefined"!=typeof WebKitBlobBuilder?WebKitBlobBuilder:"undefined"!=typeof MSBlobBuilder?MSBlobBuilder:"undefined"!=typeof MozBlobBuilder&&MozBlobBuilder,s=function(){try{var t=new Blob(["hi"]);return 2===t.size}catch(t){return!1}}(),a=s&&function(){try{var t=new Blob([new Uint8Array([1,2])]);return 2===t.size}catch(t){return!1}}(),c=i&&i.prototype.append&&i.prototype.getBlob;"undefined"!=typeof Blob&&(n.prototype=Blob.prototype,o.prototype=Blob.prototype),t.exports=function(){return s?a?Blob:o:c?n:void 0}()},function(t,e){e.encode=function(t){var e="";for(var r in t)t.hasOwnProperty(r)&&(e.length&&(e+="&"),e+=encodeURIComponent(r)+"="+encodeURIComponent(t[r]));return e},e.decode=function(t){for(var e={},r=t.split("&"),n=0,o=r.length;n<o;n++){var i=r[n].split("=");e[decodeURIComponent(i[0])]=decodeURIComponent(i[1])}return e}},function(t,e){t.exports=function(t,e){var r=function(){};r.prototype=e.prototype,t.prototype=new r,t.prototype.constructor=t}},function(t,e){"use strict";function r(t){var e="";do e=s[t%a]+e,t=Math.floor(t/a);while(t>0);return e}function n(t){var e=0;for(h=0;h<t.length;h++)e=e*a+c[t.charAt(h)];return e}function o(){var t=r(+new Date);return t!==i?(p=0,i=t):t+"."+r(p++)}for(var i,s="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split(""),a=64,c={},p=0,h=0;h<a;h++)c[s[h]]=h;o.encode=r,o.decode=n,t.exports=o},function(t,e,r){(function(e){function n(){}function o(){return"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof e?e:{}}function i(t){if(s.call(this,t),this.query=this.query||{},!c){var e=o();c=e.___eio=e.___eio||[]}this.index=c.length;var r=this;c.push(function(t){r.onData(t)}),this.query.j=this.index,"function"==typeof addEventListener&&addEventListener("beforeunload",function(){r.script&&(r.script.onerror=n)},!1)}var s=r(16),a=r(27);t.exports=i;var c,p=/\n/g,h=/\\n/g;a(i,s),i.prototype.supportsBinary=!1,i.prototype.doClose=function(){this.script&&(this.script.parentNode.removeChild(this.script),this.script=null),this.form&&(this.form.parentNode.removeChild(this.form),this.form=null,this.iframe=null),s.prototype.doClose.call(this)},i.prototype.doPoll=function(){var t=this,e=document.createElement("script");this.script&&(this.script.parentNode.removeChild(this.script),this.script=null),e.async=!0,e.src=this.uri(),e.onerror=function(e){t.onError("jsonp poll error",e)};var r=document.getElementsByTagName("script")[0];r?r.parentNode.insertBefore(e,r):(document.head||document.body).appendChild(e),this.script=e;var n="undefined"!=typeof navigator&&/gecko/i.test(navigator.userAgent);n&&setTimeout(function(){var t=document.createElement("iframe");document.body.appendChild(t),document.body.removeChild(t)},100)},i.prototype.doWrite=function(t,e){function r(){n(),e()}function n(){if(o.iframe)try{o.form.removeChild(o.iframe)}catch(t){o.onError("jsonp polling iframe removal error",t)}try{var t='<iframe src="javascript:0" name="'+o.iframeId+'">';i=document.createElement(t)}catch(t){i=document.createElement("iframe"),i.name=o.iframeId,i.src="javascript:0"}i.id=o.iframeId,o.form.appendChild(i),o.iframe=i}var o=this;if(!this.form){var i,s=document.createElement("form"),a=document.createElement("textarea"),c=this.iframeId="eio_iframe_"+this.index;s.className="socketio",s.style.position="absolute",s.style.top="-1000px",s.style.left="-1000px",s.target=c,s.method="POST",s.setAttribute("accept-charset","utf-8"),a.name="d",s.appendChild(a),document.body.appendChild(s),this.form=s,this.area=a}this.form.action=this.uri(),n(),t=t.replace(h,"\\\n"),this.area.value=t.replace(p,"\\n");try{this.form.submit()}catch(t){}this.iframe.attachEvent?this.iframe.onreadystatechange=function(){"complete"===o.iframe.readyState&&r()}:this.iframe.onload=r}}).call(e,function(){return this}())},function(t,e,r){function n(t){var e=t&&t.forceBase64;e&&(this.supportsBinary=!1),this.perMessageDeflate=t.perMessageDeflate,this.usingBrowserWebSocket=o&&!t.forceNode,this.protocols=t.protocols,this.usingBrowserWebSocket||(u=i),s.call(this,t)}var o,i,s=r(17),a=r(18),c=r(26),p=r(27),h=r(28);r(3)("engine.io-client:websocket");if("undefined"==typeof self)try{i=r(31)}catch(t){}else o=self.WebSocket||self.MozWebSocket;var u=o||i;t.exports=n,p(n,s),n.prototype.name="websocket",n.prototype.supportsBinary=!0,n.prototype.doOpen=function(){if(this.check()){var t=this.uri(),e=this.protocols,r={agent:this.agent,perMessageDeflate:this.perMessageDeflate};r.pfx=this.pfx,r.key=this.key,r.passphrase=this.passphrase,r.cert=this.cert,r.ca=this.ca,r.ciphers=this.ciphers,r.rejectUnauthorized=this.rejectUnauthorized,this.extraHeaders&&(r.headers=this.extraHeaders),this.localAddress&&(r.localAddress=this.localAddress);try{this.ws=this.usingBrowserWebSocket&&!this.isReactNative?e?new u(t,e):new u(t):new u(t,e,r)}catch(t){return this.emit("error",t)}void 0===this.ws.binaryType&&(this.supportsBinary=!1),this.ws.supports&&this.ws.supports.binary?(this.supportsBinary=!0,this.ws.binaryType="nodebuffer"):this.ws.binaryType="arraybuffer",this.addEventListeners()}},n.prototype.addEventListeners=function(){var t=this;this.ws.onopen=function(){t.onOpen()},this.ws.onclose=function(){t.onClose()},this.ws.onmessage=function(e){t.onData(e.data)},this.ws.onerror=function(e){t.onError("websocket error",e)}},n.prototype.write=function(t){function e(){r.emit("flush"),setTimeout(function(){r.writable=!0,r.emit("drain")},0)}var r=this;this.writable=!1;for(var n=t.length,o=0,i=n;o<i;o++)!function(t){a.encodePacket(t,r.supportsBinary,function(o){if(!r.usingBrowserWebSocket){var i={};if(t.options&&(i.compress=t.options.compress),r.perMessageDeflate){var s="string"==typeof o?Buffer.byteLength(o):o.length;s<r.perMessageDeflate.threshold&&(i.compress=!1)}}try{r.usingBrowserWebSocket?r.ws.send(o):r.ws.send(o,i)}catch(t){}--n||e()})}(t[o])},n.prototype.onClose=function(){s.prototype.onClose.call(this)},n.prototype.doClose=function(){"undefined"!=typeof this.ws&&this.ws.close()},n.prototype.uri=function(){var t=this.query||{},e=this.secure?"wss":"ws",r="";this.port&&("wss"===e&&443!==Number(this.port)||"ws"===e&&80!==Number(this.port))&&(r=":"+this.port),this.timestampRequests&&(t[this.timestampParam]=h()),this.supportsBinary||(t.b64=1),t=c.encode(t),t.length&&(t="?"+t);var n=this.hostname.indexOf(":")!==-1;return e+"://"+(n?"["+this.hostname+"]":this.hostname)+r+this.path+t},n.prototype.check=function(){return!(!u||"__initialize"in u&&this.name===n.prototype.name)}},function(t,e){},function(t,e){var r=[].indexOf;t.exports=function(t,e){if(r)return t.indexOf(e);for(var n=0;n<t.length;++n)if(t[n]===e)return n;return-1}},function(t,e,r){"use strict";function n(t,e,r){this.io=t,this.nsp=e,this.json=this,this.ids=0,this.acks={},this.receiveBuffer=[],this.sendBuffer=[],this.connected=!1,this.disconnected=!0,this.flags={},r&&r.query&&(this.query=r.query),this.io.autoConnect&&this.open()}var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},i=r(4),s=r(5),a=r(34),c=r(35),p=r(36),h=(r(3)("socket.io-client:socket"),r(26)),u=r(20);t.exports=e=n;var f={connect:1,connect_error:1,connect_timeout:1,connecting:1,disconnect:1,error:1,reconnect:1,reconnect_attempt:1,reconnect_failed:1,reconnect_error:1,reconnecting:1,ping:1,pong:1},l=s.prototype.emit;s(n.prototype),n.prototype.subEvents=function(){if(!this.subs){var t=this.io;this.subs=[c(t,"open",p(this,"onopen")),c(t,"packet",p(this,"onpacket")),c(t,"close",p(this,"onclose"))]}},n.prototype.open=n.prototype.connect=function(){return this.connected?this:(this.subEvents(),this.io.open(),"open"===this.io.readyState&&this.onopen(),this.emit("connecting"),this)},n.prototype.send=function(){var t=a(arguments);return t.unshift("message"),this.emit.apply(this,t),this},n.prototype.emit=function(t){if(f.hasOwnProperty(t))return l.apply(this,arguments),this;var e=a(arguments),r={type:(void 0!==this.flags.binary?this.flags.binary:u(e))?i.BINARY_EVENT:i.EVENT,data:e};return r.options={},r.options.compress=!this.flags||!1!==this.flags.compress,"function"==typeof e[e.length-1]&&(this.acks[this.ids]=e.pop(),r.id=this.ids++),this.connected?this.packet(r):this.sendBuffer.push(r),this.flags={},this},n.prototype.packet=function(t){t.nsp=this.nsp,this.io.packet(t)},n.prototype.onopen=function(){if("/"!==this.nsp)if(this.query){var t="object"===o(this.query)?h.encode(this.query):this.query;this.packet({type:i.CONNECT,query:t})}else this.packet({type:i.CONNECT})},n.prototype.onclose=function(t){this.connected=!1,this.disconnected=!0,delete this.id,this.emit("disconnect",t)},n.prototype.onpacket=function(t){var e=t.nsp===this.nsp,r=t.type===i.ERROR&&"/"===t.nsp;if(e||r)switch(t.type){case i.CONNECT:this.onconnect();break;case i.EVENT:this.onevent(t);break;case i.BINARY_EVENT:this.onevent(t);break;case i.ACK:this.onack(t);break;case i.BINARY_ACK:this.onack(t);break;case i.DISCONNECT:this.ondisconnect();break;case i.ERROR:this.emit("error",t.data)}},n.prototype.onevent=function(t){var e=t.data||[];null!=t.id&&e.push(this.ack(t.id)),this.connected?l.apply(this,e):this.receiveBuffer.push(e)},n.prototype.ack=function(t){var e=this,r=!1;return function(){if(!r){r=!0;var n=a(arguments);e.packet({type:u(n)?i.BINARY_ACK:i.ACK,id:t,data:n})}}},n.prototype.onack=function(t){var e=this.acks[t.id];"function"==typeof e&&(e.apply(this,t.data),delete this.acks[t.id])},n.prototype.onconnect=function(){this.connected=!0,this.disconnected=!1,this.emit("connect"),this.emitBuffered()},n.prototype.emitBuffered=function(){var t;for(t=0;t<this.receiveBuffer.length;t++)l.apply(this,this.receiveBuffer[t]);for(this.receiveBuffer=[],t=0;t<this.sendBuffer.length;t++)this.packet(this.sendBuffer[t]);this.sendBuffer=[]},n.prototype.ondisconnect=function(){this.destroy(),this.onclose("io server disconnect")},n.prototype.destroy=function(){if(this.subs){for(var t=0;t<this.subs.length;t++)this.subs[t].destroy();this.subs=null}this.io.destroy(this)},n.prototype.close=n.prototype.disconnect=function(){return this.connected&&this.packet({type:i.DISCONNECT}),this.destroy(),this.connected&&this.onclose("io client disconnect"),this},n.prototype.compress=function(t){return this.flags.compress=t,this},n.prototype.binary=function(t){return this.flags.binary=t,this}},function(t,e){function r(t,e){var r=[];e=e||0;for(var n=e||0;n<t.length;n++)r[n-e]=t[n];return r}t.exports=r},function(t,e){"use strict";function r(t,e,r){return t.on(e,r),{destroy:function(){t.removeListener(e,r)}}}t.exports=r},function(t,e){var r=[].slice;t.exports=function(t,e){if("string"==typeof e&&(e=t[e]),"function"!=typeof e)throw new Error("bind() requires a function");var n=r.call(arguments,2);return function(){return e.apply(t,n.concat(r.call(arguments)))}}},function(t,e){function r(t){t=t||{},this.ms=t.min||100,this.max=t.max||1e4,this.factor=t.factor||2,this.jitter=t.jitter>0&&t.jitter<=1?t.jitter:0,this.attempts=0}t.exports=r,r.prototype.duration=function(){var t=this.ms*Math.pow(this.factor,this.attempts++);if(this.jitter){var e=Math.random(),r=Math.floor(e*this.jitter*t);t=0==(1&Math.floor(10*e))?t-r:t+r}return 0|Math.min(t,this.max)},r.prototype.reset=function(){this.attempts=0},r.prototype.setMin=function(t){this.ms=t},r.prototype.setMax=function(t){this.max=t},r.prototype.setJitter=function(t){this.jitter=t}}])});
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":15}],14:[function(require,module,exports){
+},{"buffer":14}],13:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1605,7 +1552,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (Buffer){
 /*!
  * The buffer module from node.js, for the browser.
@@ -3386,7 +3333,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"base64-js":14,"buffer":15,"ieee754":16}],16:[function(require,module,exports){
+},{"base64-js":13,"buffer":14,"ieee754":15}],15:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1

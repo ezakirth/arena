@@ -5,10 +5,8 @@ var Game = require('./Game/Game');
 var Map = require('./common/Map');
 var Graphics = require('./common/Graphics');
 var Input = require('./common/Input');
-var Pickups = require('./Game/Pickups');
+var Pickups = require('./common/Pickups');
 var Timer = require('./common/Timer');
-var Menu = require('./common/Menu');
-
 
 
 window.tileSize = 128;
@@ -22,7 +20,6 @@ window.map = new Map();
 window.input = new Input();
 window.network = new Network();
 window.game = new Game();
-window.menu = new Menu();
 
 Number.prototype.clamp = function (min, max) {
     return Math.min(Math.max(this, min), max);
