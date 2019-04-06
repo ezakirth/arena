@@ -62,6 +62,10 @@ module.exports = class Network {
             time.setServerDelay(timestamp);
 
             _this.lastServerTimestamp = data.timestamp;
+
+            map.updates = data.mapUpdates;
+            map.processUpdates();
+
             let serverUsers = data.clients;
             for (let clientId in serverUsers) {
                 let playerData = serverUsers[clientId];
@@ -72,16 +76,26 @@ module.exports = class Network {
                 let client = game.clients[clientId];
 
                 if (clientId == game.localClientId) {
-
                     // if there was movement since the last server update, send it now
-                    _this.sendMovementData(client)
+                    if (playerData.networkData.forceNoReconciliation)
+                        client.networkData.pendingMovement = [];
+                    else
+                        _this.sendMovementData(client)
+
+
+
 
                     // Received the authoritative position of this client's client.
                     client.position.x = playerData.position.x;
                     client.position.y = playerData.position.y;
                     client.direction.x = playerData.direction.x;
                     client.direction.y = playerData.direction.y;
+                    client.infos = playerData.infos;
 
+                    if (playerData.networkData.forceNoReconciliation) {
+                        client.networkData.lastPosition.x = client.position.x;
+                        client.networkData.lastPosition.y = client.position.y;
+                    }
 
                     // Server Reconciliation. Re-apply all the inputs not yet processed by the server.
                     var j = 0;
@@ -104,7 +118,14 @@ module.exports = class Network {
                     // Received the position of an client other than this client's.
 
                     // Add it to the position buffer.
-                    client.networkData.positionBuffer.push({ timestamp: timestamp, position: playerData.position, direction: playerData.direction });
+                    if (playerData.networkData.forceNoReconciliation) {
+                        client.networkData.positionBuffer = [];
+                        client.networkData.positionBuffer.push({ timestamp: timestamp - 1, position: playerData.position, direction: playerData.direction });
+                        client.position.x = playerData.position.x;
+                        client.position.y = playerData.position.y;
+                    }
+                    else
+                        client.networkData.positionBuffer.push({ timestamp: timestamp, position: playerData.position, direction: playerData.direction });
                 }
             }
 

@@ -10,13 +10,13 @@
         "watchify": "^3.11.1"
     },
     "scripts": {
-        "build:game_dev": "browserify initGame.js > bundleGame.js",
-        "build:editor_dev": "browserify initEditor.js > bundleEditor.js",
-        "build:game_prod": "browserify -g uglifyify initGame.js > bundleGame.js",
-        "build:editor_prod": "browserify -g uglifyify initEditor.js > bundleEditor.js",
+        "build:game_dev": "browserify ./js/initGame.js > ./dist/bundleGame.js",
+        "build:editor_dev": "browserify ./js/initEditor.js > ./dist/bundleEditor.js",
+        "build:game_prod": "browserify -g uglifyify ./js/initGame.js > ./dist/bundleGame.js",
+        "build:editor_prod": "browserify -g uglifyify ./js/initEditor.js > ./dist/bundleEditor.js",
         "build:dev": "npm run build:game_dev && npm run build:editor_dev",
         "build:prod": "npm run build:game_prod && npm run build:editor_prod",
-        "live:game": "watchify initGame.js -o bundleGame.js -v",
-        "live:editor": "watchify initEditor.js -o bundleEditor.js -v"
+        "live:game": "watchify ./js/initGame.js -o ./dist/bundleGame.js -v",
+        "live:editor": "watchify ./js/initEditor.js -o ./dist/bundleEditor.js -v"
     }
 }

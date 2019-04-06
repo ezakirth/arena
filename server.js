@@ -1,110 +1,56 @@
-class Client {
-  constructor(clientId) {
-    this.networkData = {
-      clientId: clientId,
-      sequence: 0
-    };
-
-    this.infos = {
-      team: map.assignClientToTeam(this)
-    };
-    this.position = map.assignSpawnToClient(this.infos.team);
-    this.direction = { x: 1, y: 0 };
-  }
-}
-
-class Map {
-  constructor(data) {
-    this.data = data;
-    this.w = this.data.length;
-    this.h = this.data[0].length;
-    this.teams = { blue: [], green: [] };
-    this.spawns = { blue: [], green: [] };
-    this.flags = { blue: null, green: null };
-
-    for (let x = 0; x < this.w; x++) {
-      for (let y = 0; y < this.h; y++) {
-        let block = this.data[x][y];
-
-        if (block.pickup == "pickup_flag_blue") {
-          this.flags.blue = { x: x, y: y };
-        }
-        if (block.pickup == "pickup_flag_green") {
-          this.flags.green = { x: x, y: y };
-        }
-        if (block.spawn == "spawn_blue") {
-          this.spawns.blue.push({ x: x + 0.5, y: y + 0.5 });
-        }
-        if (block.spawn == "spawn_green") {
-          this.spawns.green.push({ x: x + 0.5, y: y + 0.5 });
-        }
-      }
-    };
-  }
-  /**
-   * Assign the client to a team (keeping them evenly matched)
-   * @param {object} client
-   */
-  assignClientToTeam(client) {
-    if (this.teams.blue.length >= this.teams.green.length) {
-      this.teams.green.push(client);
-      return 'green';
-    }
-    else {
-      this.teams.blue.push(client);
-      return 'blue';
-    }
-  }
-
-  /**
-   * Pick a random spawn point to a client
-   * @param {string} team
-   */
-  assignSpawnToClient(team) {
-    let spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];
-
-    return { x: spawnPoint.x, y: spawnPoint.y };
-  }
-}
-
-var clients = {};
-var history = {};
-
-var fs = require("fs");
-/*
-var Network = require('./js/Game/Network.js');
-var network = new Network();
-*/
-
-var map = new Map(JSON.parse(fs.readFileSync("map.json")));
-
 const express = require('express');
 const socketIO = require('socket.io');
 const path = require('path');
-
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
-
 const server = express()
   .use(express.static('/*'))
   .get('/', (req, res) => res.sendFile(INDEX))
   .get('/*', (req, res, next) => res.sendFile(__dirname + '/' + req.params[0]))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
-
 const io = socketIO(server);
 
+const Client = require('./js/Game/Client');
+const Map = require('./js/common/Map');
+const Timer = require('./js/common/Timer');
+const fs = require("fs");
+
+Number.prototype.clamp = function (min, max) {
+  return Math.min(Math.max(this, min), max);
+};
+
+var clients = {};
+var history = {};
+
+
+global.map = new Map();
+global.time = new Timer();
+
+map.parseMap(JSON.parse(fs.readFileSync("map.json")));
+
+
 io.on('connection', function (socket) {
-  let client = new Client(socket.id);
+  let client = new Client('clientname', socket.id);
   clients[client.networkData.clientId] = client;
   socket.emit('init', { client: client, map: map.data });
 
   socket.on('update', function (movementData) {
     let client = clients[socket.id];
-    client.position.x += movementData.movement.x;
-    client.position.y += movementData.movement.y;
-    client.direction.x += movementData.movement.dx;
-    client.direction.y += movementData.movement.dy;
-    client.networkData.sequence = movementData.sequence;
+    if (!client.networkData.forceNoReconciliation) {
+      client.position.x += movementData.movement.x;
+      client.position.y += movementData.movement.y;
+      client.direction.x += movementData.movement.dx;
+      client.direction.y += movementData.movement.dy;
+      client.networkData.sequence = movementData.sequence;
+
+      let px = Math.floor(client.position.x).clamp(0, map.w - 1);
+      let py = Math.floor(client.position.y).clamp(0, map.h - 1);
+
+      if (!map.data[px][py].solid) client.lastGoodPos = { x: client.position.x, y: client.position.y };
+      else { client.position = { x: client.lastGoodPos.x, y: client.lastGoodPos.y }; }
+      client.checkTile(map.data[px][py], px, py);
+    }
+
   });
 
   socket.on('disconnect', function () {
@@ -125,15 +71,22 @@ io.on('connection', function (socket) {
 
 });
 
+
 setInterval(function () {
   let timestamp = +new Date();
   history[timestamp] = JSON.parse(JSON.stringify(clients));
-
   let list = Object.keys(history);
-
   if (list.length > 10) {
     delete history[list[0]];
   }
 
-  io.emit('update', { timestamp: timestamp, clients: clients });
+  time.update();
+
+  io.emit('update', { timestamp: timestamp, clients: clients, mapUpdates: map.updates });
+  map.processUpdates();
+
+  for (let clientId in clients) {
+    clients[clientId].networkData.forceNoReconciliation = false;
+  }
+
 }, 100);

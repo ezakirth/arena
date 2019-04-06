@@ -1,10 +1,10 @@
 // browserify initEditor.js -o bundleEditor.js
 
-var Map = require('./js/common/Map');
-var Graphics = require('./js/common/Graphics');
-var Input = require('./js/common/Input');
-var Timer = require('./js/common/Timer');
-var Editor = require('./js/Editor/EditorBundle');
+var Map = require('./common/Map');
+var Graphics = require('./common/Graphics');
+var Input = require('./common/Input');
+var Timer = require('./common/Timer');
+var Editor = require('./Editor/EditorBundle');
 
 
 window.gfx = new Graphics();

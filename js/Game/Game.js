@@ -1,8 +1,10 @@
+
 module.exports = class Game {
     constructor() {
         this.clients = {};
         this.localClientId = null;
         this.localClient = null;
+
     }
     init() { }
 
@@ -27,10 +29,9 @@ module.exports = class Game {
         gfx.clear();
         gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
-        if (this.localClient) this.localClient.render();
 
-
-
+        if (this.localClient) this.localClient.renderLocal();
         gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
+
     }
 }

@@ -1,12 +1,19 @@
 // browserify initGame.js -o bundleGame.js
 
-var Network = require('./js/Game/Network');
-var Game = require('./js/Game/Game');
-var Map = require('./js/common/Map');
-var Graphics = require('./js/common/Graphics');
-var Input = require('./js/common/Input');
-var Pickups = require('./js/common/Pickups');
-var Timer = require('./js/common/Timer');
+var Network = require('./Game/Network');
+var Game = require('./Game/Game');
+var Map = require('./common/Map');
+var Graphics = require('./common/Graphics');
+var Input = require('./common/Input');
+var Pickups = require('./Game/Pickups');
+var Timer = require('./common/Timer');
+var Menu = require('./common/Menu');
+
+
+
+window.tileSize = 128;
+window.Editor = null;
+
 
 
 window.gfx = new Graphics();
@@ -15,8 +22,11 @@ window.map = new Map();
 window.input = new Input();
 window.network = new Network();
 window.game = new Game();
-window.tileSize = 128;
-window.Editor = null;
+window.menu = new Menu();
+
+Number.prototype.clamp = function (min, max) {
+    return Math.min(Math.max(this, min), max);
+};
 
 
 window.loop = function () {

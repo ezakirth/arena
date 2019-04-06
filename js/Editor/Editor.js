@@ -13,6 +13,41 @@ var Editor = {
 
     },
 
+
+    /**
+     * Saves the map to a json file (Editor method)
+     */
+    saveData: function (data, filename) {
+        var json = JSON.stringify(data);
+        localStorage.setItem('tileData', json);
+
+        var blob = new Blob([json], { type: "octet/stream" });
+        var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        document.body.append(a);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        $(a).remove();
+        window.URL.revokeObjectURL(url);
+    },
+
+    /**
+     * Loads the json file into the map (Editor method)
+     */
+    loadData: function (e) {
+        if (e.target.files[0]) {
+            var tmppath = URL.createObjectURL(e.target.files[0]);
+            $.getJSON(tmppath, function (data) {
+                map.parseMap(data);
+                $("#editor_Width_id").val(map.w);
+                $("#editor_Height_id").val(map.h);
+            });
+        }
+    },
+
+
     /**
      * perform user interactions with the map
      */

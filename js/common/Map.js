@@ -1,5 +1,5 @@
 var Vector = require('../../lib/Vector');
-var Tile = require('../common/Tile');
+var Tile = require('../Editor/Tile');
 
 module.exports = class Map {
     constructor() {
@@ -7,6 +7,9 @@ module.exports = class Map {
         this.teams = { blue: [], green: [] };
         this.spawns = { blue: [], green: [] };
         this.flags = { blue: null, green: null };
+
+        // updates from server that are to be processed
+        this.updates = [];
     }
 
     /**
@@ -36,6 +39,28 @@ module.exports = class Map {
         $("#editor_Height_id").val(this.h);
     }
 
+    /**
+     * Server method: adds an update to the queue
+     * @param {*} type 
+     * @param {*} value 
+     * @param {*} x 
+     * @param {*} y 
+     */
+    queueUpdate(type, value, x, y) {
+        this.updates.push({ type: type, value: value, x: x, y: y });
+    }
+
+    /**
+     * Client method: processes the update queue
+     */
+    processUpdates() {
+        for (let update of this.updates) {
+            let tile = this.data[update.x][update.y];
+            tile[update.type] = update.value;
+        }
+
+        this.updates = [];
+    }
 
     /**
      * Assign the client to a team (keeping them evenly matched)
@@ -53,7 +78,7 @@ module.exports = class Map {
     }
 
     /**
-     * Pick a random spawn point to a client
+     * Pick a random spawn point for a client
      * @param {string} team
      */
     assignSpawnToClient(team) {
@@ -187,41 +212,6 @@ module.exports = class Map {
         let w = parseInt($("#editor_Width_id").val());
         let h = parseInt($("#editor_Height_id").val());
         this.init(w, h, true);
-    }
-
-
-    /**
-     * Saves the map to a json file (Editor method)
-     */
-    saveData(data, filename) {
-        var json = JSON.stringify(data);
-        localStorage.setItem('tileData', json);
-
-        var blob = new Blob([json], { type: "octet/stream" });
-        var url = window.URL.createObjectURL(blob);
-
-        var a = document.createElement('a');
-        document.body.append(a);
-        a.href = url;
-        a.download = filename;
-        a.click();
-        $(a).remove();
-        window.URL.revokeObjectURL(url);
-    }
-
-    /**
-     * Loads the json file into the map (Editor method)
-     */
-    loadData(e) {
-        if (e.target.files[0]) {
-            var tmppath = URL.createObjectURL(e.target.files[0]);
-            var _this = this;
-            $.getJSON(tmppath, function (data) {
-                _this.parseMap(data);
-                $("#editor_Width_id").val(_this.w);
-                $("#editor_Height_id").val(_this.h);
-            });
-        }
     }
 
 }

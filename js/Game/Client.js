@@ -1,5 +1,5 @@
 var Vector = require('../../lib/Vector');
-
+var Pickups = require('./Pickups');
 /**
  * Handles a client
  * @param {string} name
@@ -10,13 +10,16 @@ module.exports = class Client {
      * @param {string} name
      */
     constructor(name, clientId, team, position) {
-        this.canvasId = game.clients.length;
         this.direction = new Vector(1, 0);
 
-        map.teams[team].push(this);
-        this.position = new Vector(position.x, position.y);
-        //            team = map.assignClientToTeam(this);
-        //           this.position = map.assignSpawnToClient(team);
+        if (team) {
+            map.teams[team].push(this);
+            this.position = new Vector(position.x, position.y);
+        }
+        else {
+            team = map.assignClientToTeam(this);
+            this.position = map.assignSpawnToClient(team);
+        }
 
         this.infos = {
             name: name,
@@ -34,6 +37,7 @@ module.exports = class Client {
             clientId: clientId,
             lastPosition: { x: this.position.x, y: this.position.y, dx: this.direction.x, dy: this.direction.y },
             sequence: 0,
+            forceNoReconciliation: false,
             positionBuffer: [],
             pendingMovement: []
         }
@@ -44,8 +48,6 @@ module.exports = class Client {
         this.dead = false;
         this.moving = false;
         this.frame = 1;
-
-
     }
 
     /**
@@ -60,12 +62,6 @@ module.exports = class Client {
             let oldY = this.position.y;
             let oldPx = Math.floor(this.position.x);
             let oldPy = Math.floor(this.position.y);
-
-            let currentTile = map.data[oldPx][oldPy];
-            this.checkTile(currentTile, oldPx, oldPy);
-
-
-            this.moving = false;
 
             if (input.keyboard.ArrowLeft) {
                 this.moving = true;
@@ -85,6 +81,8 @@ module.exports = class Client {
                 this.position.add(this.direction.multiply(this.infos.speed));
             }
 
+            this.position.x = this.position.x.clamp(0, map.w - 1);
+            this.position.y = this.position.y.clamp(0, map.h - 1);
             let px = Math.floor(this.position.x);
             let py = Math.floor(this.position.y);
 
@@ -97,6 +95,8 @@ module.exports = class Client {
      * update the client position
      */
     update() {
+        this.moving = false;
+
         // if the client is the client, update position based on input
         if (this.networkData.clientId == game.localClientId) {
             this.applyInputs();
@@ -143,6 +143,8 @@ module.exports = class Client {
             this.position.y = y0 + (y1 - y0) * (time.networkData.renderTimestamp - t0) / (t1 - t0);
             this.direction.x = dx0 + (dx1 - dx0) * (time.networkData.renderTimestamp - t0) / (t1 - t0);
             this.direction.y = dy0 + (dy1 - dy0) * (time.networkData.renderTimestamp - t0) / (t1 - t0);
+
+            if (!(x0 == x1 && y0 == y1)) this.moving = true;
         }
     }
 
@@ -155,7 +157,7 @@ module.exports = class Client {
         if (this.infos.hasEnemyFlag) {
             let px = Math.floor(this.position.x);
             let py = Math.floor(this.position.y);
-            map.data[px][py].pickup = 'pickup_flag_' + this.infos.enemyTeam;
+            map.queueUpdate('pickup', 'pickup_flag_' + this.infos.enemyTeam, px, py);
             this.infos.hasEnemyFlag = false;
         }
         this.dead = true;
@@ -166,7 +168,7 @@ module.exports = class Client {
      * first map pass renders the floor, decals, spawn and portals
      * second map pass renders walls, shadows and pickups
      */
-    render() {
+    renderLocal() {
         // first pass
         map.renderView(this.position, 1);
 
@@ -209,6 +211,7 @@ module.exports = class Client {
         let offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize);
         let offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize);
         gfx.translate(offsetX, offsetY);
+
         this.renderStats();
         gfx.popMatrix();
     }
@@ -268,7 +271,7 @@ module.exports = class Client {
             else {
                 time.addTimer('respawn', 0, { pickup: 'pickup_flag_' + this.infos.team, x: map.flags[this.infos.team].x, y: map.flags[this.infos.team].y });
             }
-            tile.flag = null;
+            map.queueUpdate('flag', null, x, y);
         }
 
         // if it's a pickup (weapon, buff, flag)
@@ -281,7 +284,7 @@ module.exports = class Client {
                     this.infos.weapon = pickup;
                     this.infos.ammo = pickup.ammo;
                     time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y });
-                    tile.pickup = null;
+                    map.queueUpdate('pickup', null, x, y);
                 }
                 // if client walks on a buff, consume it and trigger respawn time
                 if (pickup.type == 'buff') {
@@ -290,14 +293,14 @@ module.exports = class Client {
                     if (pickup.speed != 0) time.addTimer('buff', 3, { stat: 'speed', value: this.infos.speed, client: this });
                     this.infos.speed += pickup.speed;
                     time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y });
-                    tile.pickup = null;
+                    map.queueUpdate('pickup', null, x, y);
                 }
                 // if client walks on a flag, process it
                 if (pickup.type == 'flag') {
                     // if it's the enemy team's flag, the client takes it
                     if (pickup.name == 'flag_' + this.infos.enemyTeam) {
                         this.infos.hasEnemyFlag = true;
-                        tile.pickup = null;
+                        map.queueUpdate('pickup', null, x, y);
                     }
                     // else it's the client's flag
                     else {
@@ -317,6 +320,7 @@ module.exports = class Client {
                 this.position.x = tile.portal.dx + 0.5;
                 this.position.y = tile.portal.dy + 0.5;
                 this.justUsedPortal = true;
+                this.networkData.forceNoReconciliation = true;
             }
         }
         else {

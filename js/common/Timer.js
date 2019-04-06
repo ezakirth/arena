@@ -47,7 +47,7 @@ module.exports = class Timer {
             timer.delay -= this.delta;
             if (timer.delay <= 0) {
                 if (timer.type == 'respawn') {
-                    map.data[timer.data.x][timer.data.y].pickup = timer.data.pickup;
+                    map.queueUpdate('pickup', timer.data.pickup, timer.data.x, timer.data.y);
                 }
 
                 if (timer.type == 'buff') {
