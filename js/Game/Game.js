@@ -7,10 +7,6 @@ module.exports = class Game {
 
     }
 
-    getNbClients() {
-        return this.clients.length;
-    }
-
     update() {
         for (let clientId in this.clients) {
             this.clients[clientId].update();

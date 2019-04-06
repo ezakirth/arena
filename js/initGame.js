@@ -13,7 +13,6 @@ window.tileSize = 128;
 window.Editor = null;
 
 
-
 window.gfx = new Graphics();
 window.time = new Timer();
 window.map = new Map();
@@ -29,10 +28,13 @@ Number.prototype.clamp = function (min, max) {
 window.loop = function () {
     requestAnimationFrame(loop);
     time.update();
-    // logic
-    game.update();
-    // graphics
-    game.render();
+
+    if (game.localClient) {
+        // logic
+        game.update();
+        // graphics
+        game.render();
+    }
 }
 
 
@@ -41,5 +43,6 @@ input.init();
 
 // attempts to connect to the server.
 // once connected, server sends us the map data and our client info 
-network.init(loop);
+network.init();
 
+loop();

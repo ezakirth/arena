@@ -1,4 +1,4 @@
-const Client = require('./js/Game/Client');
+const Client = require('./js/Game/Client.serverside');
 
 module.exports = class Server {
     constructor(io) {
