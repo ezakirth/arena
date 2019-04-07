@@ -12,8 +12,8 @@ var http = express()
     .listen(PORT, function () { return console.log("Listening on " + PORT); });
 var io = socketIO(http);
 var app_server_1 = require("./app.server");
-var Map_1 = require("./src/common/Map");
-var Timer_1 = require("./src/common/Timer");
+var Map_1 = require("../common/Map");
+var Timer_1 = require("../common/Timer");
 var FileSystem = require("fs");
 global.map = new Map_1["default"]();
 map.parseMap(JSON.parse(FileSystem.readFileSync("./map.json").toString()));

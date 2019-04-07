@@ -3,20 +3,27 @@
     "version": "0.0.1",
     "description": "game server",
     "dependencies": {
+        "@types/express": "^4.16.1",
+        "@types/socket.io": "^2.1.2",
+        "@types/socket.io-client": "^1.4.32",
         "browserify": "^16.2.3",
         "express": "^4.16.4",
+        "jquery": "^3.3.1",
         "socket.io": "^2.2.0",
+        "typescript": "^3.4.2",
         "uglifyify": "^5.0.1",
         "watchify": "^3.11.1"
     },
     "scripts": {
-        "build:game_dev": "browserify ./js/initGame.js > ./dist/bundleGame.js",
-        "build:editor_dev": "browserify ./js/initEditor.js > ./dist/bundleEditor.js",
-        "build:game_prod": "browserify -g uglifyify ./js/initGame.js > ./dist/bundleGame.js",
-        "build:editor_prod": "browserify -g uglifyify ./js/initEditor.js > ./dist/bundleEditor.js",
-        "build:dev": "npm run build:game_dev && npm run build:editor_dev",
-        "build:prod": "npm run build:game_prod && npm run build:editor_prod",
-        "live:game": "watchify ./js/initGame.js -o ./dist/bundleGame.js -v",
-        "live:editor": "watchify ./js/initEditor.js -o ./dist/bundleEditor.js -v"
+        "server": "tsc && xcopy /Y .\\dist\\server\\*.js .\\ && node app.js",
+        "build:game_dev": "browserify ./dist/initGame.js > ./public/js/game.js",
+        "build:editor_dev": "browserify ./dist/initEditor.js > ./public/js/editor.js",
+        "build:game_prod": "browserify -g uglifyify ./dist/initGame.js > ./public/js/game.js",
+        "build:editor_prod": "browserify -g uglifyify ./dist/initEditor.js > ./public/js/editor.js",
+        "build:dev": "tsc && npm run build:game_dev && npm run build:editor_dev",
+        "build:prod": "tsc && npm run build:game_prod && npm run build:editor_prod",
+        "tsc:live": "tsc -w",
+        "live:game": "watchify ./dist/initGame.js -o ./public/js/game.js -v",
+        "live:editor": "watchify ./dist/initEditor.js -o ./public/js/editor.js -v"
     }
 }
