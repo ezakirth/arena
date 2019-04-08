@@ -1,3 +1,6 @@
 node_*.tmp
 node_modules/
 package-lock.json
+public/scripts/
+public/editorBundle.js
+public/gameBundle.js
