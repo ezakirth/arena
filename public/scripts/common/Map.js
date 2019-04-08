@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
 var Tile_1 = require("./Tile");
 var Map = /** @class */ (function () {
@@ -25,14 +25,14 @@ var Map = /** @class */ (function () {
             for (var x = 0; x < this.w; x++) {
                 this.data[x] = Array(this.h);
                 for (var y = 0; y < this.h; y++) {
-                    this.data[x][y] = new Tile_1["default"]();
+                    this.data[x][y] = new Tile_1.default();
                 }
             }
         }
         this.w = this.data.length;
         this.h = this.data[0].length;
-        document.getElementById("#editor_Width_id")['value'] = this.w;
-        document.getElementById("#editor_Height_id")['value'] = this.h;
+        document.getElementById("editor_Width_id")['value'] = this.w;
+        document.getElementById("editor_Height_id")['value'] = this.h;
     };
     /**
      * Server method: adds an update to the queue
@@ -61,7 +61,7 @@ var Map = /** @class */ (function () {
      */
     Map.prototype.assignSpawnToClient = function (team) {
         var spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];
-        return new Vector_1["default"](spawnPoint.x, spawnPoint.y);
+        return new Vector_1.default(spawnPoint.x, spawnPoint.y);
     };
     /**
      * Loads the map
@@ -75,16 +75,16 @@ var Map = /** @class */ (function () {
             for (var y = 0; y < this.h; y++) {
                 var block = this.data[x][y];
                 if (block.pickup == "pickup_flag_blue") {
-                    this.flags.blue = new Vector_1["default"](x, y);
+                    this.flags.blue = new Vector_1.default(x, y);
                 }
                 if (block.pickup == "pickup_flag_green") {
-                    this.flags.green = new Vector_1["default"](x, y);
+                    this.flags.green = new Vector_1.default(x, y);
                 }
                 if (block.spawn == "spawn_blue") {
-                    this.spawns.blue.push(new Vector_1["default"](x + 0.5, y + 0.5));
+                    this.spawns.blue.push(new Vector_1.default(x + 0.5, y + 0.5));
                 }
                 if (block.spawn == "spawn_green") {
-                    this.spawns.green.push(new Vector_1["default"](x + 0.5, y + 0.5));
+                    this.spawns.green.push(new Vector_1.default(x + 0.5, y + 0.5));
                 }
             }
         }
@@ -167,10 +167,10 @@ var Map = /** @class */ (function () {
      * Resets the map (Editor method)
      */
     Map.prototype.resetData = function () {
-        var w = parseInt(document.getElementById("#editor_Width_id")['value']);
-        var h = parseInt(document.getElementById("#editor_Height_id")['value']);
+        var w = parseInt(document.getElementById("editor_Width_id")['value']);
+        var h = parseInt(document.getElementById("editor_Height_id")['value']);
         this.init(w, h, true);
     };
     return Map;
 }());
-exports["default"] = Map;
+exports.default = Map;

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Tile = /** @class */ (function () {
     function Tile() {
         // true if not walkable, else false
@@ -9,4 +9,4 @@ var Tile = /** @class */ (function () {
     }
     return Tile;
 }());
-exports["default"] = Tile;
+exports.default = Tile;

@@ -4,7 +4,7 @@ Simple 2D JavaScript Vector Class
 Hacked from evanw's lightgl.js
 https://github.com/evanw/lightgl.js/blob/master/src/static _js
 */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Vector = /** @class */ (function () {
     function Vector(x, y) {
         this.x = x || 0;
@@ -156,4 +156,4 @@ var Vector = /** @class */ (function () {
     };
     return Vector;
 }());
-exports["default"] = Vector;
+exports.default = Vector;

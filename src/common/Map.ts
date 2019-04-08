@@ -48,8 +48,8 @@ export default class Map {
         this.w = this.data.length;
         this.h = this.data[0].length;
 
-        document.getElementById("#editor_Width_id")['value'] = this.w;
-        document.getElementById("#editor_Height_id")['value'] = this.h;
+        document.getElementById("editor_Width_id")['value'] = this.w;
+        document.getElementById("editor_Height_id")['value'] = this.h;
     }
 
     /**
@@ -208,8 +208,8 @@ export default class Map {
      * Resets the map (Editor method)
      */
     resetData() {
-        let w: number = parseInt(document.getElementById("#editor_Width_id")['value']);
-        let h: number = parseInt(document.getElementById("#editor_Height_id")['value']);
+        let w: number = parseInt(document.getElementById("editor_Width_id")['value']);
+        let h: number = parseInt(document.getElementById("editor_Height_id")['value']);
         this.init(w, h, true);
     }
 

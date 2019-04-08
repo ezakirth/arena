@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Timer = /** @class */ (function () {
     function Timer() {
         this.now = +new Date();
@@ -13,7 +13,7 @@ var Timer = /** @class */ (function () {
             serverDelay: 100,
             serverUpdateTimeStamps: [],
             serverUpdateDelay: 0,
-            lastServerUpdate: 0
+            lastServerUpdate: 0,
         };
     }
     Timer.prototype.update = function () {
@@ -70,4 +70,4 @@ var Timer = /** @class */ (function () {
     };
     return Timer;
 }());
-exports["default"] = Timer;
+exports.default = Timer;

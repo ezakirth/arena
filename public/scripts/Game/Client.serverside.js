@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Client_1 = require("./Client");
 var Pickups_1 = require("../common/Pickups");
 var Clientserverside = /** @class */ (function (_super) {
@@ -94,5 +94,5 @@ var Clientserverside = /** @class */ (function (_super) {
         }
     };
     return Clientserverside;
-}(Client_1["default"]));
-exports["default"] = Clientserverside;
+}(Client_1.default));
+exports.default = Clientserverside;

@@ -1,5 +1,3 @@
-export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-
 
 import Map from './common/Map';
 import Graphics from './common/Graphics';
@@ -14,7 +12,7 @@ declare var window: any;
 window.tileSize = 128;
 window.Editor = null;
 
-
+window.clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 window.gfx = new Graphics();
 window.time = new Timer();
 window.map = new Map();

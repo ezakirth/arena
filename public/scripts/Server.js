@@ -1,7 +1,7 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.clamp = function (num, min, max) { return Math.min(Math.max(num, min), max); };
-var Client_serverside_1 = require("../Game/Client.serverside");
+var Client_serverside_1 = require("./Game/Client.serverside");
 var Server = /** @class */ (function () {
     function Server(io) {
         this.io = io;
@@ -13,7 +13,7 @@ var Server = /** @class */ (function () {
         var clientId = socket.id;
         var team = (this.teams.blue.length >= this.teams.green.length ? 'green' : 'blue');
         this.teams[team].push(clientId);
-        var client = new Client_serverside_1["default"]('clientname', clientId, team, map.assignSpawnToClient(team));
+        var client = new Client_serverside_1.default('clientname', clientId, team, map.assignSpawnToClient(team));
         this.clients[clientId] = client;
         socket.emit('init', { client: client, map: map.data });
     };
@@ -57,4 +57,4 @@ var Server = /** @class */ (function () {
     };
     return Server;
 }());
-exports["default"] = Server;
+exports.default = Server;

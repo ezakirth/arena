@@ -1,6 +1,6 @@
 export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-import Client from './src/Game/Client.serverside';
-import Map from './src/common/Map';
+import Client from './Game/Client.serverside';
+import Map from './common/Map';
 
 declare var map: Map;
 

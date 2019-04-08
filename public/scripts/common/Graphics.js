@@ -1,13 +1,13 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
 var Graphics = /** @class */ (function () {
     function Graphics() {
         this.width = 1920;
         this.height = 1080;
         this.browser = { width: 1920, height: 1080 };
-        this.offset = new Vector_1["default"](0, 0);
-        this.ratio = new Vector_1["default"](0, 0);
+        this.offset = new Vector_1.default(0, 0);
+        this.ratio = new Vector_1.default(0, 0);
         this.cachedImages = {};
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext("2d");
@@ -88,4 +88,4 @@ var Graphics = /** @class */ (function () {
     };
     return Graphics;
 }());
-exports["default"] = Graphics;
+exports.default = Graphics;

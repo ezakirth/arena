@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("../common/Vector");
 var Pickups_1 = require("../common/Pickups");
 /**
@@ -8,8 +8,8 @@ var Pickups_1 = require("../common/Pickups");
  */
 var Client = /** @class */ (function () {
     function Client(name, clientId, team, position) {
-        this.direction = new Vector_1["default"](1, 0);
-        this.position = new Vector_1["default"](position.x, position.y);
+        this.direction = new Vector_1.default(1, 0);
+        this.position = new Vector_1.default(position.x, position.y);
         this.infos = {
             name: name,
             life: 100,
@@ -36,4 +36,4 @@ var Client = /** @class */ (function () {
     }
     return Client;
 }());
-exports["default"] = Client;
+exports.default = Client;

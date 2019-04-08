@@ -1,4 +1,3 @@
-export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
 
 import Map from './common/Map';
 import Graphics from './common/Graphics';
@@ -7,31 +6,35 @@ import Timer from './common/Timer';
 import { Editor } from './Editor/EditorBundle';
 
 
-export const tileSize: number = 96;
+declare var window: any;
 
-export const gfx: Graphics = new Graphics();
-export const time: Timer = new Timer();
-export const map = new Map();
-export const input = new Input();
+window.tileSize = 96;
+window.Editor = null;
+
+window.clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
+window.gfx = new Graphics();
+window.time = new Timer();
+window.map = new Map();
+window.input = new Input();
+window.Editor = Editor;
 
 
-/**
- * Game loop
- */
+
 var loop = function () {
     requestAnimationFrame(loop);
-    time.update();
-
+    window.time.update();
     // logic
-    input.update();
-    Editor.update();
-
+    window.input.update();
+    window.Editor.update();
     // graphics
-    Editor.render();
+    window.Editor.render();
+
 }
 
-gfx.init();
-Editor.init();
-input.init();
+
+window.gfx.init();
+window.input.init();
+
+window.Editor.init();
 
 loop();

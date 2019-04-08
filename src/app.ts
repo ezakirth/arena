@@ -2,18 +2,21 @@ import express = require('express');
 import socketIO = require('socket.io');
 import path = require('path');
 const PORT = process.env.PORT || 3000;
-const INDEX = path.join(__dirname, './public/index.html');
+
+const root = path.resolve(__dirname, '..');
+
+const INDEX = path.join(root, './index.html');
 const http = express()
     .use(express.static('/*'))
     .get('/', (req, res) => res.sendFile(INDEX))
-    .get('/*', (req, res, next) => res.sendFile(__dirname + '/public/' + req.params[0]))
+    .get('/*', (req, res, next) => res.sendFile(root + '/' + req.params[0]))
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socketIO(http);
 
-import Server from './app.server';
+import Server from './Server';
 
-import Map from './src/common/Map';
-import Timer from './src/common/Timer';
+import Map from './common/Map';
+import Timer from './common/Timer';
 import FileSystem = require("fs");
 
 
@@ -26,7 +29,7 @@ declare var server: Server;
 
 
 global.map = new Map();
-map.parseMap(JSON.parse(FileSystem.readFileSync("./map.json").toString()));
+map.parseMap(JSON.parse(FileSystem.readFileSync(root + "/map.json").toString()));
 
 global.time = new Timer();
 
