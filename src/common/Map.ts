@@ -157,14 +157,14 @@ export default class Map {
                             }
                         }
 
-                        if (block.spawn) {
+                        if (Editor && block.spawn) {
                             gfx.sprite(block.spawn, px, py, tileSize - time.morphs.smallfast, tileSize - time.morphs.smallfast);
                         }
 
                         if (block.portal) {
                             gfx.pushMatrix();
                             gfx.translate(px, py);
-                            gfx.rotate(time.elapsed / 10 * Math.PI / 180);
+                            gfx.rotate(time.elapsed);
                             gfx.sprite("portal_" + block.portal.color, 0, 0, tileSize - time.morphs.bigslow, tileSize - time.morphs.bigslow);
                             gfx.popMatrix();
                         }
