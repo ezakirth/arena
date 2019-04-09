@@ -4,6 +4,7 @@ import Client from './Client.clientside';
 import Game from './Game';
 import Map from '../common/Map';
 import Timer from '../common/Timer';
+import Bullet from './Bullet';
 
 //declare var io: Function;
 declare var game: Game;
@@ -194,6 +195,12 @@ export default class Network {
             // store movements for later reconciliation
             client.networkData.pendingMovement.push(movementData);
         }
+    }
+
+    shootWeapon(client: Client) {
+        let bulletData = { team: client.infos.enemyTeam, x: client.position.x, y: client.position.y, dx: client.direction.x, dy: client.direction.y };
+        game.bullets.push(new Bullet(client.infos.enemyTeam, client.position, client.direction));
+        this.socket.emit('shoot', bulletData);
     }
 }
 //var socket = io('https://charpie.herokuapp.com/');

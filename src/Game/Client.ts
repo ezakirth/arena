@@ -13,6 +13,7 @@ export default class Client {
     justUsedPortal: boolean;
     dead: boolean;
     moving: boolean;
+    shooting: boolean;
     frame: number;
 
     constructor(name, clientId, team, position) {
@@ -23,7 +24,7 @@ export default class Client {
             name: name,
             life: 100,
             shield: 100,
-            weapon: Pickups.weapons.gun,
+            weapon: Pickups.weapons.minigun,
             ammo: 10,
             speed: 0.05,
             hasEnemyFlag: false,
@@ -45,6 +46,7 @@ export default class Client {
         this.justUsedPortal = false;
         this.dead = false;
         this.moving = false;
+        this.shooting = false;
         this.frame = 1;
     }
 

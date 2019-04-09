@@ -8,6 +8,7 @@ export default class Server {
     io: any;
     clients: any;
     teams: any;
+    bullets: any;
     history: any;
 
     constructor(io) {
@@ -15,6 +16,7 @@ export default class Server {
         this.clients = {};
         this.teams = { blue: [], green: [] };
         this.history = {};
+        this.bullets = [];
 
 
 
@@ -28,6 +30,11 @@ export default class Server {
         let client = new Client('clientname', clientId, team, map.assignSpawnToClient(team));
         this.clients[clientId] = client;
         socket.emit('init', { client: client, map: map.data });
+    }
+
+    shootBullet(socket, bulletData) {
+        this.bullets.push(bulletData);
+
     }
 
     deleteClient(socket) {

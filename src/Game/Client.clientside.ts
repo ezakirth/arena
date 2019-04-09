@@ -5,6 +5,7 @@ import Input from '../common/Input';
 import Graphics from '../common/Graphics';
 import Timer from '../common/Timer';
 import Game from './Game';
+import Network from './Network';
 
 declare var clamp: Function;
 declare var input: Input;
@@ -12,15 +13,20 @@ declare var gfx: Graphics;
 declare var time: Timer;
 declare var game: Game;
 declare var map: Map;
+declare var network: Network;
 declare var tileSize: number;
 
 
 
 export default class Clientclientside extends Client {
     dirSide: Vector;
+    canShoot: boolean;
+    lastShot: number;
     constructor(name, clientId, team, position) {
         super(name, clientId, team, position);
 
+        this.canShoot = true;
+        this.lastShot = 0;
     }
 
     /**
@@ -30,6 +36,13 @@ export default class Clientclientside extends Client {
         if (!this.dead) {
             this.direction = Vector._subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(input.mouse.x, input.mouse.y)).normalize();
             this.dirSide = Vector._rotate(this.direction, Math.PI / 2);
+
+            this.shooting = input.mouse.left;
+            this.canShoot = time.elapsed > this.lastShot + this.infos.weapon.rate;
+            if (this.canShoot && this.shooting) {
+                this.lastShot = time.elapsed
+                network.shootWeapon(this);
+            }
 
             let oldX = this.position.x;
             let oldY = this.position.y;
@@ -61,6 +74,8 @@ export default class Clientclientside extends Client {
 
             if (map.data[oldPx][py].solid) this.position.y = oldY;
             if (map.data[px][oldPy].solid) this.position.x = oldX;
+
+
         }
     }
 
@@ -146,6 +161,10 @@ export default class Clientclientside extends Client {
         map.renderView(this.position, 1);
 
         this.renderCharacter();
+
+        for (let bullet of game.bullets) {
+            bullet.render();
+        }
 
         // render network clients
         for (let clientId in game.clients) {

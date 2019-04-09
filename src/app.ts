@@ -40,6 +40,10 @@ global.server = new Server(io);
 io.on('connection', function (socket) {
     server.createClient(socket);
 
+    socket.on('shoot', function (bulletData) {
+        server.shootBullet(socket, bulletData);
+    });
+
     socket.on('update', function (movementData) {
         server.updateClient(socket, movementData);
     });
