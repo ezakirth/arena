@@ -38,9 +38,10 @@ export const Pickups: any = {
         gun: {
             type: 'weapon',
             name: 'gun',
+            sprite: 'bullet',
             dmg: 20,
             rate: 0.4,
-            speed: 10,
+            speed: 0.2,
             range: 500,
             ammo: 1 / 0,
             weight: 1.0
@@ -49,9 +50,10 @@ export const Pickups: any = {
         minigun: {
             type: 'weapon',
             name: 'minigun',
+            sprite: 'bullet',
             dmg: 8,
             rate: 0.1,
-            speed: 15,
+            speed: 0.2,
             range: 800,
             ammo: 60,
             weight: 2.0
@@ -60,9 +62,10 @@ export const Pickups: any = {
         blastgun: {
             type: 'weapon',
             name: 'blastgun',
+            sprite: 'blast',
             dmg: 15,
             rate: 0.2,
-            speed: 10,
+            speed: 0.2,
             range: 1000,
             ammo: 60,
             weight: 2.5
@@ -71,9 +74,10 @@ export const Pickups: any = {
         railgun: {
             type: 'weapon',
             name: 'railgun',
+            sprite: 'blast3',
             dmg: 150,
             rate: 2,
-            speed: 40,
+            speed: 0.40,
             range: 1000,
             ammo: 5,
             weight: 3
@@ -82,9 +86,10 @@ export const Pickups: any = {
         shotgun: {
             type: 'weapon',
             name: 'shotgun',
+            sprite: 'bullet',
             dmg: 10,
             rate: 1.5,
-            speed: 10,
+            speed: 0.2,
             range: 300,
             ammo: 15,
             weight: 1.5
@@ -93,9 +98,10 @@ export const Pickups: any = {
         rpg: {
             type: 'weapon',
             name: 'rpg',
+            sprite: 'bullet',
             dmg: 100,
             rate: 1,
-            speed: 10,
+            speed: 0.10,
             range: 3000,
             ammo: 10,
             weight: 3

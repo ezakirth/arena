@@ -1,4 +1,221 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+module.exports = after
+
+function after(count, callback, err_cb) {
+    var bail = false
+    err_cb = err_cb || noop
+    proxy.count = count
+
+    return (count === 0) ? callback() : proxy
+
+    function proxy(err, result) {
+        if (proxy.count <= 0) {
+            throw new Error('after called too many times')
+        }
+        --proxy.count
+
+        // after first error, rest are passed to err_cb
+        if (err) {
+            bail = true
+            callback(err)
+            // future error callbacks will go to error handler
+            callback = err_cb
+        } else if (proxy.count === 0 && !bail) {
+            callback(null, result)
+        }
+    }
+}
+
+function noop() {}
+
+},{}],2:[function(require,module,exports){
+/**
+ * An abstraction for slicing an arraybuffer even when
+ * ArrayBuffer.prototype.slice is not supported
+ *
+ * @api public
+ */
+
+module.exports = function(arraybuffer, start, end) {
+  var bytes = arraybuffer.byteLength;
+  start = start || 0;
+  end = end || bytes;
+
+  if (arraybuffer.slice) { return arraybuffer.slice(start, end); }
+
+  if (start < 0) { start += bytes; }
+  if (end < 0) { end += bytes; }
+  if (end > bytes) { end = bytes; }
+
+  if (start >= bytes || start >= end || bytes === 0) {
+    return new ArrayBuffer(0);
+  }
+
+  var abv = new Uint8Array(arraybuffer);
+  var result = new Uint8Array(end - start);
+  for (var i = start, ii = 0; i < end; i++, ii++) {
+    result[ii] = abv[i];
+  }
+  return result.buffer;
+};
+
+},{}],3:[function(require,module,exports){
+
+/**
+ * Expose `Backoff`.
+ */
+
+module.exports = Backoff;
+
+/**
+ * Initialize backoff timer with `opts`.
+ *
+ * - `min` initial timeout in milliseconds [100]
+ * - `max` max timeout [10000]
+ * - `jitter` [0]
+ * - `factor` [2]
+ *
+ * @param {Object} opts
+ * @api public
+ */
+
+function Backoff(opts) {
+  opts = opts || {};
+  this.ms = opts.min || 100;
+  this.max = opts.max || 10000;
+  this.factor = opts.factor || 2;
+  this.jitter = opts.jitter > 0 && opts.jitter <= 1 ? opts.jitter : 0;
+  this.attempts = 0;
+}
+
+/**
+ * Return the backoff duration.
+ *
+ * @return {Number}
+ * @api public
+ */
+
+Backoff.prototype.duration = function(){
+  var ms = this.ms * Math.pow(this.factor, this.attempts++);
+  if (this.jitter) {
+    var rand =  Math.random();
+    var deviation = Math.floor(rand * this.jitter * ms);
+    ms = (Math.floor(rand * 10) & 1) == 0  ? ms - deviation : ms + deviation;
+  }
+  return Math.min(ms, this.max) | 0;
+};
+
+/**
+ * Reset the number of attempts.
+ *
+ * @api public
+ */
+
+Backoff.prototype.reset = function(){
+  this.attempts = 0;
+};
+
+/**
+ * Set the minimum duration
+ *
+ * @api public
+ */
+
+Backoff.prototype.setMin = function(min){
+  this.ms = min;
+};
+
+/**
+ * Set the maximum duration
+ *
+ * @api public
+ */
+
+Backoff.prototype.setMax = function(max){
+  this.max = max;
+};
+
+/**
+ * Set the jitter
+ *
+ * @api public
+ */
+
+Backoff.prototype.setJitter = function(jitter){
+  this.jitter = jitter;
+};
+
+
+},{}],4:[function(require,module,exports){
+/*
+ * base64-arraybuffer
+ * https://github.com/niklasvh/base64-arraybuffer
+ *
+ * Copyright (c) 2012 Niklas von Hertzen
+ * Licensed under the MIT license.
+ */
+(function(){
+  "use strict";
+
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+  // Use a lookup table to find the index.
+  var lookup = new Uint8Array(256);
+  for (var i = 0; i < chars.length; i++) {
+    lookup[chars.charCodeAt(i)] = i;
+  }
+
+  exports.encode = function(arraybuffer) {
+    var bytes = new Uint8Array(arraybuffer),
+    i, len = bytes.length, base64 = "";
+
+    for (i = 0; i < len; i+=3) {
+      base64 += chars[bytes[i] >> 2];
+      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+      base64 += chars[bytes[i + 2] & 63];
+    }
+
+    if ((len % 3) === 2) {
+      base64 = base64.substring(0, base64.length - 1) + "=";
+    } else if (len % 3 === 1) {
+      base64 = base64.substring(0, base64.length - 2) + "==";
+    }
+
+    return base64;
+  };
+
+  exports.decode =  function(base64) {
+    var bufferLength = base64.length * 0.75,
+    len = base64.length, i, p = 0,
+    encoded1, encoded2, encoded3, encoded4;
+
+    if (base64[base64.length - 1] === "=") {
+      bufferLength--;
+      if (base64[base64.length - 2] === "=") {
+        bufferLength--;
+      }
+    }
+
+    var arraybuffer = new ArrayBuffer(bufferLength),
+    bytes = new Uint8Array(arraybuffer);
+
+    for (i = 0; i < len; i+=4) {
+      encoded1 = lookup[base64.charCodeAt(i)];
+      encoded2 = lookup[base64.charCodeAt(i+1)];
+      encoded3 = lookup[base64.charCodeAt(i+2)];
+      encoded4 = lookup[base64.charCodeAt(i+3)];
+
+      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+    }
+
+    return arraybuffer;
+  };
+})();
+
+},{}],5:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -151,9 +368,111 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],2:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+/**
+ * Create a blob builder even when vendor prefixes exist
+ */
 
-},{}],3:[function(require,module,exports){
+var BlobBuilder = typeof BlobBuilder !== 'undefined' ? BlobBuilder :
+  typeof WebKitBlobBuilder !== 'undefined' ? WebKitBlobBuilder :
+  typeof MSBlobBuilder !== 'undefined' ? MSBlobBuilder :
+  typeof MozBlobBuilder !== 'undefined' ? MozBlobBuilder : 
+  false;
+
+/**
+ * Check if Blob constructor is supported
+ */
+
+var blobSupported = (function() {
+  try {
+    var a = new Blob(['hi']);
+    return a.size === 2;
+  } catch(e) {
+    return false;
+  }
+})();
+
+/**
+ * Check if Blob constructor supports ArrayBufferViews
+ * Fails in Safari 6, so we need to map to ArrayBuffers there.
+ */
+
+var blobSupportsArrayBufferView = blobSupported && (function() {
+  try {
+    var b = new Blob([new Uint8Array([1,2])]);
+    return b.size === 2;
+  } catch(e) {
+    return false;
+  }
+})();
+
+/**
+ * Check if BlobBuilder is supported
+ */
+
+var blobBuilderSupported = BlobBuilder
+  && BlobBuilder.prototype.append
+  && BlobBuilder.prototype.getBlob;
+
+/**
+ * Helper function that maps ArrayBufferViews to ArrayBuffers
+ * Used by BlobBuilder constructor and old browsers that didn't
+ * support it in the Blob constructor.
+ */
+
+function mapArrayBufferViews(ary) {
+  return ary.map(function(chunk) {
+    if (chunk.buffer instanceof ArrayBuffer) {
+      var buf = chunk.buffer;
+
+      // if this is a subarray, make a copy so we only
+      // include the subarray region from the underlying buffer
+      if (chunk.byteLength !== buf.byteLength) {
+        var copy = new Uint8Array(chunk.byteLength);
+        copy.set(new Uint8Array(buf, chunk.byteOffset, chunk.byteLength));
+        buf = copy.buffer;
+      }
+
+      return buf;
+    }
+
+    return chunk;
+  });
+}
+
+function BlobBuilderConstructor(ary, options) {
+  options = options || {};
+
+  var bb = new BlobBuilder();
+  mapArrayBufferViews(ary).forEach(function(part) {
+    bb.append(part);
+  });
+
+  return (options.type) ? bb.getBlob(options.type) : bb.getBlob();
+};
+
+function BlobConstructor(ary, options) {
+  return new Blob(mapArrayBufferViews(ary), options || {});
+};
+
+if (typeof Blob !== 'undefined') {
+  BlobBuilderConstructor.prototype = Blob.prototype;
+  BlobConstructor.prototype = Blob.prototype;
+}
+
+module.exports = (function() {
+  if (blobSupported) {
+    return blobSupportsArrayBufferView ? Blob : BlobConstructor;
+  } else if (blobBuilderSupported) {
+    return BlobBuilderConstructor;
+  } else {
+    return undefined;
+  }
+})();
+
+},{}],7:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
 (function (Buffer){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1934,598 +2253,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"base64-js":1,"buffer":3,"ieee754":4}],4:[function(require,module,exports){
-exports.read = function (buffer, offset, isLE, mLen, nBytes) {
-  var e, m
-  var eLen = (nBytes * 8) - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var nBits = -7
-  var i = isLE ? (nBytes - 1) : 0
-  var d = isLE ? -1 : 1
-  var s = buffer[offset + i]
-
-  i += d
-
-  e = s & ((1 << (-nBits)) - 1)
-  s >>= (-nBits)
-  nBits += eLen
-  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-  m = e & ((1 << (-nBits)) - 1)
-  e >>= (-nBits)
-  nBits += mLen
-  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
-
-  if (e === 0) {
-    e = 1 - eBias
-  } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity)
-  } else {
-    m = m + Math.pow(2, mLen)
-    e = e - eBias
-  }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
-}
-
-exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c
-  var eLen = (nBytes * 8) - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
-  var i = isLE ? 0 : (nBytes - 1)
-  var d = isLE ? 1 : -1
-  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
-
-  value = Math.abs(value)
-
-  if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0
-    e = eMax
-  } else {
-    e = Math.floor(Math.log(value) / Math.LN2)
-    if (value * (c = Math.pow(2, -e)) < 1) {
-      e--
-      c *= 2
-    }
-    if (e + eBias >= 1) {
-      value += rt / c
-    } else {
-      value += rt * Math.pow(2, 1 - eBias)
-    }
-    if (value * c >= 2) {
-      e++
-      c /= 2
-    }
-
-    if (e + eBias >= eMax) {
-      m = 0
-      e = eMax
-    } else if (e + eBias >= 1) {
-      m = ((value * c) - 1) * Math.pow(2, mLen)
-      e = e + eBias
-    } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
-      e = 0
-    }
-  }
-
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
-
-  e = (e << mLen) | m
-  eLen += mLen
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
-
-  buffer[offset + i - d] |= s * 128
-}
-
-},{}],5:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],6:[function(require,module,exports){
-module.exports = after
-
-function after(count, callback, err_cb) {
-    var bail = false
-    err_cb = err_cb || noop
-    proxy.count = count
-
-    return (count === 0) ? callback() : proxy
-
-    function proxy(err, result) {
-        if (proxy.count <= 0) {
-            throw new Error('after called too many times')
-        }
-        --proxy.count
-
-        // after first error, rest are passed to err_cb
-        if (err) {
-            bail = true
-            callback(err)
-            // future error callbacks will go to error handler
-            callback = err_cb
-        } else if (proxy.count === 0 && !bail) {
-            callback(null, result)
-        }
-    }
-}
-
-function noop() {}
-
-},{}],7:[function(require,module,exports){
-/**
- * An abstraction for slicing an arraybuffer even when
- * ArrayBuffer.prototype.slice is not supported
- *
- * @api public
- */
-
-module.exports = function(arraybuffer, start, end) {
-  var bytes = arraybuffer.byteLength;
-  start = start || 0;
-  end = end || bytes;
-
-  if (arraybuffer.slice) { return arraybuffer.slice(start, end); }
-
-  if (start < 0) { start += bytes; }
-  if (end < 0) { end += bytes; }
-  if (end > bytes) { end = bytes; }
-
-  if (start >= bytes || start >= end || bytes === 0) {
-    return new ArrayBuffer(0);
-  }
-
-  var abv = new Uint8Array(arraybuffer);
-  var result = new Uint8Array(end - start);
-  for (var i = start, ii = 0; i < end; i++, ii++) {
-    result[ii] = abv[i];
-  }
-  return result.buffer;
-};
-
-},{}],8:[function(require,module,exports){
-
-/**
- * Expose `Backoff`.
- */
-
-module.exports = Backoff;
-
-/**
- * Initialize backoff timer with `opts`.
- *
- * - `min` initial timeout in milliseconds [100]
- * - `max` max timeout [10000]
- * - `jitter` [0]
- * - `factor` [2]
- *
- * @param {Object} opts
- * @api public
- */
-
-function Backoff(opts) {
-  opts = opts || {};
-  this.ms = opts.min || 100;
-  this.max = opts.max || 10000;
-  this.factor = opts.factor || 2;
-  this.jitter = opts.jitter > 0 && opts.jitter <= 1 ? opts.jitter : 0;
-  this.attempts = 0;
-}
-
-/**
- * Return the backoff duration.
- *
- * @return {Number}
- * @api public
- */
-
-Backoff.prototype.duration = function(){
-  var ms = this.ms * Math.pow(this.factor, this.attempts++);
-  if (this.jitter) {
-    var rand =  Math.random();
-    var deviation = Math.floor(rand * this.jitter * ms);
-    ms = (Math.floor(rand * 10) & 1) == 0  ? ms - deviation : ms + deviation;
-  }
-  return Math.min(ms, this.max) | 0;
-};
-
-/**
- * Reset the number of attempts.
- *
- * @api public
- */
-
-Backoff.prototype.reset = function(){
-  this.attempts = 0;
-};
-
-/**
- * Set the minimum duration
- *
- * @api public
- */
-
-Backoff.prototype.setMin = function(min){
-  this.ms = min;
-};
-
-/**
- * Set the maximum duration
- *
- * @api public
- */
-
-Backoff.prototype.setMax = function(max){
-  this.max = max;
-};
-
-/**
- * Set the jitter
- *
- * @api public
- */
-
-Backoff.prototype.setJitter = function(jitter){
-  this.jitter = jitter;
-};
-
-
-},{}],9:[function(require,module,exports){
-/*
- * base64-arraybuffer
- * https://github.com/niklasvh/base64-arraybuffer
- *
- * Copyright (c) 2012 Niklas von Hertzen
- * Licensed under the MIT license.
- */
-(function(){
-  "use strict";
-
-  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-  // Use a lookup table to find the index.
-  var lookup = new Uint8Array(256);
-  for (var i = 0; i < chars.length; i++) {
-    lookup[chars.charCodeAt(i)] = i;
-  }
-
-  exports.encode = function(arraybuffer) {
-    var bytes = new Uint8Array(arraybuffer),
-    i, len = bytes.length, base64 = "";
-
-    for (i = 0; i < len; i+=3) {
-      base64 += chars[bytes[i] >> 2];
-      base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
-      base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
-      base64 += chars[bytes[i + 2] & 63];
-    }
-
-    if ((len % 3) === 2) {
-      base64 = base64.substring(0, base64.length - 1) + "=";
-    } else if (len % 3 === 1) {
-      base64 = base64.substring(0, base64.length - 2) + "==";
-    }
-
-    return base64;
-  };
-
-  exports.decode =  function(base64) {
-    var bufferLength = base64.length * 0.75,
-    len = base64.length, i, p = 0,
-    encoded1, encoded2, encoded3, encoded4;
-
-    if (base64[base64.length - 1] === "=") {
-      bufferLength--;
-      if (base64[base64.length - 2] === "=") {
-        bufferLength--;
-      }
-    }
-
-    var arraybuffer = new ArrayBuffer(bufferLength),
-    bytes = new Uint8Array(arraybuffer);
-
-    for (i = 0; i < len; i+=4) {
-      encoded1 = lookup[base64.charCodeAt(i)];
-      encoded2 = lookup[base64.charCodeAt(i+1)];
-      encoded3 = lookup[base64.charCodeAt(i+2)];
-      encoded4 = lookup[base64.charCodeAt(i+3)];
-
-      bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
-      bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
-      bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
-    }
-
-    return arraybuffer;
-  };
-})();
-
-},{}],10:[function(require,module,exports){
-/**
- * Create a blob builder even when vendor prefixes exist
- */
-
-var BlobBuilder = typeof BlobBuilder !== 'undefined' ? BlobBuilder :
-  typeof WebKitBlobBuilder !== 'undefined' ? WebKitBlobBuilder :
-  typeof MSBlobBuilder !== 'undefined' ? MSBlobBuilder :
-  typeof MozBlobBuilder !== 'undefined' ? MozBlobBuilder : 
-  false;
-
-/**
- * Check if Blob constructor is supported
- */
-
-var blobSupported = (function() {
-  try {
-    var a = new Blob(['hi']);
-    return a.size === 2;
-  } catch(e) {
-    return false;
-  }
-})();
-
-/**
- * Check if Blob constructor supports ArrayBufferViews
- * Fails in Safari 6, so we need to map to ArrayBuffers there.
- */
-
-var blobSupportsArrayBufferView = blobSupported && (function() {
-  try {
-    var b = new Blob([new Uint8Array([1,2])]);
-    return b.size === 2;
-  } catch(e) {
-    return false;
-  }
-})();
-
-/**
- * Check if BlobBuilder is supported
- */
-
-var blobBuilderSupported = BlobBuilder
-  && BlobBuilder.prototype.append
-  && BlobBuilder.prototype.getBlob;
-
-/**
- * Helper function that maps ArrayBufferViews to ArrayBuffers
- * Used by BlobBuilder constructor and old browsers that didn't
- * support it in the Blob constructor.
- */
-
-function mapArrayBufferViews(ary) {
-  return ary.map(function(chunk) {
-    if (chunk.buffer instanceof ArrayBuffer) {
-      var buf = chunk.buffer;
-
-      // if this is a subarray, make a copy so we only
-      // include the subarray region from the underlying buffer
-      if (chunk.byteLength !== buf.byteLength) {
-        var copy = new Uint8Array(chunk.byteLength);
-        copy.set(new Uint8Array(buf, chunk.byteOffset, chunk.byteLength));
-        buf = copy.buffer;
-      }
-
-      return buf;
-    }
-
-    return chunk;
-  });
-}
-
-function BlobBuilderConstructor(ary, options) {
-  options = options || {};
-
-  var bb = new BlobBuilder();
-  mapArrayBufferViews(ary).forEach(function(part) {
-    bb.append(part);
-  });
-
-  return (options.type) ? bb.getBlob(options.type) : bb.getBlob();
-};
-
-function BlobConstructor(ary, options) {
-  return new Blob(mapArrayBufferViews(ary), options || {});
-};
-
-if (typeof Blob !== 'undefined') {
-  BlobBuilderConstructor.prototype = Blob.prototype;
-  BlobConstructor.prototype = Blob.prototype;
-}
-
-module.exports = (function() {
-  if (blobSupported) {
-    return blobSupportsArrayBufferView ? Blob : BlobConstructor;
-  } else if (blobBuilderSupported) {
-    return BlobBuilderConstructor;
-  } else {
-    return undefined;
-  }
-})();
-
-},{}],11:[function(require,module,exports){
+},{"base64-js":5,"buffer":8,"ieee754":28}],9:[function(require,module,exports){
 /**
  * Slice reference.
  */
@@ -2550,7 +2278,7 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -2715,7 +2443,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],13:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 
 module.exports = function(a, b){
   var fn = function(){};
@@ -2723,7 +2451,7 @@ module.exports = function(a, b){
   a.prototype = new fn;
   a.prototype.constructor = a;
 };
-},{}],14:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 
 module.exports = require('./socket');
 
@@ -2735,7 +2463,7 @@ module.exports = require('./socket');
  */
 module.exports.parser = require('engine.io-parser');
 
-},{"./socket":15,"engine.io-parser":25}],15:[function(require,module,exports){
+},{"./socket":13,"engine.io-parser":23}],13:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3483,7 +3211,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
   return filteredUpgrades;
 };
 
-},{"./transport":16,"./transports/index":17,"component-emitter":12,"debug":23,"engine.io-parser":25,"indexof":30,"parseqs":33,"parseuri":34}],16:[function(require,module,exports){
+},{"./transport":14,"./transports/index":15,"component-emitter":10,"debug":21,"engine.io-parser":23,"indexof":29,"parseqs":32,"parseuri":33}],14:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3645,7 +3373,7 @@ Transport.prototype.onClose = function () {
   this.emit('close');
 };
 
-},{"component-emitter":12,"engine.io-parser":25}],17:[function(require,module,exports){
+},{"component-emitter":10,"engine.io-parser":23}],15:[function(require,module,exports){
 /**
  * Module dependencies
  */
@@ -3700,7 +3428,7 @@ function polling (opts) {
   }
 }
 
-},{"./polling-jsonp":18,"./polling-xhr":19,"./websocket":21,"xmlhttprequest-ssl":22}],18:[function(require,module,exports){
+},{"./polling-jsonp":16,"./polling-xhr":17,"./websocket":19,"xmlhttprequest-ssl":20}],16:[function(require,module,exports){
 (function (global){
 /**
  * Module requirements.
@@ -3943,7 +3671,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./polling":20,"component-inherit":13}],19:[function(require,module,exports){
+},{"./polling":18,"component-inherit":11}],17:[function(require,module,exports){
 /* global attachEvent */
 
 /**
@@ -4360,7 +4088,7 @@ function unloadHandler () {
   }
 }
 
-},{"./polling":20,"component-emitter":12,"component-inherit":13,"debug":23,"xmlhttprequest-ssl":22}],20:[function(require,module,exports){
+},{"./polling":18,"component-emitter":10,"component-inherit":11,"debug":21,"xmlhttprequest-ssl":20}],18:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -4607,7 +4335,7 @@ Polling.prototype.uri = function () {
   return schema + '://' + (ipv6 ? '[' + this.hostname + ']' : this.hostname) + port + this.path + query;
 };
 
-},{"../transport":16,"component-inherit":13,"debug":23,"engine.io-parser":25,"parseqs":33,"xmlhttprequest-ssl":22,"yeast":48}],21:[function(require,module,exports){
+},{"../transport":14,"component-inherit":11,"debug":21,"engine.io-parser":23,"parseqs":32,"xmlhttprequest-ssl":20,"yeast":48}],19:[function(require,module,exports){
 (function (Buffer){
 /**
  * Module dependencies.
@@ -4904,7 +4632,7 @@ WS.prototype.check = function () {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"../transport":16,"buffer":3,"component-inherit":13,"debug":23,"engine.io-parser":25,"parseqs":33,"ws":2,"yeast":48}],22:[function(require,module,exports){
+},{"../transport":14,"buffer":8,"component-inherit":11,"debug":21,"engine.io-parser":23,"parseqs":32,"ws":7,"yeast":48}],20:[function(require,module,exports){
 // browser shim for xmlhttprequest module
 
 var hasCORS = require('has-cors');
@@ -4943,7 +4671,7 @@ module.exports = function (opts) {
   }
 };
 
-},{"has-cors":29}],23:[function(require,module,exports){
+},{"has-cors":27}],21:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -5142,7 +4870,7 @@ function localstorage() {
 }
 
 }).call(this,require('_process'))
-},{"./debug":24,"_process":5}],24:[function(require,module,exports){
+},{"./debug":22,"_process":34}],22:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -5369,7 +5097,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":32}],25:[function(require,module,exports){
+},{"ms":31}],23:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -5976,7 +5704,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
   });
 };
 
-},{"./keys":26,"./utf8":27,"after":6,"arraybuffer.slice":7,"base64-arraybuffer":9,"blob":10,"has-binary2":28}],26:[function(require,module,exports){
+},{"./keys":24,"./utf8":25,"after":1,"arraybuffer.slice":2,"base64-arraybuffer":4,"blob":6,"has-binary2":26}],24:[function(require,module,exports){
 
 /**
  * Gets the keys for an object.
@@ -5997,7 +5725,7 @@ module.exports = Object.keys || function keys (obj){
   return arr;
 };
 
-},{}],27:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
 
 var stringFromCharCode = String.fromCharCode;
@@ -6209,7 +5937,7 @@ module.exports = {
 	decode: utf8decode
 };
 
-},{}],28:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (Buffer){
 /* global Blob File */
 
@@ -6277,7 +6005,7 @@ function hasBinary (obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":3,"isarray":31}],29:[function(require,module,exports){
+},{"buffer":8,"isarray":30}],27:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -6296,7 +6024,93 @@ try {
   module.exports = false;
 }
 
-},{}],30:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = (nBytes * 8) - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
+
+  i += d
+
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
+
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = (nBytes * 8) - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+  value = Math.abs(value)
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0
+    e = eMax
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2)
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--
+      c *= 2
+    }
+    if (e + eBias >= 1) {
+      value += rt / c
+    } else {
+      value += rt * Math.pow(2, 1 - eBias)
+    }
+    if (value * c >= 2) {
+      e++
+      c /= 2
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0
+      e = eMax
+    } else if (e + eBias >= 1) {
+      m = ((value * c) - 1) * Math.pow(2, mLen)
+      e = e + eBias
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128
+}
+
+},{}],29:[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -6307,14 +6121,14 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],31:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],32:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -6468,7 +6282,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],33:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -6507,7 +6321,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -6547,6 +6361,192 @@ module.exports = function parseuri(str) {
 
     return uri;
 };
+
+},{}],34:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
 
 },{}],35:[function(require,module,exports){
 
@@ -7219,7 +7219,7 @@ Manager.prototype.onreconnect = function () {
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":37,"./socket":38,"backo2":8,"component-bind":11,"component-emitter":12,"debug":40,"engine.io-client":14,"indexof":30,"socket.io-parser":43}],37:[function(require,module,exports){
+},{"./on":37,"./socket":38,"backo2":3,"component-bind":9,"component-emitter":10,"debug":40,"engine.io-client":12,"indexof":29,"socket.io-parser":43}],37:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -7685,7 +7685,7 @@ Socket.prototype.binary = function (binary) {
   return this;
 };
 
-},{"./on":37,"component-bind":11,"component-emitter":12,"debug":40,"has-binary2":28,"parseqs":33,"socket.io-parser":43,"to-array":47}],39:[function(require,module,exports){
+},{"./on":37,"component-bind":9,"component-emitter":10,"debug":40,"has-binary2":26,"parseqs":32,"socket.io-parser":43,"to-array":47}],39:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -7762,11 +7762,11 @@ function url (uri, loc) {
   return obj;
 }
 
-},{"debug":40,"parseuri":34}],40:[function(require,module,exports){
-arguments[4][23][0].apply(exports,arguments)
-},{"./debug":41,"_process":5,"dup":23}],41:[function(require,module,exports){
-arguments[4][24][0].apply(exports,arguments)
-},{"dup":24,"ms":32}],42:[function(require,module,exports){
+},{"debug":40,"parseuri":33}],40:[function(require,module,exports){
+arguments[4][21][0].apply(exports,arguments)
+},{"./debug":41,"_process":34,"dup":21}],41:[function(require,module,exports){
+arguments[4][22][0].apply(exports,arguments)
+},{"dup":22,"ms":31}],42:[function(require,module,exports){
 /*global Blob,File*/
 
 /**
@@ -7909,7 +7909,7 @@ exports.removeBlobs = function(data, callback) {
   }
 };
 
-},{"./is-buffer":44,"isarray":31}],43:[function(require,module,exports){
+},{"./is-buffer":44,"isarray":30}],43:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -8326,7 +8326,7 @@ function error(msg) {
   };
 }
 
-},{"./binary":42,"./is-buffer":44,"component-emitter":12,"debug":45,"isarray":31}],44:[function(require,module,exports){
+},{"./binary":42,"./is-buffer":44,"component-emitter":10,"debug":45,"isarray":30}],44:[function(require,module,exports){
 (function (Buffer){
 
 module.exports = isBuf;
@@ -8350,11 +8350,11 @@ function isBuf(obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":3}],45:[function(require,module,exports){
-arguments[4][23][0].apply(exports,arguments)
-},{"./debug":46,"_process":5,"dup":23}],46:[function(require,module,exports){
-arguments[4][24][0].apply(exports,arguments)
-},{"dup":24,"ms":32}],47:[function(require,module,exports){
+},{"buffer":8}],45:[function(require,module,exports){
+arguments[4][21][0].apply(exports,arguments)
+},{"./debug":46,"_process":34,"dup":21}],46:[function(require,module,exports){
+arguments[4][22][0].apply(exports,arguments)
+},{"dup":22,"ms":31}],47:[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -8447,26 +8447,51 @@ var Vector_1 = require("../common/Vector");
  * Handles a bullet
  */
 var Bullet = /** @class */ (function () {
-    function Bullet(team, position, direction) {
+    function Bullet(clientId, targetTeam, position, direction, type) {
+        this.clientId = clientId;
+        this.type = type;
         this.direction = new Vector_1.default(direction.x, direction.y);
         this.position = new Vector_1.default(position.x, position.y);
-        this.position.subtract(Vector_1.default._multiply(this.direction, .5));
-        this.team = team;
-        this.speed = .1;
+        // this.position.subtract(Vector._multiply(this.direction, .5));
+        this.targetTeam = targetTeam;
+        this.active = true;
+        this.origin = new Vector_1.default(direction.x, direction.y);
+        this.distance = 0;
     }
-    Bullet.prototype.update = function () {
-        this.position.subtract(Vector_1.default._multiply(this.direction, this.speed));
-    };
     Bullet.prototype.render = function () {
-        gfx.pushMatrix();
-        var offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize);
-        var offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize);
-        gfx.translate(offsetX, offsetY);
-        gfx.pushMatrix();
-        gfx.translate(gfx.width / 2, gfx.height / 2);
-        gfx.sprite('bullet', 0, 0, 32, 32);
-        gfx.popMatrix();
-        gfx.popMatrix();
+        if (this.active) {
+            gfx.pushMatrix();
+            var offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize) + gfx.width / 2;
+            var offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize) + gfx.height / 2;
+            gfx.translate(offsetX, offsetY);
+            // gfx.ctx.globalAlpha = 0.4;
+            gfx.sprite(this.type.sprite, 0, 0, tileSize, tileSize);
+            gfx.popMatrix();
+        }
+    };
+    Bullet.prototype.update = function () {
+        this.position.subtract(Vector_1.default._multiply(this.direction, this.type.speed));
+        //        if (this.active) {
+        //          this.distance = this.origin.subtract(this.position).length();
+        //        if (Math.sqrt(this.distance) > 40) this.active = false;
+    };
+    Bullet.prototype.hitTest = function (client, serverSide) {
+        var px = Math.floor(this.position.x);
+        var py = Math.floor(this.position.y);
+        if (map.data[px][py].solid) {
+            this.active = false;
+            return true;
+        }
+        if (!client.infos.dead && client.networkData.clientId != this.clientId) {
+            var dist = Vector_1.default._dist(this.position, client.position);
+            if (dist < .3) {
+                if (serverSide)
+                    client.modLife(-this.type.dmg);
+                this.active = false;
+                return true;
+            }
+        }
+        return false;
     };
     return Bullet;
 }());
@@ -8494,7 +8519,6 @@ var Clientclientside = /** @class */ (function (_super) {
     __extends(Clientclientside, _super);
     function Clientclientside(name, clientId, team, position) {
         var _this = _super.call(this, name, clientId, team, position) || this;
-        _this.canShoot = true;
         _this.lastShot = 0;
         return _this;
     }
@@ -8502,12 +8526,11 @@ var Clientclientside = /** @class */ (function (_super) {
      * Applies local input to the client
      */
     Clientclientside.prototype.applyInputs = function () {
-        if (!this.dead) {
+        if (!this.infos.dead) {
             this.direction = Vector_1.default._subtract(new Vector_1.default(gfx.width / 2, gfx.height / 2), new Vector_1.default(input.mouse.x, input.mouse.y)).normalize();
             this.dirSide = Vector_1.default._rotate(this.direction, Math.PI / 2);
             this.shooting = input.mouse.left;
-            this.canShoot = time.elapsed > this.lastShot + this.infos.weapon.rate;
-            if (this.canShoot && this.shooting) {
+            if (this.shooting && time.elapsed > this.lastShot + this.infos.weapon.rate) {
                 this.lastShot = time.elapsed;
                 network.shootWeapon(this);
             }
@@ -8590,18 +8613,6 @@ var Clientclientside = /** @class */ (function (_super) {
         }
     };
     /**
-     * Kills the client (drops flag if he was carrying)
-     */
-    Clientclientside.prototype.die = function () {
-        if (this.infos.hasEnemyFlag) {
-            var px = Math.floor(this.position.x);
-            var py = Math.floor(this.position.y);
-            map.queueUpdate('pickup', 'pickup_flag_' + this.infos.enemyTeam, px, py);
-            this.infos.hasEnemyFlag = false;
-        }
-        this.dead = true;
-    };
-    /**
      * Renders the client and his view of the map
      * first map pass renders the floor, decals, spawn and portals
      * second map pass renders walls, shadows and pickups
@@ -8655,6 +8666,8 @@ var Clientclientside = /** @class */ (function (_super) {
         gfx.translate(gfx.width / 2, gfx.height / 2);
         gfx.rotate(ang - Math.PI / 2);
         gfx.sprite("shadow", 0, 0, tileSize, tileSize);
+        if (this.infos.dead)
+            gfx.ctx.globalAlpha = 0.4;
         gfx.spriteSheet("toon_" + this.infos.team, 320 / 3 * Math.floor(this.frame), 0, 320 / 3, 210, 0, 0, tileSize * ((320 / 3) / 210), tileSize);
         gfx.popMatrix();
     };
@@ -8675,9 +8688,14 @@ var Clientclientside = /** @class */ (function (_super) {
             lifeVal = 0;
         gfx.pushMatrix();
         gfx.translate(gfx.width / 2, gfx.height / 2);
-        gfx.sprite('stat_life_' + lifeVal, 0, -55, life, 8);
-        gfx.sprite('stat_shield', 0, -45, shield, 8);
-        gfx.drawText(this.infos.name, 0, -68);
+        if (this.infos.dead) {
+            gfx.drawText(this.name + ' (Dead, respawn in ' + this.infos.respawnTime.toFixed(1) + 's)', 0, -68);
+        }
+        else {
+            gfx.sprite('stat_life_' + lifeVal, 0, -55, life, 8);
+            gfx.sprite('stat_shield', 0, -45, shield, 8);
+            gfx.drawText(this.name, 0, -68);
+        }
         gfx.popMatrix();
     };
     return Clientclientside;
@@ -8697,11 +8715,12 @@ var Client = /** @class */ (function () {
     function Client(name, clientId, team, position) {
         this.direction = new Vector_1.default(1, 0);
         this.position = new Vector_1.default(position.x, position.y);
+        this.name = name;
         this.infos = {
-            name: name,
             life: 100,
             shield: 100,
-            weapon: Pickups_1.Pickups.weapons.minigun,
+            dead: false,
+            weapon: Pickups_1.Pickups.weapons.gun,
             ammo: 10,
             speed: 0.05,
             hasEnemyFlag: false,
@@ -8717,11 +8736,19 @@ var Client = /** @class */ (function () {
             pendingMovement: []
         };
         this.justUsedPortal = false;
-        this.dead = false;
         this.moving = false;
         this.shooting = false;
         this.frame = 1;
     }
+    Client.prototype.respawn = function () {
+        this.position = map.assignSpawnToClient(this.infos.team);
+        this.infos.life = 100;
+        this.infos.shield = 100;
+        this.infos.dead = false;
+        this.infos.speed = 0.05;
+        this.infos.weapon = Pickups_1.Pickups.weapons.gun;
+        this.networkData.forceNoReconciliation = true;
+    };
     return Client;
 }());
 exports.default = Client;
@@ -8736,21 +8763,29 @@ var Game = /** @class */ (function () {
         this.localClientId = null;
         this.localClient = null;
     }
-    Game.prototype.update = function () {
-        for (var clientId in this.clients) {
-            this.clients[clientId].update();
-        }
-        for (var _i = 0, _a = this.bullets; _i < _a.length; _i++) {
-            var bullet = _a[_i];
-            bullet.update();
-        }
-    };
     Game.prototype.render = function () {
         gfx.clear();
         gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
         if (this.localClient)
             this.localClient.renderLocal();
         gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
+    };
+    Game.prototype.update = function () {
+        for (var clientId in this.clients) {
+            this.clients[clientId].update();
+        }
+        for (var index = this.bullets.length - 1; index >= 0; index--) {
+            var bullet = this.bullets[index];
+            bullet.update();
+            for (var clientId in this.clients) {
+                var client = this.clients[clientId];
+                if (bullet.hitTest(client, false))
+                    break;
+            }
+            if (!bullet.active) {
+                this.bullets.splice(index, 1);
+            }
+        }
     };
     return Game;
 }());
@@ -8802,6 +8837,10 @@ var Network = /** @class */ (function () {
         this.socket.on('update', function (data) {
             _this.updateClient(data);
         });
+        // bullet updates from the server
+        this.socket.on('bullets', function (bullets) {
+            _this.updateBullets(bullets);
+        });
     };
     /**
      * Load map from server and add local client
@@ -8839,6 +8878,7 @@ var Network = /** @class */ (function () {
                 this.reconciliation(client, serverClient);
             }
             else {
+                client.infos = serverClient.infos;
                 this.clientsPositionBuffer(client, serverClient);
             }
         }
@@ -8854,7 +8894,6 @@ var Network = /** @class */ (function () {
         client.direction.x = serverClient.direction.x;
         client.direction.y = serverClient.direction.y;
         client.infos = serverClient.infos;
-        client.infos.name = 'localza';
         if (serverClient.networkData.forceNoReconciliation) {
             client.networkData.lastPosition.x = client.position.x;
             client.networkData.lastPosition.y = client.position.y;
@@ -8919,9 +8958,17 @@ var Network = /** @class */ (function () {
         }
     };
     Network.prototype.shootWeapon = function (client) {
-        var bulletData = { team: client.infos.enemyTeam, x: client.position.x, y: client.position.y, dx: client.direction.x, dy: client.direction.y };
-        game.bullets.push(new Bullet_1.default(client.infos.enemyTeam, client.position, client.direction));
-        this.socket.emit('shoot', bulletData);
+        var bullet = new Bullet_1.default(client.networkData.clientId, client.infos.enemyTeam, client.position, client.direction, client.infos.weapon);
+        game.bullets.push(bullet);
+        this.socket.emit('shoot', bullet);
+    };
+    Network.prototype.updateBullets = function (bullets) {
+        for (var _i = 0, bullets_1 = bullets; _i < bullets_1.length; _i++) {
+            var bullet = bullets_1[_i];
+            var newBullet = new Bullet_1.default(bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
+            if (newBullet.clientId != game.localClientId)
+                game.bullets.push(newBullet);
+        }
     };
     return Network;
 }());
@@ -9368,9 +9415,10 @@ exports.Pickups = {
         gun: {
             type: 'weapon',
             name: 'gun',
+            sprite: 'bullet',
             dmg: 20,
             rate: 0.4,
-            speed: 10,
+            speed: 0.2,
             range: 500,
             ammo: 1 / 0,
             weight: 1.0
@@ -9378,9 +9426,10 @@ exports.Pickups = {
         minigun: {
             type: 'weapon',
             name: 'minigun',
+            sprite: 'bullet',
             dmg: 8,
             rate: 0.1,
-            speed: 15,
+            speed: 0.2,
             range: 800,
             ammo: 60,
             weight: 2.0
@@ -9388,9 +9437,10 @@ exports.Pickups = {
         blastgun: {
             type: 'weapon',
             name: 'blastgun',
+            sprite: 'blast',
             dmg: 15,
             rate: 0.2,
-            speed: 10,
+            speed: 0.2,
             range: 1000,
             ammo: 60,
             weight: 2.5
@@ -9398,9 +9448,10 @@ exports.Pickups = {
         railgun: {
             type: 'weapon',
             name: 'railgun',
+            sprite: 'blast3',
             dmg: 150,
             rate: 2,
-            speed: 40,
+            speed: 0.40,
             range: 1000,
             ammo: 5,
             weight: 3
@@ -9408,9 +9459,10 @@ exports.Pickups = {
         shotgun: {
             type: 'weapon',
             name: 'shotgun',
+            sprite: 'bullet',
             dmg: 10,
             rate: 1.5,
-            speed: 10,
+            speed: 0.2,
             range: 300,
             ammo: 15,
             weight: 1.5
@@ -9418,9 +9470,10 @@ exports.Pickups = {
         rpg: {
             type: 'weapon',
             name: 'rpg',
+            sprite: 'bullet',
             dmg: 100,
             rate: 1,
-            speed: 10,
+            speed: 0.10,
             range: 3000,
             ammo: 10,
             weight: 3
@@ -9666,6 +9719,11 @@ var Vector = /** @class */ (function () {
     Vector._cross = function (a, b) {
         return a.x * b.y - a.y * b.x;
     };
+    Vector._dist = function (a, b) {
+        var x = a.x - b.x;
+        var y = a.y - b.y;
+        return Math.sqrt(x * x + y * y);
+    };
     Vector._rotate = function (vec, angle) {
         var v = new Vector(vec.x, vec.y);
         var nx = (v.x * Math.cos(angle)) - (v.y * Math.sin(angle));
@@ -9700,10 +9758,10 @@ var loop = function () {
     requestAnimationFrame(loop);
     window.time.update();
     if (window.game.localClient) {
-        // logic
-        window.game.update();
         // graphics
         window.game.render();
+        // logic
+        window.game.update();
     }
 };
 window.gfx.init();

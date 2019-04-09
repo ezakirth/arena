@@ -61,6 +61,11 @@ export default class Network {
             _this.updateClient(data);
         });
 
+        // bullet updates from the server
+        this.socket.on('bullets', function (bullets) {
+            _this.updateBullets(bullets);
+        });
+
     }
 
     /**
@@ -106,6 +111,7 @@ export default class Network {
                 this.reconciliation(client, serverClient);
 
             } else {
+                client.infos = serverClient.infos;
                 this.clientsPositionBuffer(client, serverClient);
             }
         }
@@ -123,7 +129,7 @@ export default class Network {
         client.direction.x = serverClient.direction.x;
         client.direction.y = serverClient.direction.y;
         client.infos = serverClient.infos;
-        client.infos.name = 'localza';
+
         if (serverClient.networkData.forceNoReconciliation) {
             client.networkData.lastPosition.x = client.position.x;
             client.networkData.lastPosition.y = client.position.y;
@@ -198,9 +204,17 @@ export default class Network {
     }
 
     shootWeapon(client: Client) {
-        let bulletData = { team: client.infos.enemyTeam, x: client.position.x, y: client.position.y, dx: client.direction.x, dy: client.direction.y };
-        game.bullets.push(new Bullet(client.infos.enemyTeam, client.position, client.direction));
-        this.socket.emit('shoot', bulletData);
+        let bullet = new Bullet(client.networkData.clientId, client.infos.enemyTeam, client.position, client.direction, client.infos.weapon);
+        game.bullets.push(bullet);
+        this.socket.emit('shoot', bullet);
+    }
+
+    updateBullets(bullets: Array<Bullet>) {
+        for (let bullet of bullets) {
+            let newBullet = new Bullet(bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
+            if (newBullet.clientId != game.localClientId)
+                game.bullets.push(newBullet);
+        }
     }
 }
 //var socket = io('https://charpie.herokuapp.com/');

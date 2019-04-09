@@ -27,10 +27,10 @@ var loop = function () {
     window.time.update();
 
     if (window.game.localClient) {
-        // logic
-        window.game.update();
         // graphics
         window.game.render();
+        // logic
+        window.game.update();
     }
 }
 

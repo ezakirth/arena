@@ -60,7 +60,7 @@ io.on('connection', function (socket) {
 
 
 setInterval(function () {
-    time.update();
+    server.update();
 }, 1000 / 60);
 
 setInterval(function () {

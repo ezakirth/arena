@@ -18,23 +18,35 @@ export default class Game {
 
     }
 
-    update() {
-        for (let clientId in this.clients) {
-            this.clients[clientId].update();
-        }
-
-        for (let bullet of this.bullets) {
-            bullet.update();
-        }
-    }
 
     render() {
         gfx.clear();
         gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
-
         if (this.localClient) this.localClient.renderLocal();
+
         gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
     }
+
+    update() {
+        for (let clientId in this.clients) {
+            this.clients[clientId].update();
+        }
+
+        for (let index = this.bullets.length - 1; index >= 0; index--) {
+            let bullet = this.bullets[index];
+            bullet.update();
+
+            for (let clientId in this.clients) {
+                let client = this.clients[clientId];
+                if (bullet.hitTest(client, false)) break;
+            }
+
+            if (!bullet.active) {
+                this.bullets.splice(index, 1);
+            }
+        }
+    }
+
 }

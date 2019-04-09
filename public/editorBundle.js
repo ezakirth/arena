@@ -11736,6 +11736,11 @@ var Vector = /** @class */ (function () {
     Vector._cross = function (a, b) {
         return a.x * b.y - a.y * b.x;
     };
+    Vector._dist = function (a, b) {
+        var x = a.x - b.x;
+        var y = a.y - b.y;
+        return Math.sqrt(x * x + y * y);
+    };
     Vector._rotate = function (vec, angle) {
         var v = new Vector(vec.x, vec.y);
         var nx = (v.x * Math.cos(angle)) - (v.y * Math.sin(angle));

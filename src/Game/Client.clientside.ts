@@ -25,7 +25,6 @@ export default class Clientclientside extends Client {
     constructor(name, clientId, team, position) {
         super(name, clientId, team, position);
 
-        this.canShoot = true;
         this.lastShot = 0;
     }
 
@@ -33,13 +32,13 @@ export default class Clientclientside extends Client {
      * Applies local input to the client
      */
     applyInputs() {
-        if (!this.dead) {
+        if (!this.infos.dead) {
             this.direction = Vector._subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(input.mouse.x, input.mouse.y)).normalize();
             this.dirSide = Vector._rotate(this.direction, Math.PI / 2);
 
             this.shooting = input.mouse.left;
-            this.canShoot = time.elapsed > this.lastShot + this.infos.weapon.rate;
-            if (this.canShoot && this.shooting) {
+
+            if (this.shooting && time.elapsed > this.lastShot + this.infos.weapon.rate) {
                 this.lastShot = time.elapsed
                 network.shootWeapon(this);
             }
@@ -138,18 +137,7 @@ export default class Clientclientside extends Client {
 
 
 
-    /**
-     * Kills the client (drops flag if he was carrying)
-     */
-    die() {
-        if (this.infos.hasEnemyFlag) {
-            let px = Math.floor(this.position.x);
-            let py = Math.floor(this.position.y);
-            map.queueUpdate('pickup', 'pickup_flag_' + this.infos.enemyTeam, px, py);
-            this.infos.hasEnemyFlag = false;
-        }
-        this.dead = true;
-    }
+
 
     /**
      * Renders the client and his view of the map
@@ -217,7 +205,7 @@ export default class Clientclientside extends Client {
         gfx.translate(gfx.width / 2, gfx.height / 2);
         gfx.rotate(ang - Math.PI / 2);
         gfx.sprite("shadow", 0, 0, tileSize, tileSize);
-
+        if (this.infos.dead) gfx.ctx.globalAlpha = 0.4;
         gfx.spriteSheet("toon_" + this.infos.team, 320 / 3 * Math.floor(this.frame), 0, 320 / 3, 210, 0, 0, tileSize * ((320 / 3) / 210), tileSize);
         gfx.popMatrix();
     }
@@ -236,9 +224,14 @@ export default class Clientclientside extends Client {
 
         gfx.pushMatrix();
         gfx.translate(gfx.width / 2, gfx.height / 2);
-        gfx.sprite('stat_life_' + lifeVal, 0, -55, life, 8);
-        gfx.sprite('stat_shield', 0, -45, shield, 8);
-        gfx.drawText(this.infos.name, 0, -68);
+        if (this.infos.dead) {
+            gfx.drawText(this.name + ' (Dead, respawn in ' + this.infos.respawnTime.toFixed(1) + 's)', 0, -68);
+        }
+        else {
+            gfx.sprite('stat_life_' + lifeVal, 0, -55, life, 8);
+            gfx.sprite('stat_shield', 0, -45, shield, 8);
+            gfx.drawText(this.name, 0, -68);
+        }
         gfx.popMatrix();
     }
 

@@ -140,6 +140,11 @@ export default class Vector {
     static _cross(a: any, b: any) {
         return a.x * b.y - a.y * b.x;
     }
+    static _dist(a: any, b: any) {
+        let x = a.x - b.x;
+        let y = a.y - b.y;
+        return Math.sqrt(x * x + y * y);
+    }
 
     static _rotate(vec: Vector, angle: number) {
         let v = new Vector(vec.x, vec.y);
