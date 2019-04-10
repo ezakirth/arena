@@ -7,7 +7,7 @@ export default class Timer {
     delta: number;
     elapsed: number;
     morphs: any;
-    timers: Array<any>
+    timers: any[];
     networkData: any;
 
     constructor() {

@@ -11,10 +11,10 @@ declare var Editor: any;
 export default class Map {
     w: number;
     h: number;
-    data: Array<Array<Tile>>;
+    data: Tile[][];
     spawns: any;
     flags: any;
-    updates: Array<any>;
+    updates: any[];
     constructor() {
 
         this.data = null;
@@ -37,9 +37,9 @@ export default class Map {
 
         this.data = JSON.parse(localStorage.getItem('tileData'));
         if (!this.data || forceNew) {
-            this.data = Array(this.w);
+            this.data = [];
             for (var x: number = 0; x < this.w; x++) {
-                this.data[x] = Array(this.h);
+                this.data[x] = [];
                 for (var y: number = 0; y < this.h; y++) {
                     this.data[x][y] = new Tile();
                 }
@@ -88,9 +88,10 @@ export default class Map {
 
     /**
      * Loads the map
-     * @param {Object} data
+     * @param {Tile[][]} data
+     * @returns {Map} Map
      */
-    parseMap(data: Array<Array<Tile>>) {
+    parseMap(data: Tile[][]): Map {
         this.data = data;
         this.w = this.data.length;
         this.h = this.data[0].length;
@@ -113,14 +114,15 @@ export default class Map {
                 }
             }
         };
+        return this;
     }
 
     /**
      * Render the map based on position
      * first pass renders the floor, decals, spawn and portals
      * second pass renders walls, shadows and pickups
-     * @param {vector2} view
-     * @param {integer} pass
+     * @param view 
+     * @param pass 
      */
     renderView(view: Vector, pass: number) {
         let block: Tile = null;

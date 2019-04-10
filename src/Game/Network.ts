@@ -209,7 +209,7 @@ export default class Network {
         this.socket.emit('shoot', bullet);
     }
 
-    updateBullets(bullets: Array<Bullet>) {
+    updateBullets(bullets: Bullet[]) {
         for (let bullet of bullets) {
             let newBullet = new Bullet(bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
             if (newBullet.clientId != game.localClientId)

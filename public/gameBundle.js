@@ -8497,7 +8497,7 @@ var Bullet = /** @class */ (function () {
 }());
 exports.default = Bullet;
 
-},{"../common/Vector":60}],50:[function(require,module,exports){
+},{"../common/Vector":62}],50:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -8702,11 +8702,10 @@ var Clientclientside = /** @class */ (function (_super) {
 }(Client_1.default));
 exports.default = Clientclientside;
 
-},{"../common/Vector":60,"./Client":51}],51:[function(require,module,exports){
+},{"../common/Vector":62,"./Client":51}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("../common/Vector");
-var Pickups_1 = require("../common/Pickups");
 /**
  * Handles a client
  * @param {string} name
@@ -8720,7 +8719,7 @@ var Client = /** @class */ (function () {
             life: 100,
             shield: 100,
             dead: false,
-            weapon: Pickups_1.Pickups.weapons.gun,
+            weapon: pickups.weapons.gun,
             ammo: 10,
             speed: 0.05,
             hasEnemyFlag: false,
@@ -8746,14 +8745,14 @@ var Client = /** @class */ (function () {
         this.infos.shield = 100;
         this.infos.dead = false;
         this.infos.speed = 0.05;
-        this.infos.weapon = Pickups_1.Pickups.weapons.gun;
+        this.infos.weapon = pickups.weapons.gun;
         this.networkData.forceNoReconciliation = true;
     };
     return Client;
 }());
 exports.default = Client;
 
-},{"../common/Pickups":57,"../common/Vector":60}],52:[function(require,module,exports){
+},{"../common/Vector":62}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Game = /** @class */ (function () {
@@ -8978,6 +8977,48 @@ exports.default = Network;
 },{"./Bullet":49,"./Client.clientside":50,"socket.io-client":35}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var Buff = /** @class */ (function () {
+    function Buff(type, name, life, shield, speed) {
+        this.type = type;
+        this.name = name;
+        this.life = life;
+        this.shield = shield;
+        this.speed = speed;
+    }
+    return Buff;
+}());
+var Buffs = /** @class */ (function () {
+    function Buffs() {
+        this.medkit = new Buff('buff', 'medkit', 30, 0, 0);
+        this.shield = new Buff('buff', 'shield', 0, 25, 0);
+        this.speed = new Buff('buff', 'speed', 0, 0, 0.05);
+    }
+    return Buffs;
+}());
+exports.default = Buffs;
+
+},{}],55:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Flag = /** @class */ (function () {
+    function Flag(type, name) {
+        this.type = type;
+        this.name = name;
+    }
+    return Flag;
+}());
+var Buffs = /** @class */ (function () {
+    function Buffs() {
+        this.flag_blue = new Flag('flag', 'flag_blue');
+        this.flag_green = new Flag('flag', 'flag_green');
+    }
+    return Buffs;
+}());
+exports.default = Buffs;
+
+},{}],56:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
 var Graphics = /** @class */ (function () {
     function Graphics() {
@@ -9068,7 +9109,7 @@ var Graphics = /** @class */ (function () {
 }());
 exports.default = Graphics;
 
-},{"./Vector":60}],55:[function(require,module,exports){
+},{"./Vector":62}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
@@ -9196,7 +9237,7 @@ var Input = /** @class */ (function () {
 }());
 exports.default = Input;
 
-},{"./Vector":60}],56:[function(require,module,exports){
+},{"./Vector":62}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
@@ -9374,114 +9415,23 @@ var Map = /** @class */ (function () {
 }());
 exports.default = Map;
 
-},{"./Tile":58,"./Vector":60}],57:[function(require,module,exports){
+},{"./Tile":60,"./Vector":62}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pickups = {
-    buffs: {
-        medkit: {
-            type: 'buff',
-            name: 'medkit',
-            life: 30,
-            shield: 0,
-            speed: 0
-        },
-        shield: {
-            type: 'buff',
-            name: 'shield',
-            life: 0,
-            shield: 25,
-            speed: 0
-        },
-        speed: {
-            type: 'buff',
-            name: 'speed',
-            life: 0,
-            shield: 0,
-            speed: 0.05
-        }
-    },
-    flags: {
-        flag_blue: {
-            type: 'flag',
-            name: 'flag_blue'
-        },
-        flag_green: {
-            type: 'flag',
-            name: 'flag_green'
-        }
-    },
-    weapons: {
-        gun: {
-            type: 'weapon',
-            name: 'gun',
-            sprite: 'bullet',
-            dmg: 20,
-            rate: 0.4,
-            speed: 0.2,
-            range: 500,
-            ammo: 1 / 0,
-            weight: 1.0
-        },
-        minigun: {
-            type: 'weapon',
-            name: 'minigun',
-            sprite: 'bullet',
-            dmg: 8,
-            rate: 0.1,
-            speed: 0.2,
-            range: 800,
-            ammo: 60,
-            weight: 2.0
-        },
-        blastgun: {
-            type: 'weapon',
-            name: 'blastgun',
-            sprite: 'blast',
-            dmg: 15,
-            rate: 0.2,
-            speed: 0.2,
-            range: 1000,
-            ammo: 60,
-            weight: 2.5
-        },
-        railgun: {
-            type: 'weapon',
-            name: 'railgun',
-            sprite: 'blast3',
-            dmg: 150,
-            rate: 2,
-            speed: 0.40,
-            range: 1000,
-            ammo: 5,
-            weight: 3
-        },
-        shotgun: {
-            type: 'weapon',
-            name: 'shotgun',
-            sprite: 'bullet',
-            dmg: 10,
-            rate: 1.5,
-            speed: 0.2,
-            range: 300,
-            ammo: 15,
-            weight: 1.5
-        },
-        rpg: {
-            type: 'weapon',
-            name: 'rpg',
-            sprite: 'bullet',
-            dmg: 100,
-            rate: 1,
-            speed: 0.10,
-            range: 3000,
-            ammo: 10,
-            weight: 3
-        }
+var Buffs_1 = require("./Buffs");
+var Weapons_1 = require("./Weapons");
+var Flags_1 = require("./Flags");
+var Pickups = /** @class */ (function () {
+    function Pickups() {
+        this.buffs = new Buffs_1.default();
+        this.flags = new Flags_1.default();
+        this.weapons = new Weapons_1.default();
     }
-};
+    return Pickups;
+}());
+exports.default = Pickups;
 
-},{}],58:[function(require,module,exports){
+},{"./Buffs":54,"./Flags":55,"./Weapons":63}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Tile = /** @class */ (function () {
@@ -9495,7 +9445,7 @@ var Tile = /** @class */ (function () {
 }());
 exports.default = Tile;
 
-},{}],59:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Timer = /** @class */ (function () {
@@ -9570,7 +9520,7 @@ var Timer = /** @class */ (function () {
 }());
 exports.default = Timer;
 
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 /*
 Simple 2D JavaScript Vector Class
@@ -9736,7 +9686,37 @@ var Vector = /** @class */ (function () {
 }());
 exports.default = Vector;
 
-},{}],61:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Weapon = /** @class */ (function () {
+    function Weapon(type, name, sprite, dmg, rate, speed, range, ammo, weight) {
+        this.type = type;
+        this.name = name;
+        this.sprite = sprite;
+        this.dmg = dmg;
+        this.rate = rate;
+        this.speed = speed;
+        this.range = range;
+        this.ammo = ammo;
+        this.weight = weight;
+    }
+    return Weapon;
+}());
+var Weapons = /** @class */ (function () {
+    function Weapons() {
+        this.gun = new Weapon('weapon', 'gun', 'bullet', 20, 0.4, 0.2, 500, 1 / 0, 1.0);
+        this.minigun = new Weapon('weapon', 'minigun', 'bullet', 8, 0.1, 0.2, 800, 60, 2.0);
+        this.blastgun = new Weapon('weapon', 'blastgun', 'blast', 15, 0.2, 0.2, 1000, 60, 2.5);
+        this.railgun = new Weapon('weapon', 'railgun', 'blast3', 150, 2, 0.4, 1000, 5, 3);
+        this.shotgun = new Weapon('weapon', 'shotgun', 'bullet', 10, 1.5, 0.2, 300, 15, 1.5);
+        this.rpg = new Weapon('weapon', 'rpg', 'bullet', 100, 1, 0.1, 3000, 10, 3);
+    }
+    return Weapons;
+}());
+exports.default = Weapons;
+
+},{}],64:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Map_1 = require("./common/Map");
@@ -9745,6 +9725,7 @@ var Input_1 = require("./common/Input");
 var Timer_1 = require("./common/Timer");
 var Game_1 = require("./Game/Game");
 var Network_1 = require("./Game/Network");
+var Pickups_1 = require("./common/Pickups");
 window.tileSize = 128;
 window.Editor = null;
 window.clamp = function (num, min, max) { return Math.min(Math.max(num, min), max); };
@@ -9754,6 +9735,7 @@ window.map = new Map_1.default();
 window.input = new Input_1.default();
 window.network = new Network_1.default();
 window.game = new Game_1.default();
+window.pickups = new Pickups_1.default();
 var loop = function () {
     requestAnimationFrame(loop);
     window.time.update();
@@ -9771,4 +9753,4 @@ window.input.init();
 window.network.init();
 loop();
 
-},{"./Game/Game":52,"./Game/Network":53,"./common/Graphics":54,"./common/Input":55,"./common/Map":56,"./common/Timer":59}]},{},[61]);
+},{"./Game/Game":52,"./Game/Network":53,"./common/Graphics":56,"./common/Input":57,"./common/Map":58,"./common/Pickups":59,"./common/Timer":61}]},{},[64]);

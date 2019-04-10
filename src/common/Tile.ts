@@ -6,7 +6,7 @@ export default class Tile {
     // contains the pickup name (medkit, weapon, flags, etc.) (flag gathered on map load)
     pickup: string;
     // contains a list of decal texture names
-    decals: Array<string> = [];
+    decals: string[];
     // contains shadow texture name
     shadow: string;
     // contains spawn texture (gathered on map load)

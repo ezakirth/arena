@@ -1,5 +1,5 @@
 import Vector from '../common/Vector';
-import { Pickups } from '../common/Pickups';
+import Pickups from '../common/Pickups';
 import Game from './Game';
 import Map from '../common/Map';
 import Timer from '../common/Timer';
@@ -9,6 +9,7 @@ import Clientserverside from './Client.serverside';
 declare var game: Game;
 declare var map: Map;
 declare var gfx: Graphics;
+declare var pickups: Pickups;
 
 declare var tileSize: number;
 declare var time: Timer;

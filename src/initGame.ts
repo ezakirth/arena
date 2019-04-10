@@ -5,6 +5,7 @@ import Input from './common/Input';
 import Timer from './common/Timer';
 import Game from './Game/Game';
 import Network from './Game/Network';
+import Pickups from './common/Pickups';
 
 
 declare var window: any;
@@ -19,6 +20,7 @@ window.map = new Map();
 window.input = new Input();
 window.network = new Network();
 window.game = new Game();
+window.pickups = new Pickups();
 
 
 

@@ -2,10 +2,11 @@ import Client from './Client';
 import Timer from '../common/Timer';
 import Map from '../common/Map';
 import Tile from '../common/Tile';
-import { Pickups } from '../common/Pickups';
+import Pickups from '../common/Pickups';
 
 declare var map: Map;
 declare var time: Timer;
+declare var pickups: Pickups;
 
 export default class Clientserverside extends Client {
     constructor(name, clientId, team, position) {
@@ -60,7 +61,7 @@ export default class Clientserverside extends Client {
             // if it's a rogue flag (flag dropped by client)
             if (tile.flag) {
                 let name = tile.flag.replace('pickup_', '');
-                let pickup = Pickups.flags[name];
+                let pickup = pickups.flags[name];
 
                 // if it's enemy flag, we take it
                 if (pickup.name == 'flag_' + this.infos.enemyTeam) {
@@ -76,7 +77,7 @@ export default class Clientserverside extends Client {
             // if it's a pickup (weapon, buff, flag)
             if (tile.pickup) {
                 let name = tile.pickup.replace('pickup_', '');
-                let pickup = Pickups.buffs[name] || Pickups.weapons[name] || Pickups.flags[name]
+                let pickup = pickups.buffs[name] || pickups.weapons[name] || pickups.flags[name]
                 if (pickup) {
                     // if client walks on a weapon, equip it and trigger respawn time
                     if (pickup.type == 'weapon') {

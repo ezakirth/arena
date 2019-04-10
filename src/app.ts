@@ -16,6 +16,7 @@ const io = socketIO(http);
 import Server from './Server';
 
 import Map from './common/Map';
+import Pickups from './common/Pickups';
 import Timer from './common/Timer';
 import FileSystem = require("fs");
 
@@ -23,16 +24,11 @@ import FileSystem = require("fs");
 
 
 declare var global: any;
-declare var map: any;
-declare var time: Timer;
 declare var server: Server;
 
-
-global.map = new Map();
-map.parseMap(JSON.parse(FileSystem.readFileSync(root + "/map.json").toString()));
-
+global.map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(root + "/map.json").toString()));
+global.pickups = new Pickups();
 global.time = new Timer();
-
 global.server = new Server(io);
 
 

@@ -6,7 +6,7 @@ declare var gfx: Graphics
 
 
 export default class Game {
-    bullets: Array<Bullet>;
+    bullets: Bullet[];
     clients: any;
     localClientId: string;
     localClient: Clientclientside;

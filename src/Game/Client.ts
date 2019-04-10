@@ -1,7 +1,8 @@
 import Vector from '../common/Vector';
 import Map from '../common/Map';
-import { Pickups } from '../common/Pickups';
+import Pickups from '../common/Pickups';
 
+declare var pickups: Pickups;
 declare var map: Map;
 
 /**
@@ -27,7 +28,7 @@ export default class Client {
             life: 100,
             shield: 100,
             dead: false,
-            weapon: Pickups.weapons.gun,
+            weapon: pickups.weapons.gun,
             ammo: 10,
             speed: 0.05,
             hasEnemyFlag: false,
@@ -59,7 +60,7 @@ export default class Client {
         this.infos.shield = 100;
         this.infos.dead = false;
         this.infos.speed = 0.05;
-        this.infos.weapon = Pickups.weapons.gun;
+        this.infos.weapon = pickups.weapons.gun;
         this.networkData.forceNoReconciliation = true;
 
     }

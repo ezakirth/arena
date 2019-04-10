@@ -29,7 +29,7 @@ export const Editor = {
     /**
      * Saves the map to a json file (Editor method)
      */
-    saveData: function (data: Array<Array<Tile>>, filename: string) {
+    saveData: function (data: Tile[][], filename: string) {
         var json = JSON.stringify(data);
         localStorage.setItem('tileData', json);
 

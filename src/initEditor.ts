@@ -4,6 +4,7 @@ import Graphics from './common/Graphics';
 import Input from './common/Input';
 import Timer from './common/Timer';
 import { Editor } from './Editor/EditorBundle';
+import Pickups from './common/Pickups';
 
 
 declare var window: any;
@@ -17,6 +18,7 @@ window.time = new Timer();
 window.map = new Map();
 window.input = new Input();
 window.Editor = Editor;
+window.pickups = new Pickups();
 
 
 

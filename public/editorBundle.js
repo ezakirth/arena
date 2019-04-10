@@ -11102,6 +11102,48 @@ exports.Editor = {
 },{"jquery":1}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var Buff = /** @class */ (function () {
+    function Buff(type, name, life, shield, speed) {
+        this.type = type;
+        this.name = name;
+        this.life = life;
+        this.shield = shield;
+        this.speed = speed;
+    }
+    return Buff;
+}());
+var Buffs = /** @class */ (function () {
+    function Buffs() {
+        this.medkit = new Buff('buff', 'medkit', 30, 0, 0);
+        this.shield = new Buff('buff', 'shield', 0, 25, 0);
+        this.speed = new Buff('buff', 'speed', 0, 0, 0.05);
+    }
+    return Buffs;
+}());
+exports.default = Buffs;
+
+},{}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Flag = /** @class */ (function () {
+    function Flag(type, name) {
+        this.type = type;
+        this.name = name;
+    }
+    return Flag;
+}());
+var Buffs = /** @class */ (function () {
+    function Buffs() {
+        this.flag_blue = new Flag('flag', 'flag_blue');
+        this.flag_green = new Flag('flag', 'flag_green');
+    }
+    return Buffs;
+}());
+exports.default = Buffs;
+
+},{}],5:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
 var Graphics = /** @class */ (function () {
     function Graphics() {
@@ -11192,7 +11234,7 @@ var Graphics = /** @class */ (function () {
 }());
 exports.default = Graphics;
 
-},{"./Vector":8}],4:[function(require,module,exports){
+},{"./Vector":11}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
@@ -11320,7 +11362,7 @@ var Input = /** @class */ (function () {
 }());
 exports.default = Input;
 
-},{"./Vector":8}],5:[function(require,module,exports){
+},{"./Vector":11}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Vector_1 = require("./Vector");
@@ -11498,7 +11540,23 @@ var Map = /** @class */ (function () {
 }());
 exports.default = Map;
 
-},{"./Tile":6,"./Vector":8}],6:[function(require,module,exports){
+},{"./Tile":9,"./Vector":11}],8:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Buffs_1 = require("./Buffs");
+var Weapons_1 = require("./Weapons");
+var Flags_1 = require("./Flags");
+var Pickups = /** @class */ (function () {
+    function Pickups() {
+        this.buffs = new Buffs_1.default();
+        this.flags = new Flags_1.default();
+        this.weapons = new Weapons_1.default();
+    }
+    return Pickups;
+}());
+exports.default = Pickups;
+
+},{"./Buffs":3,"./Flags":4,"./Weapons":12}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Tile = /** @class */ (function () {
@@ -11512,7 +11570,7 @@ var Tile = /** @class */ (function () {
 }());
 exports.default = Tile;
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Timer = /** @class */ (function () {
@@ -11587,7 +11645,7 @@ var Timer = /** @class */ (function () {
 }());
 exports.default = Timer;
 
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 /*
 Simple 2D JavaScript Vector Class
@@ -11753,7 +11811,37 @@ var Vector = /** @class */ (function () {
 }());
 exports.default = Vector;
 
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Weapon = /** @class */ (function () {
+    function Weapon(type, name, sprite, dmg, rate, speed, range, ammo, weight) {
+        this.type = type;
+        this.name = name;
+        this.sprite = sprite;
+        this.dmg = dmg;
+        this.rate = rate;
+        this.speed = speed;
+        this.range = range;
+        this.ammo = ammo;
+        this.weight = weight;
+    }
+    return Weapon;
+}());
+var Weapons = /** @class */ (function () {
+    function Weapons() {
+        this.gun = new Weapon('weapon', 'gun', 'bullet', 20, 0.4, 0.2, 500, 1 / 0, 1.0);
+        this.minigun = new Weapon('weapon', 'minigun', 'bullet', 8, 0.1, 0.2, 800, 60, 2.0);
+        this.blastgun = new Weapon('weapon', 'blastgun', 'blast', 15, 0.2, 0.2, 1000, 60, 2.5);
+        this.railgun = new Weapon('weapon', 'railgun', 'blast3', 150, 2, 0.4, 1000, 5, 3);
+        this.shotgun = new Weapon('weapon', 'shotgun', 'bullet', 10, 1.5, 0.2, 300, 15, 1.5);
+        this.rpg = new Weapon('weapon', 'rpg', 'bullet', 100, 1, 0.1, 3000, 10, 3);
+    }
+    return Weapons;
+}());
+exports.default = Weapons;
+
+},{}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Map_1 = require("./common/Map");
@@ -11761,6 +11849,7 @@ var Graphics_1 = require("./common/Graphics");
 var Input_1 = require("./common/Input");
 var Timer_1 = require("./common/Timer");
 var EditorBundle_1 = require("./Editor/EditorBundle");
+var Pickups_1 = require("./common/Pickups");
 window.tileSize = 96;
 window.Editor = null;
 window.clamp = function (num, min, max) { return Math.min(Math.max(num, min), max); };
@@ -11769,6 +11858,7 @@ window.time = new Timer_1.default();
 window.map = new Map_1.default();
 window.input = new Input_1.default();
 window.Editor = EditorBundle_1.Editor;
+window.pickups = new Pickups_1.default();
 var loop = function () {
     requestAnimationFrame(loop);
     window.time.update();
@@ -11783,4 +11873,4 @@ window.input.init();
 window.Editor.init();
 loop();
 
-},{"./Editor/EditorBundle":2,"./common/Graphics":3,"./common/Input":4,"./common/Map":5,"./common/Timer":7}]},{},[9]);
+},{"./Editor/EditorBundle":2,"./common/Graphics":5,"./common/Input":6,"./common/Map":7,"./common/Pickups":8,"./common/Timer":10}]},{},[13]);
