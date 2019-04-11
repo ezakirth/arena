@@ -82,9 +82,8 @@ export default class Server {
         this.io.to(lobbyId).emit('disconnected', clientId);
     }
 
-    updateClient(socket: SocketIO.Socket, clientData) {
-        let movementData = clientData;
-        let lobby = this.lobbies[clientData.lobbyId];
+    updateClient(socket: SocketIO.Socket, movementData) {
+        let lobby = this.lobbies[movementData.lobbyId];
         if (lobby) {
             let client = lobby.clients[socket.id];
 

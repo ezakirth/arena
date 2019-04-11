@@ -19,6 +19,7 @@ import Map from './common/Map';
 import Pickups from './common/Pickups';
 import Timer from './common/Timer';
 import FileSystem = require("fs");
+import Bullet from './Game/Bullet';
 
 
 
@@ -35,19 +36,19 @@ FileSystem.readdirSync(root + '/maps/').forEach(file => {
     server.maps.push(root + '/maps/' + file);
 });
 
-io.on('connection', function (socket) {
+io.on('connection', function (socket: SocketIO.Socket) {
     server.welcome(socket);
 
-    socket.on('join', function (clientData) {
+    socket.on('join', function (clientData: any) {
         server.createClient(socket, clientData);
     });
 
-    socket.on('shoot', function (bulletData) {
-        server.shootBullet(bulletData);
+    socket.on('shoot', function (bullet: Bullet) {
+        server.shootBullet(bullet);
     });
 
-    socket.on('update', function (clientData) {
-        server.updateClient(socket, clientData);
+    socket.on('update', function (movementData: any) {
+        server.updateClient(socket, movementData);
     });
 
     socket.on('disconnect', function () {

@@ -6,6 +6,8 @@ import Map from '../common/Map';
 import Timer from '../common/Timer';
 import Bullet from './Bullet';
 import Vector from '../common/Vector';
+import Clientserverside from './Client.serverside';
+import Clientclientside from './Client.clientside';
 
 
 //declare var io: Function;
@@ -44,7 +46,7 @@ export default class Network {
         setInterval(function () {
             let client = game.clients[game.localClientId];
             if (client) {
-                //    _this.sendMovementData(client);
+                _this.sendMovementData(client);
             }
         }, 100);
 
@@ -88,20 +90,19 @@ export default class Network {
     /**
      * Load map from server and add local client
      * @param {*} serverData
-     * @param {*} callback
      */
-    createClient(serverData) {
+    createClient(serverData: any) {
         let client = serverData.client;
         let mapData = serverData.map;
         map.parseMap(mapData);
         game.localClient = game.clients[game.localClientId] = new Client(client.name, client.networkData.lobbyId, client.networkData.clientId, client.infos.team, client.position);
     }
 
-    deleteClient(clientId) {
+    deleteClient(clientId: string) {
         delete game.clients[clientId];
     }
 
-    updateClient(serverData) {
+    updateClient(serverData: any) {
         this.lastServerTimestamp = serverData.timestamp;
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
@@ -136,26 +137,27 @@ export default class Network {
 
     /**
      * Apply the authoritative position of this client's client.
-     * @param {*} client
-     * @param {*} serverClient
+     * @param {Clientclientside} client
+     * @param {Clientserverside} serverClient
      */
-    authoring(client, serverClient) {
+    authoring(client: Clientclientside, serverClient: Clientserverside) {
         client.position.set(serverClient.position.x, serverClient.position.y);
         client.direction.set(serverClient.direction.x, serverClient.direction.y);
         client.infos.apply(serverClient.infos);
 
         if (serverClient.networkData.forceNoReconciliation) {
             client.networkData.lastPosition.set(client.position.x, client.position.y);
+            client.networkData.lastDirection.set(client.direction.x, client.direction.y);
         }
 
     }
 
     /**
      * Server Reconciliation. Re-apply all the inputs not yet processed by the server.
-     * @param {*} client
-     * @param {*} serverClient
+     * @param {Clientclientside} client
+     * @param {Clientserverside} serverClient
      */
-    reconciliation(client, serverClient) {
+    reconciliation(client: Clientclientside, serverClient: Clientserverside) {
         var j = 0;
         while (j < client.networkData.pendingMovement.length) {
             let movementData = client.networkData.pendingMovement[j];
@@ -174,25 +176,24 @@ export default class Network {
 
     /**
      * Add the position of non local clients to the position buffer.
-     * @param {*} client
-     * @param {*} serverClient
+     * @param {Clientclientside} client
+     * @param {Clientserverside} serverClient
      */
-    clientsPositionBuffer(client, serverClient) {
+    clientsPositionBuffer(client: Clientclientside, serverClient: Clientserverside) {
         let timestamp = +new Date();
         time.setServerDelay(timestamp);
-
-
 
         if (serverClient.networkData.forceNoReconciliation) {
             client.networkData.positionBuffer = [];
             client.networkData.positionBuffer.push({ timestamp: timestamp - 1, position: serverClient.position, direction: serverClient.direction });
             client.position.set(serverClient.position.x, serverClient.position.y);
+            client.direction.set(serverClient.direction.x, serverClient.direction.y);
         }
         else
             client.networkData.positionBuffer.push({ timestamp: timestamp, position: serverClient.position, direction: serverClient.direction });
     }
 
-    sendMovementData(client: Client) {
+    sendMovementData(client: Clientclientside) {
         // get movement since last one sent to server
         let deltaDirection = new Vector(client.position.x - client.networkData.lastPosition.x, client.position.y - client.networkData.lastPosition.y);
         let deltaPosition = new Vector(client.direction.x - client.networkData.lastDirection.x, client.direction.y - client.networkData.lastDirection.y);
@@ -216,7 +217,7 @@ export default class Network {
      * Shoots a bullet (origin = local)
      * @param client
      */
-    shootWeapon(client: Client) {
+    shootWeapon(client: Clientclientside) {
         let bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, client.infos.enemyTeam, client.position, client.direction, client.infos.weapon);
         game.bullets.push(bullet);
         this.socket.emit('shoot', bullet);
