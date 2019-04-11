@@ -111,7 +111,7 @@ export default class Network {
 
         let serverClients = serverData.clients;
         for (let clientId in serverClients) {
-            let serverClient = serverClients[clientId];
+            let serverClient: Clientserverside = serverClients[clientId];
             if (!game.clients[clientId]) {
                 game.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
