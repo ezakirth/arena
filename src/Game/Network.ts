@@ -125,7 +125,7 @@ export default class Network {
 
                 this.authoring(client, serverClient);
 
-                //  this.reconciliation(client, serverClient);
+                this.reconciliation(client, serverClient);
 
             } else {
                 client.infos.apply(serverClient.infos);
@@ -195,8 +195,8 @@ export default class Network {
 
     sendMovementData(client: Clientclientside) {
         // get movement since last one sent to server
-        let deltaDirection = new Vector(client.position.x - client.networkData.lastPosition.x, client.position.y - client.networkData.lastPosition.y);
-        let deltaPosition = new Vector(client.direction.x - client.networkData.lastDirection.x, client.direction.y - client.networkData.lastDirection.y);
+        let deltaPosition = new Vector(client.position.x - client.networkData.lastPosition.x, client.position.y - client.networkData.lastPosition.y);
+        let deltaDirection = new Vector(client.direction.x - client.networkData.lastDirection.x, client.direction.y - client.networkData.lastDirection.y);
 
 
         // If there was movement, notify the server
