@@ -5,6 +5,7 @@ import Game from './Game';
 import Map from '../common/Map';
 import Timer from '../common/Timer';
 import Bullet from './Bullet';
+import Vector from '../common/Vector';
 
 
 //declare var io: Function;
@@ -43,7 +44,7 @@ export default class Network {
         setInterval(function () {
             let client = game.clients[game.localClientId];
             if (client) {
-                _this.sendMovementData(client);
+                //    _this.sendMovementData(client);
             }
         }, 100);
 
@@ -123,10 +124,10 @@ export default class Network {
 
                 this.authoring(client, serverClient);
 
-                this.reconciliation(client, serverClient);
+                //  this.reconciliation(client, serverClient);
 
             } else {
-                client.infos = serverClient.infos;
+                client.infos.apply(serverClient.infos);
                 this.clientsPositionBuffer(client, serverClient);
             }
         }
@@ -139,15 +140,12 @@ export default class Network {
      * @param {*} serverClient
      */
     authoring(client, serverClient) {
-        client.position.x = serverClient.position.x;
-        client.position.y = serverClient.position.y;
-        client.direction.x = serverClient.direction.x;
-        client.direction.y = serverClient.direction.y;
-        client.infos = serverClient.infos;
+        client.position.set(serverClient.position.x, serverClient.position.y);
+        client.direction.set(serverClient.direction.x, serverClient.direction.y);
+        client.infos.apply(serverClient.infos);
 
         if (serverClient.networkData.forceNoReconciliation) {
-            client.networkData.lastPosition.x = client.position.x;
-            client.networkData.lastPosition.y = client.position.y;
+            client.networkData.lastPosition.set(client.position.x, client.position.y);
         }
 
     }
@@ -166,10 +164,8 @@ export default class Network {
                 // we just got, so we can drop it.
                 client.networkData.pendingMovement.splice(j, 1);
             } else {
-                client.position.x += movementData.movement.x;
-                client.position.y += movementData.movement.y;
-                client.direction.x += movementData.movement.dx;
-                client.direction.y += movementData.movement.dy;
+                client.position.add(movementData.deltaPosition);
+                client.direction.add(movementData.deltaDirection);
                 j++;
             }
         }
@@ -190,8 +186,7 @@ export default class Network {
         if (serverClient.networkData.forceNoReconciliation) {
             client.networkData.positionBuffer = [];
             client.networkData.positionBuffer.push({ timestamp: timestamp - 1, position: serverClient.position, direction: serverClient.direction });
-            client.position.x = serverClient.position.x;
-            client.position.y = serverClient.position.y;
+            client.position.set(serverClient.position.x, serverClient.position.y);
         }
         else
             client.networkData.positionBuffer.push({ timestamp: timestamp, position: serverClient.position, direction: serverClient.direction });
@@ -199,18 +194,16 @@ export default class Network {
 
     sendMovementData(client: Client) {
         // get movement since last one sent to server
-        let deltaPosition = {
-            x: client.position.x - client.networkData.lastPosition.x,
-            y: client.position.y - client.networkData.lastPosition.y,
-            dx: client.direction.x - client.networkData.lastPosition.dx,
-            dy: client.direction.y - client.networkData.lastPosition.dy,
-        }
+        let deltaDirection = new Vector(client.position.x - client.networkData.lastPosition.x, client.position.y - client.networkData.lastPosition.y);
+        let deltaPosition = new Vector(client.direction.x - client.networkData.lastDirection.x, client.direction.y - client.networkData.lastDirection.y);
+
 
         // If there was movement, notify the server
-        if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaPosition.dx) + Math.abs(deltaPosition.dy) > 0) {
-            client.networkData.lastPosition = { x: client.position.x, y: client.position.y, dx: client.direction.x, dy: client.direction.y };
+        if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
+            client.networkData.lastPosition.set(client.position.x, client.position.y);
+            client.networkData.lastDirection.set(client.direction.x, client.direction.y);
             // send movement to server for validation
-            let movementData = { movement: deltaPosition, sequence: ++client.networkData.sequence, lobbyId: client.networkData.lobbyId };
+            let movementData = { deltaPosition: deltaPosition, deltaDirection: deltaDirection, sequence: ++client.networkData.sequence, lobbyId: client.networkData.lobbyId };
 
             this.socket.emit('update', movementData);
 

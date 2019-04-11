@@ -1,6 +1,6 @@
 import Client from './Client';
 import Timer from '../common/Timer';
-import Tile from '../common/Tile';
+import Tile from '../types/Tile';
 import Pickups from '../common/Pickups';
 import Vector from '../common/Vector';
 import Server from '../Server';
@@ -133,8 +133,7 @@ export default class Clientserverside extends Client {
             // if it's a portal
             if (tile.portal) {
                 if (!this.justUsedPortal) {
-                    this.position.x = tile.portal.dx + 0.5;
-                    this.position.y = tile.portal.dy + 0.5;
+                    this.position.set(tile.portal.dx + 0.5, tile.portal.dy + 0.5);
                     this.justUsedPortal = true;
                     this.networkData.forceNoReconciliation = true;
                 }

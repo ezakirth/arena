@@ -89,10 +89,10 @@ export default class Server {
             let client = lobby.clients[socket.id];
 
             if (!client.networkData.forceNoReconciliation) {
-                client.position.x += movementData.movement.x;
-                client.position.y += movementData.movement.y;
-                client.direction.x += movementData.movement.dx;
-                client.direction.y += movementData.movement.dy;
+                client.position.x += movementData.deltaPosition.x;
+                client.position.y += movementData.deltaPosition.y;
+                client.direction.x += movementData.deltaDirection.x;
+                client.direction.y += movementData.deltaDirection.y;
                 client.networkData.sequence = movementData.sequence;
 
                 let px = clamp(Math.floor(client.position.x), 0, lobby.map.w - 1);

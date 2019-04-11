@@ -1,12 +1,4 @@
-class Flag {
-    type: string;
-    name: string;
-
-    constructor(type: string, name: string) {
-        this.type = type;
-        this.name = name;
-    }
-}
+import Flag from '../types/Flag';
 
 export default class Buffs {
     flag_blue: Flag;
@@ -16,4 +8,3 @@ export default class Buffs {
         this.flag_green = new Flag('flag', 'flag_green');
     }
 }
-

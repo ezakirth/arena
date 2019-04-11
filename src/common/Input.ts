@@ -93,8 +93,7 @@ export default class Input {
         if (this.mouse.browser.y < 30) this.view.y -= deltaMovement;
 
         // make sure we don't lose sight of the map ^^
-        this.view.x = clamp(this.view.x, 0, map.w - 5);
-        this.view.y = clamp(this.view.y, 0, map.h);
+        this.view.set(clamp(this.view.x, 0, map.w - 5), clamp(this.view.y, 0, map.h));
 
     }
 

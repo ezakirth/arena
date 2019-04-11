@@ -7,6 +7,7 @@ import Graphics from '../common/Graphics';
 import Client from './Client';
 import Server from '../Server';
 import Clientserverside from './Client.serverside';
+import Weapon from '../types/Weapon';
 
 declare var game: Game;
 declare var map: Map;
@@ -22,7 +23,7 @@ declare var server: Server;
 export default class Bullet {
     direction: Vector;
     position: Vector;
-    type: any;
+    type: Weapon;
     origin: Vector;
     distance: number;
     targetTeam: string;
@@ -30,7 +31,7 @@ export default class Bullet {
     lobbyId: string;
     clientId: string;
     speed: number;
-    constructor(lobbyId, clientId, targetTeam, position, direction, type) {
+    constructor(lobbyId: string, clientId: string, targetTeam: string, position: Vector, direction: Vector, type: Weapon) {
         this.lobbyId = lobbyId;
         this.clientId = clientId;
         this.type = type;

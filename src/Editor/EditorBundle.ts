@@ -1,6 +1,6 @@
 var $ = require('jquery');
 
-import Tile from '../common/Tile';
+import Tile from '../types/Tile';
 import Map from '../common/Map';
 import Input from '../common/Input';
 import Graphics from '../common/Graphics';

@@ -1,6 +1,7 @@
 import Vector from '../common/Vector';
 import Map from '../common/Map';
 import Pickups from '../common/Pickups';
+import Infos from '../types/Infos';
 
 declare var pickups: Pickups;
 declare var map: Map;
@@ -12,7 +13,7 @@ declare var map: Map;
 export default class Client {
     direction: Vector;
     position: Vector;
-    infos: any;
+    infos: Infos;
     networkData: any;
     justUsedPortal: boolean;
     moving: boolean;
@@ -24,22 +25,13 @@ export default class Client {
         this.direction = new Vector(1, 0);
         this.position = new Vector(position.x, position.y);
         this.name = name;
-        this.infos = {
-            life: 100,
-            shield: 100,
-            dead: false,
-            weapon: pickups.weapons.gun,
-            ammo: 10,
-            speed: 0.05,
-            hasEnemyFlag: false,
-            team: team,
-            enemyTeam: (team == 'green' ? 'blue' : 'green')
-        }
+        this.infos = new Infos(100, 100, false, pickups.weapons.gun, 10, 0.05, false, team);
 
         this.networkData = {
             lobbyId: lobbyId,
             clientId: clientId,
-            lastPosition: { x: this.position.x, y: this.position.y, dx: this.direction.x, dy: this.direction.y },
+            lastPosition: new Vector(this.position.x, this.position.y),
+            lastDirection: new Vector(this.direction.x, this.direction.y),
             sequence: 0,
             forceNoReconciliation: false,
             positionBuffer: [],

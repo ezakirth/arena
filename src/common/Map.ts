@@ -1,5 +1,5 @@
 import Vector from './Vector';
-import Tile from './Tile';
+import Tile from '../types/Tile';
 import Timer from './Timer';
 import Graphics from './Graphics';
 
