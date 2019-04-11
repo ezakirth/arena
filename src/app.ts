@@ -20,6 +20,7 @@ import Pickups from './common/Pickups';
 import Timer from './common/Timer';
 import FileSystem = require("fs");
 import Bullet from './Game/Bullet';
+import MovementData from './types/MovementData';
 
 
 
@@ -47,7 +48,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
         server.shootBullet(bullet);
     });
 
-    socket.on('update', function (movementData: any) {
+    socket.on('update', function (movementData: MovementData) {
         server.updateClient(socket, movementData);
     });
 

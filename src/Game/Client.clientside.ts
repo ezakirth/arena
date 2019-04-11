@@ -6,6 +6,7 @@ import Graphics from '../common/Graphics';
 import Timer from '../common/Timer';
 import Game from './Game';
 import Network from './Network';
+import PositionBuffer from '../types/PositionBuffer';
 
 declare var clamp: Function;
 declare var input: Input;
@@ -102,16 +103,16 @@ export default class Clientclientside extends Client {
 
     interpolatePositions() {
         // Find the two authoritative positions surrounding the rendering timestamp.
-        var buffer = this.networkData.positionBuffer;
+        var buffer: PositionBuffer[] = this.networkData.positionBuffer;
 
         // Drop positions older than 100ms.
-        while (buffer.length >= 2 && buffer[1].timestamp <= time.networkData.renderTimestamp) {
+        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
             buffer.shift();
         }
 
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length >= 2 && buffer[0].timestamp <= time.networkData.renderTimestamp && buffer[1].timestamp >= time.networkData.renderTimestamp) {
+        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
             var x0 = buffer[0].position.x;
             var y0 = buffer[0].position.y;
             var dx0 = buffer[0].direction.x;
@@ -124,8 +125,8 @@ export default class Clientclientside extends Client {
             var dy1 = buffer[1].direction.y;
             var t1 = buffer[1].timestamp;
 
-            this.position.set(x0 + (x1 - x0) * (time.networkData.renderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.networkData.renderTimestamp - t0) / (t1 - t0));
-            this.direction.set(dx0 + (dx1 - dx0) * (time.networkData.renderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.networkData.renderTimestamp - t0) / (t1 - t0));
+            this.position.set(x0 + (x1 - x0) * (time.serverRenderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
+            this.direction.set(dx0 + (dx1 - dx0) * (time.serverRenderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
 
             if (!(x0 == x1 && y0 == y1)) this.moving = true;
         }

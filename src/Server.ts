@@ -6,6 +6,7 @@ import Clientserverside from './Game/Client.serverside';
 import Lobby from './Lobby';
 import Vector from './common/Vector';
 import FileSystem = require("fs");
+import MovementData from './types/MovementData';
 
 declare var time: Timer;
 
@@ -82,7 +83,7 @@ export default class Server {
         this.io.to(lobbyId).emit('disconnected', clientId);
     }
 
-    updateClient(socket: SocketIO.Socket, movementData) {
+    updateClient(socket: SocketIO.Socket, movementData: MovementData) {
         let lobby = this.lobbies[movementData.lobbyId];
         if (lobby) {
             let client = lobby.clients[socket.id];

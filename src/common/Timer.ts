@@ -8,7 +8,12 @@ export default class Timer {
     elapsed: number;
     morphs: any;
     timers: any[];
-    networkData: any;
+
+    serverRenderTimestamp: number;
+    serverDelay: number;
+    serverUpdateTimeStamps: number[];
+    serverUpdateDelay: number;
+    serverLastUpdate: number;
 
     constructor() {
         this.now = +new Date();
@@ -20,14 +25,12 @@ export default class Timer {
 
         this.timers = [];
 
+        this.serverRenderTimestamp = 0;
+        this.serverDelay = 100;
+        this.serverUpdateTimeStamps = [];
+        this.serverUpdateDelay = 0;
+        this.serverLastUpdate = 0;
 
-        this.networkData = {
-            renderTimestamp: 0,
-            serverDelay: 100,
-            serverUpdateTimeStamps: [],
-            serverUpdateDelay: 0,
-            lastServerUpdate: 0,
-        }
     }
 
     update() {
@@ -82,12 +85,12 @@ export default class Timer {
 
 
     networkUpdate() {
-        this.networkData.renderTimestamp = this.now + this.networkData.serverUpdateDelay;
-        this.networkData.lastServerUpdate += this.delta;
+        this.serverRenderTimestamp = this.now + this.serverUpdateDelay;
+        this.serverLastUpdate += this.delta;
     }
     setServerDelay(timestamp: number) {
-        this.networkData.serverUpdateTimeStamps.push(timestamp);
-        if (this.networkData.serverUpdateTimeStamps.length > 2) this.networkData.serverUpdateTimeStamps.shift();
-        this.networkData.serverUpdateDelay = this.networkData.serverUpdateTimeStamps[0] - this.networkData.serverUpdateTimeStamps[1];
+        this.serverUpdateTimeStamps.push(timestamp);
+        if (this.serverUpdateTimeStamps.length > 2) this.serverUpdateTimeStamps.shift();
+        this.serverUpdateDelay = this.serverUpdateTimeStamps[0] - this.serverUpdateTimeStamps[1];
     }
 }

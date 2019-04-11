@@ -8,6 +8,8 @@ import Bullet from './Bullet';
 import Vector from '../common/Vector';
 import Clientserverside from './Client.serverside';
 import Clientclientside from './Client.clientside';
+import MovementData from '../types/MovementData';
+import PositionBuffer from '../types/PositionBuffer';
 
 
 //declare var io: Function;
@@ -185,12 +187,12 @@ export default class Network {
 
         if (serverClient.networkData.forceNoReconciliation) {
             client.networkData.positionBuffer = [];
-            client.networkData.positionBuffer.push({ timestamp: timestamp - 1, position: serverClient.position, direction: serverClient.direction });
+            client.networkData.positionBuffer.push(new PositionBuffer(timestamp - 1, serverClient.position, serverClient.direction));
             client.position.set(serverClient.position.x, serverClient.position.y);
             client.direction.set(serverClient.direction.x, serverClient.direction.y);
         }
         else
-            client.networkData.positionBuffer.push({ timestamp: timestamp, position: serverClient.position, direction: serverClient.direction });
+            client.networkData.positionBuffer.push(new PositionBuffer(timestamp, serverClient.position, serverClient.direction));
     }
 
     sendMovementData(client: Clientclientside) {
@@ -204,7 +206,7 @@ export default class Network {
             client.networkData.lastPosition.set(client.position.x, client.position.y);
             client.networkData.lastDirection.set(client.direction.x, client.direction.y);
             // send movement to server for validation
-            let movementData = { deltaPosition: deltaPosition, deltaDirection: deltaDirection, sequence: ++client.networkData.sequence, lobbyId: client.networkData.lobbyId };
+            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.lobbyId);
 
             this.socket.emit('update', movementData);
 
