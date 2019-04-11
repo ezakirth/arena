@@ -48,8 +48,8 @@ export default class Server {
             let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()))
             lobby = new Lobby(map);
             this.lobbies[lobby.id] = lobby;
-            socket.join(lobby.id);
         }
+        socket.join(lobby.id);
 
         let team = (lobby.teams.blue.length >= lobby.teams.green.length ? 'green' : 'blue');
         lobby.teams[team].push(clientData.clientId);
@@ -60,7 +60,7 @@ export default class Server {
     }
 
 
-    deleteClient(socket) {
+    deleteClient(socket: SocketIO.Socket) {
         let clientId = socket.id;
 
         let lobbyId = null;
@@ -82,7 +82,7 @@ export default class Server {
         this.io.to(lobbyId).emit('disconnected', clientId);
     }
 
-    updateClient(socket, clientData) {
+    updateClient(socket: SocketIO.Socket, clientData) {
         let movementData = clientData;
         let lobby = this.lobbies[clientData.lobbyId];
         if (lobby) {
