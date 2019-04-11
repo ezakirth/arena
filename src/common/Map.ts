@@ -9,22 +9,24 @@ declare var tileSize: number;
 declare var Editor: any;
 
 export default class Map {
-    w: number;
-    h: number;
+    width: number;
+    height: number;
     name: string;
-    type: string;
+    gameType: string;
     maxPlayers: number;
     data: Tile[][];
     spawns: any;
     flags: any;
     updates: any[];
     constructor() {
-        this.name = 'New map';
-        this.type = 'CTF';
-        this.maxPlayers = 4;
+        this.name = null;
+        this.gameType = null;
+        this.maxPlayers = null;
         this.data = null;
-        this.spawns = { blue: [], green: [] };
+        this.spawns = { any: [], blue: [], green: [] };
         this.flags = { blue: null, green: null };
+        this.width = null;
+        this.height = null;
 
         // updates from server that are to be processed
         this.updates = [];
@@ -36,25 +38,37 @@ export default class Map {
      * @param h
      * @param forceNew
      */
-    init(w: number, h: number, forceNew: boolean) {
-        this.w = w;
-        this.h = h;
+    init(width: number, height: number, forceNew: boolean) {
+        this.width = width || 20;
+        this.height = height || 20;
 
-        this.data = JSON.parse(localStorage.getItem('tileData'));
+        let data = JSON.parse(localStorage.getItem('tileData'));
+
         if (!this.data || forceNew) {
+            this.name = 'New map';
+            this.gameType = 'Deathmatch';
+            this.maxPlayers = 4;
+            this.width = width;
+            this.height = height;
             this.data = [];
-            for (var x: number = 0; x < this.w; x++) {
+            for (var x: number = 0; x < this.width; x++) {
                 this.data[x] = [];
-                for (var y: number = 0; y < this.h; y++) {
+                for (var y: number = 0; y < this.height; y++) {
                     this.data[x][y] = new Tile();
                 }
             }
         }
-        this.w = this.data.length;
-        this.h = this.data[0].length;
+        else {
+            this.name = data.name;
+            this.gameType = data.gameType;
+            this.maxPlayers = data.maxPlayers;
+            this.width = data.width;
+            this.height = data.height;
+            this.data = data.mapData;
+        }
 
-        document.getElementById("editor_Width_id")['value'] = this.w;
-        document.getElementById("editor_Height_id")['value'] = this.h;
+
+
     }
 
     /**
@@ -86,7 +100,12 @@ export default class Map {
      * @param {string} team
      */
     assignSpawnToClient(team: string) {
-        let spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];
+        let spawnPoint = new Vector(0, 0);
+
+        if (this.gameType == "Deathmatch")
+            spawnPoint = this.spawns.any[Math.floor(Math.random() * this.spawns.any.length)];
+        else
+            spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];
 
         return new Vector(spawnPoint.x, spawnPoint.y);
     }
@@ -96,13 +115,17 @@ export default class Map {
      * @param {Tile[][]} data
      * @returns {Map} Map
      */
-    parseMap(data: Tile[][]): Map {
-        this.data = data;
-        this.w = this.data.length;
-        this.h = this.data[0].length;
+    parseMap(data: any): Map {
 
-        for (let x: number = 0; x < this.w; x++) {
-            for (let y: number = 0; y < this.h; y++) {
+        this.name = data.name;
+        this.gameType = data.gameType;
+        this.maxPlayers = data.maxPlayers;
+        this.width = data.width;
+        this.height = data.height;
+        this.data = data.mapData;
+
+        for (let x: number = 0; x < this.width; x++) {
+            for (let y: number = 0; y < this.height; y++) {
                 let block: Tile = this.data[x][y];
 
                 if (block.pickup == "pickup_flag_blue") {
@@ -117,9 +140,13 @@ export default class Map {
                 if (block.spawn == "spawn_green") {
                     this.spawns.green.push(new Vector(x + 0.5, y + 0.5));
                 }
+                if (block.spawn == "spawn_any") {
+                    this.spawns.any.push(new Vector(x + 0.5, y + 0.5));
+                }
             }
         };
         return this;
+
     }
 
     /**
@@ -147,7 +174,7 @@ export default class Map {
         // on boucle sur toutes les tiles autour du joueur
         for (let x: number = pMapX - viewSizeX; x < pMapX + viewSizeX + 1; x++) {
             for (let y: number = pMapY - viewSizeY - 1; y < pMapY + viewSizeY + 1; y++) {
-                if (x < this.w && y < this.h && x >= 0 && y >= 0) {
+                if (x < this.width && y < this.height && x >= 0 && y >= 0) {
                     block = this.data[x][y];
                     let px = x * tileSize;
                     let py = y * tileSize;
@@ -215,9 +242,9 @@ export default class Map {
      * Resets the map (Editor method)
      */
     resetData() {
-        let w: number = parseInt(document.getElementById("editor_Width_id")['value']);
-        let h: number = parseInt(document.getElementById("editor_Height_id")['value']);
-        this.init(w, h, true);
+        let width: number = parseInt(document.getElementById("editor_Width_id")['value']);
+        let height: number = parseInt(document.getElementById("editor_Height_id")['value']);
+        this.init(width, height, true);
     }
 
 }

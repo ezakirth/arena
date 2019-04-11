@@ -34,7 +34,20 @@ global.time = new Timer();
 global.server = new Server(io);
 
 FileSystem.readdirSync(root + '/maps/').forEach(file => {
-    server.maps.push(root + '/maps/' + file);
+    let mapPath = root + '/maps/' + file;
+    let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
+
+    let mapInfo = {
+        name: map.name,
+        gameType: map.gameType,
+        maxPlayers: map.maxPlayers,
+        width: map.width,
+        height: map.height,
+        mapData: map.data,
+        path: mapPath
+    }
+
+    server.maps.push(mapInfo);
 });
 
 io.on('connection', function (socket: SocketIO.Socket) {

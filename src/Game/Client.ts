@@ -27,7 +27,7 @@ export default class Client {
         this.direction = new Vector(1, 0);
         this.position = new Vector(position.x, position.y);
         this.name = name;
-        this.infos = new Infos(100, 100, false, pickups.weapons.gun, 10, 0.05, false, team);
+        this.infos = new Infos(100, 0, false, pickups.weapons.gun, 0, .05, false, team);
 
         this.networkData = new NetworkData(lobbyId, clientId, new Vector(this.position.x, this.position.y), new Vector(this.direction.x, this.direction.y), 0, false, [], []);
 

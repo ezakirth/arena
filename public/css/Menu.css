@@ -57,6 +57,9 @@
     height:210px;
     border:2px solid rgba(255,255,255,.5);
 }
+.itemLobby {
+    font-size:22px;
+}
 .itemLobby:hover {
     cursor:pointer;
     background-color: rgb(0, 92, 128);

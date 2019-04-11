@@ -3,7 +3,7 @@ import Timer from '../common/Timer';
 import Tile from '../types/Tile';
 import Pickups from '../common/Pickups';
 import Vector from '../common/Vector';
-import Server from '../Server';
+import Server, { clamp } from '../Server';
 
 declare var server: Server;
 declare var time: Timer;
@@ -106,6 +106,8 @@ export default class Clientserverside extends Client {
                     if (pickup.type == 'buff') {
                         this.infos.life += pickup.life;
                         this.infos.shield += pickup.shield;
+                        this.infos.life = clamp(this.infos.life, 0, 100);
+                        this.infos.shield = clamp(this.infos.shield, 0, 100);
                         if (pickup.speed != 0) time.addTimer('buff', 3, { stat: 'speed', value: this.infos.speed, client: this });
                         this.infos.speed += pickup.speed;
                         time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y, map: map });

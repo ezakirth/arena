@@ -10,6 +10,7 @@ export default class Game {
     bullets: Bullet[];
     clients: { [name: string]: Clientclientside };
     lobbies: any[];
+    mapList: any[];
     menu: Menu;
     localClientId: string;
     localClient: Clientclientside;
@@ -45,14 +46,16 @@ export default class Game {
 
         for (let index = this.bullets.length - 1; index >= 0; index--) {
             let bullet = this.bullets[index];
-            bullet.update();
+            if (bullet.active) {
+                bullet.update();
 
-            for (let clientId in this.clients) {
-                let client = this.clients[clientId];
-                if (bullet.hitTest(client, false)) break;
+                for (let clientId in this.clients) {
+                    let client = this.clients[clientId];
+                    if (bullet.hitTest(client, false)) break;
+                }
+
             }
-
-            if (!bullet.active) {
+            else {
                 this.bullets.splice(index, 1);
             }
         }

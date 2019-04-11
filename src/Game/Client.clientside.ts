@@ -51,23 +51,23 @@ export default class Clientclientside extends Client {
 
             if (input.keyboard.ArrowLeft) {
                 this.moving = true;
-                this.position.add(this.dirSide.multiply(this.infos.speed));
+                this.position.add(this.dirSide.multiply(this.infos.speed * time.normalize));
             }
             if (input.keyboard.ArrowRight) {
                 this.moving = true;
-                this.position.subtract(this.dirSide.multiply(this.infos.speed));
+                this.position.subtract(this.dirSide.multiply(this.infos.speed * time.normalize));
             }
 
             if (input.keyboard.ArrowUp) {
                 this.moving = true;
-                this.position.subtract(this.direction.multiply(this.infos.speed));
+                this.position.subtract(this.direction.multiply(this.infos.speed * time.normalize));
             }
             if (input.keyboard.ArrowDown) {
                 this.moving = true;
-                this.position.add(this.direction.multiply(this.infos.speed));
+                this.position.add(this.direction.multiply(this.infos.speed * time.normalize));
             }
 
-            this.position.set(clamp(this.position.x, 0, map.w - 1), clamp(this.position.y, 0, map.h - 1));
+            this.position.set(clamp(this.position.x, 0, map.width - 1), clamp(this.position.y, 0, map.height - 1));
             let px = Math.floor(this.position.x);
             let py = Math.floor(this.position.y);
 

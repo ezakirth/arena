@@ -5,6 +5,7 @@ export default class Timer {
     now: number;
     last: number;
     delta: number;
+    normalize: number;
     elapsed: number;
     morphs: any;
     timers: any[];
@@ -20,6 +21,7 @@ export default class Timer {
         this.last = this.now;
         this.delta = 0;
         this.elapsed = 0;
+        this.normalize = 0;
 
         this.morphs = {}
 
@@ -36,6 +38,7 @@ export default class Timer {
     update() {
         this.now = +new Date();
         this.delta = (this.now - this.last) / 1000.0;
+        this.normalize = this.delta * 60;
         this.last = this.now;
         this.elapsed += this.delta;
 

@@ -14,7 +14,7 @@ export default class Server {
     io: SocketIO.Server;
     lobbies: { [name: string]: Lobby };
 
-    maps: string[];
+    maps: any[];
 
     constructor(io: SocketIO.Server) {
         this.io = io;
@@ -30,10 +30,11 @@ export default class Server {
         let lobbies = [];
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
-            lobbies.push({ id: lobby.id, map: lobby.map.name, type: lobby.map.type, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
+
+            lobbies.push({ id: lobby.id, map: lobby.map.name, gameType: lobby.map.gameType, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
 
         }
-        socket.emit('init', { clientId: socket.id, lobbies: lobbies });
+        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.maps });
     }
 
     /**
@@ -45,7 +46,7 @@ export default class Server {
         //
         let lobby = this.lobbies[clientData.lobbyId];
         if (!lobby) {
-            let mapPath = this.maps[0];
+            let mapPath = clientData.mapPath;
             let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()))
             lobby = new Lobby(map);
             this.lobbies[lobby.id] = lobby;
@@ -57,7 +58,17 @@ export default class Server {
 
         let client = new Clientserverside(clientData.name, lobby.id, clientData.clientId, team, lobby.map.assignSpawnToClient(team));
         lobby.clients[clientData.clientId] = client;
-        socket.emit('create', { client: client, map: lobby.map.data });
+
+        let data = {
+            name: lobby.map.name,
+            gameType: lobby.map.gameType,
+            maxPlayers: lobby.map.maxPlayers,
+            mapData: lobby.map.data,
+            width: lobby.map.width,
+            height: lobby.map.height
+        };
+
+        socket.emit('create', { client: client, mapInfo: data });
     }
 
 
@@ -95,8 +106,8 @@ export default class Server {
                 client.direction.y += movementData.deltaDirection.y;
                 client.networkData.sequence = movementData.sequence;
 
-                let px = clamp(Math.floor(client.position.x), 0, lobby.map.w - 1);
-                let py = clamp(Math.floor(client.position.y), 0, lobby.map.h - 1);
+                let px = clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
+                let py = clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
 
                 if (!lobby.map.data[px][py].solid) client.lastGoodPos = new Vector(client.position.x, client.position.y);
                 else { client.position = new Vector(client.lastGoodPos.x, client.lastGoodPos.y) }
@@ -161,15 +172,16 @@ export default class Server {
             // update all bullets
             for (let index = lobby.bullets.length - 1; index >= 0; index--) {
                 let bullet = lobby.bullets[index];
-                bullet.update();
+                if (bullet.active) {
+                    bullet.update();
 
-                // if one hits a client or a wall, remove it
-                for (let clientId in lobby.clients) {
-                    let client = lobby.clients[clientId];
-                    if (bullet.hitTest(client, true)) break;
-                }
+                    // if one hits a client or a wall, remove it
+                    for (let clientId in lobby.clients) {
+                        let client = lobby.clients[clientId];
+                        if (bullet.hitTest(client, true)) break;
+                    }
 
-                if (!bullet.active) {
+                } else {
                     lobby.bullets.splice(index, 1);
                 }
             }

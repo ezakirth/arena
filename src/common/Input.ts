@@ -34,7 +34,7 @@ export default class Input {
 
         this.keyboard = { active: false };
 
-        this.speed = 10;
+        this.speed = 0.2;
     }
 
     init() {
@@ -60,7 +60,7 @@ export default class Input {
     update() {
         this.updateMapPosition();
 
-        let deltaMovement = time.delta * this.speed;
+        let deltaMovement = time.normalize * this.speed;
 
         if (this.keyboard.ArrowLeft) {
             this.inertia.x += deltaMovement;
@@ -93,7 +93,7 @@ export default class Input {
         if (this.mouse.browser.y < 30) this.view.y -= deltaMovement;
 
         // make sure we don't lose sight of the map ^^
-        this.view.set(clamp(this.view.x, 0, map.w - 5), clamp(this.view.y, 0, map.h));
+        this.view.set(clamp(this.view.x, 0, map.width - 5), clamp(this.view.y, 0, map.height));
 
     }
 

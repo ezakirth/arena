@@ -54,11 +54,12 @@ export default class Network {
 
         /**
          * Connected to the server
-         * @param { clients: this.clients, maps: this.maps }
+         * serverData : clientId, lobbies, mapList
          */
         this.socket.on('init', function (serverData) {
             game.localClientId = serverData.clientId;
             game.lobbies = serverData.lobbies;
+            game.mapList = serverData.mapList;
             game.menu.show();
         });
 
@@ -85,8 +86,8 @@ export default class Network {
     }
 
 
-    joinGame() {
-        this.socket.emit('join', { clientId: game.localClientId, name: game.localClientName, lobbyId: game.lobbyId });
+    joinGame(mapPath: string) {
+        this.socket.emit('join', { clientId: game.localClientId, name: game.localClientName, lobbyId: game.lobbyId, mapPath: mapPath });
     }
 
     /**
@@ -95,8 +96,8 @@ export default class Network {
      */
     createClient(serverData: any) {
         let client = serverData.client;
-        let mapData = serverData.map;
-        map.parseMap(mapData);
+        let mapInfo = serverData.mapInfo;
+        map.parseMap(mapInfo);
         game.localClient = game.clients[game.localClientId] = new Client(client.name, client.networkData.lobbyId, client.networkData.clientId, client.infos.team, client.position);
     }
 
@@ -220,8 +221,25 @@ export default class Network {
      * @param client
      */
     shootWeapon(client: Clientclientside) {
-        let bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, client.infos.enemyTeam, client.position, client.direction, client.infos.weapon);
-        game.bullets.push(bullet);
+        let bullet: Bullet = null;
+
+        if (client.infos.weapon.name == "shotgun") {
+            // random bullets that won't be pushed to server
+            for (let i = 0; i < 8; i++) {
+                let ang = (-15 + Math.random() * 30) * Math.PI / 180;
+                bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
+                game.bullets.push(bullet);
+            }
+            bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, client.direction, client.infos.weapon);
+            game.bullets.push(bullet);
+        }
+        else {
+            let ang = 0;
+            if (client.infos.weapon.name == "blastgun")
+                ang = (-5 + Math.random() * 10) * Math.PI / 180;
+            bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
+            game.bullets.push(bullet);
+        }
         this.socket.emit('shoot', bullet);
     }
 
@@ -234,6 +252,15 @@ export default class Network {
             if (bullet.clientId != game.localClientId) {
                 let newBullet = new Bullet(bullet.lobbyId, bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
                 game.bullets.push(newBullet);
+
+                if (bullet.type.name == "shotgun") {
+                    // random bullets that won't be pushed to server
+                    for (let i = 0; i < 8; i++) {
+                        let ang = (-15 + Math.random() * 30) * Math.PI / 180;
+                        newBullet = new Bullet(bullet.lobbyId, bullet.clientId, bullet.targetTeam, bullet.position, Vector._rotate(bullet.direction, ang), bullet.type);
+                        game.bullets.push(newBullet);
+                    }
+                }
             }
         }
     }
