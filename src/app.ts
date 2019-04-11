@@ -26,22 +26,28 @@ import FileSystem = require("fs");
 declare var global: any;
 declare var server: Server;
 
-global.map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(root + "/map.json").toString()));
+
 global.pickups = new Pickups();
 global.time = new Timer();
 global.server = new Server(io);
 
-
+FileSystem.readdirSync(root + '/maps/').forEach(file => {
+    server.maps.push(root + '/maps/' + file);
+});
 
 io.on('connection', function (socket) {
-    server.createClient(socket);
+    server.welcome(socket);
 
-    socket.on('shoot', function (bulletData) {
-        server.shootBullet(socket, bulletData);
+    socket.on('join', function (clientData) {
+        server.createClient(socket, clientData);
     });
 
-    socket.on('update', function (movementData) {
-        server.updateClient(socket, movementData);
+    socket.on('shoot', function (bulletData) {
+        server.shootBullet(bulletData);
+    });
+
+    socket.on('update', function (clientData) {
+        server.updateClient(socket, clientData);
     });
 
     socket.on('disconnect', function () {

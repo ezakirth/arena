@@ -11,12 +11,17 @@ declare var Editor: any;
 export default class Map {
     w: number;
     h: number;
+    name: string;
+    type: string;
+    maxPlayers: number;
     data: Tile[][];
     spawns: any;
     flags: any;
     updates: any[];
     constructor() {
-
+        this.name = 'New map';
+        this.type = 'CTF';
+        this.maxPlayers = 4;
         this.data = null;
         this.spawns = { blue: [], green: [] };
         this.flags = { blue: null, green: null };
@@ -121,8 +126,8 @@ export default class Map {
      * Render the map based on position
      * first pass renders the floor, decals, spawn and portals
      * second pass renders walls, shadows and pickups
-     * @param view 
-     * @param pass 
+     * @param view
+     * @param pass
      */
     renderView(view: Vector, pass: number) {
         let block: Tile = null;

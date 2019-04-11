@@ -11188,6 +11188,14 @@ var Graphics = /** @class */ (function () {
     Graphics.prototype.clear = function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     };
+    /**
+     * Draws an image on the canvas
+     * @param img
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
     Graphics.prototype.sprite = function (img, x, y, w, h) {
         img = './assets/' + img + '.png';
         var image = this.cachedImages[img];
@@ -11202,10 +11210,28 @@ var Graphics = /** @class */ (function () {
             this.ctx.drawImage(image, x - width / 2, y - height / 2, width, height);
         }
     };
+    /**
+     * Draws text on the canvas
+     * @param text
+     * @param x
+     * @param y
+     */
     Graphics.prototype.drawText = function (text, x, y) {
         this.ctx.fillText(text, x, y);
         this.ctx.strokeText(text, x, y);
     };
+    /**
+     * Draws a spritesheet on the canvas
+     * @param img
+     * @param sx
+     * @param sy
+     * @param sw
+     * @param sh
+     * @param dx
+     * @param dy
+     * @param dw
+     * @param dh
+     */
     Graphics.prototype.spriteSheet = function (img, sx, sy, sw, sh, dx, dy, dw, dh) {
         img = './assets/' + img + '.png';
         var image = this.cachedImages[img];
@@ -11369,6 +11395,9 @@ var Vector_1 = require("./Vector");
 var Tile_1 = require("./Tile");
 var Map = /** @class */ (function () {
     function Map() {
+        this.name = 'New map';
+        this.type = 'CTF';
+        this.maxPlayers = 4;
         this.data = null;
         this.spawns = { blue: [], green: [] };
         this.flags = { blue: null, green: null };
@@ -11386,9 +11415,9 @@ var Map = /** @class */ (function () {
         this.h = h;
         this.data = JSON.parse(localStorage.getItem('tileData'));
         if (!this.data || forceNew) {
-            this.data = Array(this.w);
+            this.data = [];
             for (var x = 0; x < this.w; x++) {
-                this.data[x] = Array(this.h);
+                this.data[x] = [];
                 for (var y = 0; y < this.h; y++) {
                     this.data[x][y] = new Tile_1.default();
                 }
@@ -11430,7 +11459,8 @@ var Map = /** @class */ (function () {
     };
     /**
      * Loads the map
-     * @param {Object} data
+     * @param {Tile[][]} data
+     * @returns {Map} Map
      */
     Map.prototype.parseMap = function (data) {
         this.data = data;
@@ -11454,13 +11484,14 @@ var Map = /** @class */ (function () {
             }
         }
         ;
+        return this;
     };
     /**
      * Render the map based on position
      * first pass renders the floor, decals, spawn and portals
      * second pass renders walls, shadows and pickups
-     * @param {vector2} view
-     * @param {integer} pass
+     * @param view
+     * @param pass
      */
     Map.prototype.renderView = function (view, pass) {
         var block = null;
@@ -11563,8 +11594,6 @@ var Tile = /** @class */ (function () {
     function Tile() {
         // true if not walkable, else false
         this.solid = true;
-        // contains a list of decal texture names
-        this.decals = [];
     }
     return Tile;
 }());
@@ -11613,7 +11642,7 @@ var Timer = /** @class */ (function () {
             timer.delay -= this.delta;
             if (timer.delay <= 0) {
                 if (timer.type == 'respawn') {
-                    map.queueUpdate('pickup', timer.data.pickup, timer.data.x, timer.data.y);
+                    timer.data.map.queueUpdate('pickup', timer.data.pickup, timer.data.x, timer.data.y);
                 }
                 if (timer.type == 'buff') {
                     timer.data.client.infos[timer.data.stat] = timer.data.value;

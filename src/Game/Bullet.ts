@@ -4,6 +4,8 @@ import Game from './Game';
 import Map from '../common/Map';
 import Timer from '../common/Timer';
 import Graphics from '../common/Graphics';
+import Client from './Client';
+import Server from '../Server';
 import Clientserverside from './Client.serverside';
 
 declare var game: Game;
@@ -13,6 +15,7 @@ declare var pickups: Pickups;
 
 declare var tileSize: number;
 declare var time: Timer;
+declare var server: Server;
 /**
  * Handles a bullet
  */
@@ -24,9 +27,11 @@ export default class Bullet {
     distance: number;
     targetTeam: string;
     active: boolean;
+    lobbyId: string;
     clientId: string;
     speed: number;
-    constructor(clientId, targetTeam, position, direction, type) {
+    constructor(lobbyId, clientId, targetTeam, position, direction, type) {
+        this.lobbyId = lobbyId;
         this.clientId = clientId;
         this.type = type;
         this.direction = new Vector(direction.x, direction.y);
@@ -64,18 +69,29 @@ export default class Bullet {
 
     }
 
-    hitTest(client: Clientserverside, serverSide: boolean): boolean {
+    hitTest(client: any, serverSide: boolean): boolean {
         let px: number = Math.floor(this.position.x);
         let py: number = Math.floor(this.position.y);
-        if (map.data[px][py].solid) {
-            this.active = false;
-            return true;
+        if (serverSide) {
+            if (server.lobbies[this.lobbyId].map.data[px][py].solid) {
+                this.active = false;
+                return true;
+            }
         }
+        else {
+            if (map.data[px][py].solid) {
+                this.active = false;
+                return true;
+            }
+        }
+
 
         if (!client.infos.dead && client.networkData.clientId != this.clientId) {
             let dist = Vector._dist(this.position, client.position);
             if (dist < .3) {
-                if (serverSide) client.modLife(-this.type.dmg);
+                if (serverSide) {
+                    client.modLife(-this.type.dmg);
+                }
                 this.active = false;
                 return true;
             }

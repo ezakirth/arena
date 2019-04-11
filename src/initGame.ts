@@ -9,6 +9,7 @@ import Pickups from './common/Pickups';
 
 
 declare var window: any;
+declare var loop: any;
 
 window.tileSize = 128;
 window.Editor = null;
@@ -24,7 +25,7 @@ window.pickups = new Pickups();
 
 
 
-var loop = function () {
+window.loop = function () {
     requestAnimationFrame(loop);
     window.time.update();
 
@@ -43,5 +44,3 @@ window.input.init();
 // attempts to connect to the server.
 // once connected, server sends us the map data and our client info
 window.network.init();
-
-loop();

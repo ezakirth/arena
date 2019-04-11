@@ -6,16 +6,17 @@ import Map from '../common/Map';
 import Timer from '../common/Timer';
 import Bullet from './Bullet';
 
+
 //declare var io: Function;
 declare var game: Game;
 declare var map: Map;
 declare var time: Timer;
-
+declare var loop: Function;
 
 export default class Network {
     latency: number;
     lastServerTimestamp: 0;
-    socket: any;//SocketIOClient.Socket;
+    socket: SocketIOClient.Socket;
 
     constuctor() {
         this.latency = 0;
@@ -46,9 +47,19 @@ export default class Network {
             }
         }, 100);
 
-        // Connected to the server
+        /**
+         * Connected to the server
+         * @param { clients: this.clients, maps: this.maps }
+         */
         this.socket.on('init', function (serverData) {
+            game.localClientId = serverData.clientId;
+            game.lobbies = serverData.lobbies;
+            game.menu.show();
+        });
+
+        this.socket.on('create', function (serverData) {
             _this.createClient(serverData);
+            loop();
         });
 
         // disconnected to the server
@@ -57,8 +68,8 @@ export default class Network {
         });
 
         // updates from the server
-        this.socket.on('update', function (data) {
-            _this.updateClient(data);
+        this.socket.on('update', function (serverData) {
+            _this.updateClient(serverData);
         });
 
         // bullet updates from the server
@@ -66,6 +77,11 @@ export default class Network {
             _this.updateBullets(bullets);
         });
 
+    }
+
+
+    joinGame() {
+        this.socket.emit('join', { clientId: game.localClientId, name: game.localClientName, lobbyId: game.lobbyId });
     }
 
     /**
@@ -77,24 +93,23 @@ export default class Network {
         let client = serverData.client;
         let mapData = serverData.map;
         map.parseMap(mapData);
-        game.localClientId = client.networkData.clientId;
-        game.localClient = game.clients[game.localClientId] = new Client('Local client', game.localClientId, client.infos.team, client.position);
+        game.localClient = game.clients[game.localClientId] = new Client(client.name, client.networkData.lobbyId, client.networkData.clientId, client.infos.team, client.position);
     }
 
     deleteClient(clientId) {
         delete game.clients[clientId];
     }
 
-    updateClient(data) {
-        this.lastServerTimestamp = data.timestamp;
-        map.updates = data.mapUpdates;
+    updateClient(serverData) {
+        this.lastServerTimestamp = serverData.timestamp;
+        map.updates = serverData.mapUpdates || [];
         map.processUpdates();
 
-        let serverClients = data.clients;
+        let serverClients = serverData.clients;
         for (let clientId in serverClients) {
             let serverClient = serverClients[clientId];
             if (!game.clients[clientId]) {
-                game.clients[clientId] = new Client('Network client ' + Object.keys(game.clients).length, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
+                game.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
 
             let client = game.clients[clientId];
@@ -182,7 +197,7 @@ export default class Network {
             client.networkData.positionBuffer.push({ timestamp: timestamp, position: serverClient.position, direction: serverClient.direction });
     }
 
-    sendMovementData(client) {
+    sendMovementData(client: Client) {
         // get movement since last one sent to server
         let deltaPosition = {
             x: client.position.x - client.networkData.lastPosition.x,
@@ -195,7 +210,8 @@ export default class Network {
         if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaPosition.dx) + Math.abs(deltaPosition.dy) > 0) {
             client.networkData.lastPosition = { x: client.position.x, y: client.position.y, dx: client.direction.x, dy: client.direction.y };
             // send movement to server for validation
-            let movementData = { movement: deltaPosition, sequence: ++client.networkData.sequence };
+            let movementData = { movement: deltaPosition, sequence: ++client.networkData.sequence, lobbyId: client.networkData.lobbyId };
+
             this.socket.emit('update', movementData);
 
             // store movements for later reconciliation
@@ -203,17 +219,26 @@ export default class Network {
         }
     }
 
+    /**
+     * Shoots a bullet (origin = local)
+     * @param client
+     */
     shootWeapon(client: Client) {
-        let bullet = new Bullet(client.networkData.clientId, client.infos.enemyTeam, client.position, client.direction, client.infos.weapon);
+        let bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, client.infos.enemyTeam, client.position, client.direction, client.infos.weapon);
         game.bullets.push(bullet);
         this.socket.emit('shoot', bullet);
     }
 
+    /**
+     * Adds a bullet (origin = server)
+     * @param bullets
+     */
     updateBullets(bullets: Bullet[]) {
         for (let bullet of bullets) {
-            let newBullet = new Bullet(bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
-            if (newBullet.clientId != game.localClientId)
+            if (bullet.clientId != game.localClientId) {
+                let newBullet = new Bullet(bullet.lobbyId, bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
                 game.bullets.push(newBullet);
+            }
         }
     }
 }

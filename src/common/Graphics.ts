@@ -8,7 +8,7 @@ export default class Graphics {
     ratio: Vector;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
-    cachedImages: any;
+    cachedImages: { [name: string]: HTMLImageElement };
 
     constructor() {
         this.width = 1920;
@@ -65,6 +65,14 @@ export default class Graphics {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    /**
+     * Draws an image on the canvas
+     * @param img
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
     sprite(img: string, x: number, y: number, w: number, h: number) {
         img = './assets/' + img + '.png';
         let image: HTMLImageElement = this.cachedImages[img];
@@ -82,12 +90,29 @@ export default class Graphics {
         }
     }
 
+    /**
+     * Draws text on the canvas
+     * @param text
+     * @param x
+     * @param y
+     */
     drawText(text: string, x: number, y: number) {
         this.ctx.fillText(text, x, y);
         this.ctx.strokeText(text, x, y);
     }
 
-
+    /**
+     * Draws a spritesheet on the canvas
+     * @param img
+     * @param sx
+     * @param sy
+     * @param sw
+     * @param sh
+     * @param dx
+     * @param dy
+     * @param dw
+     * @param dh
+     */
     spriteSheet(img: string, sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw: number, dh: number) {
         img = './assets/' + img + '.png';
         let image: HTMLImageElement = this.cachedImages[img];

@@ -1,0 +1,82 @@
+#Menu {
+
+    z-index:99;
+    display:none;
+    position:fixed;
+    box-sizing: border-box;
+    top:0px;
+    left:0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(24, 34, 45, 0.9);
+    align-items: center;
+    justify-content: center;
+}
+
+#Menu .popup {
+    text-align:center;
+    box-sizing: border-box;
+    padding-top:20px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    text-transform: uppercase;
+    color:white;
+    font-size:32px;
+    width: 470px;
+    height: 390px;
+    background-image: url('../assets/Window.png');
+    background-repeat:no-repeat;
+}
+
+.shrink{
+    -webkit-transform:scale(0.8);
+    -moz-transform:scale(0.8);
+    -ms-transform:scale(0.8);
+    transform:scale(0.8);
+    }
+
+.inputContainer {
+    margin-top:32px;
+}
+#clientName {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size:26px;
+    box-sizing:border-box;
+    width:360px;
+    text-align: center;
+    border:2px solid rgba(255,255,255,.5);
+	padding:.25em .5em .3125em;
+	color:white;
+	border-radius:.25em;
+	background:transparent;
+}
+
+.lobbyContainer {
+    border-radius:.25em;
+    margin:20px;
+    margin-top:10px;
+    height:210px;
+    border:2px solid rgba(255,255,255,.5);
+}
+.itemLobby:hover {
+    cursor:pointer;
+    background-color: rgb(0, 92, 128);
+}
+
+
+#clientName:focus {outline:0;
+    border:2px solid rgba(255,255,255,1);
+}
+
+.buttonOK {
+    position:relative;
+    left:187px;
+    top:32px;
+    width:96px;
+    height:96px;
+    background-image: url('../assets/button_ok_off.png');
+    background-repeat:no-repeat;
+}
+.buttonOK:hover {
+    cursor:pointer;
+    background-image: url('../assets/button_ok_on.png');
+}

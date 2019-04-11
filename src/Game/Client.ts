@@ -20,7 +20,7 @@ export default class Client {
     frame: number;
     name: string;
 
-    constructor(name, clientId, team, position) {
+    constructor(name, lobbyId, clientId, team, position) {
         this.direction = new Vector(1, 0);
         this.position = new Vector(position.x, position.y);
         this.name = name;
@@ -37,6 +37,7 @@ export default class Client {
         }
 
         this.networkData = {
+            lobbyId: lobbyId,
             clientId: clientId,
             lastPosition: { x: this.position.x, y: this.position.y, dx: this.direction.x, dy: this.direction.y },
             sequence: 0,
@@ -53,16 +54,6 @@ export default class Client {
         this.frame = 1;
     }
 
-    respawn() {
-        this.position = map.assignSpawnToClient(this.infos.team);
 
-        this.infos.life = 100;
-        this.infos.shield = 100;
-        this.infos.dead = false;
-        this.infos.speed = 0.05;
-        this.infos.weapon = pickups.weapons.gun;
-        this.networkData.forceNoReconciliation = true;
-
-    }
 
 }

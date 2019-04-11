@@ -1,20 +1,29 @@
 import Clientclientside from './Client.clientside';
 import Graphics from '../common/Graphics';
 import Bullet from './Bullet';
+import Menu from './Menu';
 
 declare var gfx: Graphics
 
 
 export default class Game {
     bullets: Bullet[];
-    clients: any;
+    clients: { [name: string]: Clientclientside };
+    lobbies: any[];
+    menu: Menu;
     localClientId: string;
     localClient: Clientclientside;
+    localClientName: string;
+    lobbyId: string;
     constructor() {
         this.clients = {};
         this.bullets = [];
+        this.lobbies = [];
         this.localClientId = null;
         this.localClient = null;
+        this.localClientName = null;
+        this.lobbyId = null;
+        this.menu = new Menu();
 
     }
 

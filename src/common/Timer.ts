@@ -58,7 +58,7 @@ export default class Timer {
             timer.delay -= this.delta;
             if (timer.delay <= 0) {
                 if (timer.type == 'respawn') {
-                    map.queueUpdate('pickup', timer.data.pickup, timer.data.x, timer.data.y);
+                    timer.data.map.queueUpdate('pickup', timer.data.pickup, timer.data.x, timer.data.y);
                 }
 
                 if (timer.type == 'buff') {

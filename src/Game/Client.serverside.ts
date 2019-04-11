@@ -1,16 +1,19 @@
 import Client from './Client';
 import Timer from '../common/Timer';
-import Map from '../common/Map';
 import Tile from '../common/Tile';
 import Pickups from '../common/Pickups';
+import Vector from '../common/Vector';
+import Server from '../Server';
 
-declare var map: Map;
+declare var server: Server;
 declare var time: Timer;
 declare var pickups: Pickups;
 
 export default class Clientserverside extends Client {
-    constructor(name, clientId, team, position) {
-        super(name, clientId, team, position);
+    lastGoodPos: Vector;
+    constructor(name, lobbyId, clientId, team, position) {
+        super(name, lobbyId, clientId, team, position);
+        this.lastGoodPos = new Vector(position.x, position.y);
     }
 
     update() {
@@ -22,6 +25,17 @@ export default class Clientserverside extends Client {
         }
     }
 
+    respawn() {
+        this.position = server.lobbies[this.networkData.lobbyId].map.assignSpawnToClient(this.infos.team);
+
+        this.infos.life = 100;
+        this.infos.shield = 100;
+        this.infos.dead = false;
+        this.infos.speed = 0.05;
+        this.infos.weapon = pickups.weapons.gun;
+        this.networkData.forceNoReconciliation = true;
+
+    }
 
     modLife(delta) {
         this.infos.life += delta;
@@ -39,13 +53,15 @@ export default class Clientserverside extends Client {
         if (this.infos.hasEnemyFlag) {
             let px = Math.floor(this.position.x);
             let py = Math.floor(this.position.y);
-            map.queueUpdate('flag', 'pickup_flag_' + this.infos.enemyTeam, px, py);
+            server.lobbies[this.networkData.lobbyId].map.queueUpdate('flag', 'pickup_flag_' + this.infos.enemyTeam, px, py);
             this.infos.hasEnemyFlag = false;
         }
         this.infos.dead = true;
 
         this.infos.respawnTime = 8;
     }
+
+
 
 
     /**
@@ -56,7 +72,7 @@ export default class Clientserverside extends Client {
      */
     checkTile(tile: Tile, x: number, y: number) {
         if (!this.infos.dead) {
-
+            let map = server.lobbies[this.networkData.lobbyId].map;
 
             // if it's a rogue flag (flag dropped by client)
             if (tile.flag) {
@@ -69,7 +85,7 @@ export default class Clientserverside extends Client {
                 }
                 // else it's our flag, so we return it
                 else {
-                    time.addTimer('respawn', 0, { pickup: 'pickup_flag_' + this.infos.team, x: map.flags[this.infos.team].x, y: map.flags[this.infos.team].y });
+                    time.addTimer('respawn', 0, { pickup: 'pickup_flag_' + this.infos.team, x: map.flags[this.infos.team].x, y: map.flags[this.infos.team].y, map: map });
                 }
                 map.queueUpdate('flag', null, x, y);
             }
@@ -83,7 +99,7 @@ export default class Clientserverside extends Client {
                     if (pickup.type == 'weapon') {
                         this.infos.weapon = pickup;
                         this.infos.ammo = pickup.ammo;
-                        time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y });
+                        time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y, map: map });
                         map.queueUpdate('pickup', null, x, y);
                     }
                     // if client walks on a buff, consume it and trigger respawn time
@@ -92,7 +108,7 @@ export default class Clientserverside extends Client {
                         this.infos.shield += pickup.shield;
                         if (pickup.speed != 0) time.addTimer('buff', 3, { stat: 'speed', value: this.infos.speed, client: this });
                         this.infos.speed += pickup.speed;
-                        time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y });
+                        time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y, map: map });
                         map.queueUpdate('pickup', null, x, y);
                     }
                     // if client walks on a flag, process it
@@ -106,7 +122,7 @@ export default class Clientserverside extends Client {
                         else {
                             // If we are at our flag spawn location and have the enemy flag, capture it
                             if (map.flags[this.infos.team].x == x && map.flags[this.infos.team].y == y && this.infos.hasEnemyFlag) {
-                                time.addTimer('respawn', 10, { pickup: 'pickup_flag_' + this.infos.enemyTeam, x: map.flags[this.infos.enemyTeam].x, y: map.flags[this.infos.enemyTeam].y });
+                                time.addTimer('respawn', 10, { pickup: 'pickup_flag_' + this.infos.enemyTeam, x: map.flags[this.infos.enemyTeam].x, y: map.flags[this.infos.enemyTeam].y, map: map });
                                 this.infos.hasEnemyFlag = false;
                             }
                         }

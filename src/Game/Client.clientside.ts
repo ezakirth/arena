@@ -22,8 +22,8 @@ export default class Clientclientside extends Client {
     dirSide: Vector;
     canShoot: boolean;
     lastShot: number;
-    constructor(name, clientId, team, position) {
-        super(name, clientId, team, position);
+    constructor(name, lobbyId, clientId, team, position) {
+        super(name, lobbyId, clientId, team, position);
 
         this.lastShot = 0;
     }
