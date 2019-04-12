@@ -29,6 +29,11 @@ export default class ClientLocal extends Client {
         this.lastShot = 0;
     }
 
+    savePositionForReconciliation() {
+        this.networkData.lastPosition.set(this.position.x, this.position.y);
+        this.networkData.lastDirection.set(this.direction.x, this.direction.y);
+    }
+
     /**
      * Applies local input to the client
      */
@@ -49,22 +54,22 @@ export default class ClientLocal extends Client {
             let oldPx = Math.floor(this.position.x);
             let oldPy = Math.floor(this.position.y);
 
-            if (input.keyboard.ArrowLeft) {
+            if (input.keyboard.ArrowLeft || input.keyboard.q) {
                 this.moving = true;
-                this.position.add(this.dirSide.multiply(this.infos.speed * time.normalize));
+                this.position.x -= this.infos.speed * time.normalize;
             }
-            if (input.keyboard.ArrowRight) {
+            if (input.keyboard.ArrowRight || input.keyboard.d) {
                 this.moving = true;
-                this.position.subtract(this.dirSide.multiply(this.infos.speed * time.normalize));
+                this.position.x += this.infos.speed * time.normalize;
             }
 
-            if (input.keyboard.ArrowUp) {
+            if (input.keyboard.ArrowUp || input.keyboard.z) {
                 this.moving = true;
-                this.position.subtract(this.direction.multiply(this.infos.speed * time.normalize));
+                this.position.y -= this.infos.speed * time.normalize;
             }
-            if (input.keyboard.ArrowDown) {
+            if (input.keyboard.ArrowDown || input.keyboard.s) {
                 this.moving = true;
-                this.position.add(this.direction.multiply(this.infos.speed * time.normalize));
+                this.position.y += this.infos.speed * time.normalize;
             }
 
             this.position.set(clamp(this.position.x, 0, map.width - 1), clamp(this.position.y, 0, map.height - 1));

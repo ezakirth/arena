@@ -99,21 +99,26 @@ export default class Server {
         if (lobby) {
             let client = lobby.clients[socket.id];
 
-            if (!client.networkData.forceNoReconciliation) {
+            if (!client.networkData.ignoreClientMovement) {
                 client.position.x += movementData.deltaPosition.x;
                 client.position.y += movementData.deltaPosition.y;
                 client.direction.x += movementData.deltaDirection.x;
                 client.direction.y += movementData.deltaDirection.y;
-                client.networkData.sequence = movementData.sequence;
 
                 let px = clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
                 let py = clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
 
-                if (!lobby.map.data[px][py].solid) client.lastGoodPos = new Vector(client.position.x, client.position.y);
-                else { client.position = new Vector(client.lastGoodPos.x, client.lastGoodPos.y) }
+                if (!lobby.map.data[px][py].solid)
+                    client.lastGoodPos = new Vector(client.position.x, client.position.y);
+                else {
+                    client.position = new Vector(client.lastGoodPos.x, client.lastGoodPos.y);
+                    client.networkData.ignoreClientMovement = true;
+                }
+
                 client.checkTile(lobby.map.data[px][py], px, py);
             }
 
+            client.networkData.sequence = movementData.sequence;
         }
     }
 
@@ -132,7 +137,7 @@ export default class Server {
             lobby.map.processUpdates();
 
             for (let clientId in lobby.clients) {
-                lobby.clients[clientId].networkData.forceNoReconciliation = false;
+                lobby.clients[clientId].networkData.ignoreClientMovement = false;
             }
         }
 

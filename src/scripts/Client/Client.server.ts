@@ -33,7 +33,7 @@ export default class ClientServer extends Client {
         this.infos.dead = false;
         this.infos.speed = 0.05;
         this.infos.weapon = pickups.weapons.gun;
-        this.networkData.forceNoReconciliation = true;
+        this.networkData.ignoreClientMovement = true;
 
     }
 
@@ -137,7 +137,7 @@ export default class ClientServer extends Client {
                 if (!this.justUsedPortal) {
                     this.position.set(tile.portal.dx + 0.5, tile.portal.dy + 0.5);
                     this.justUsedPortal = true;
-                    this.networkData.forceNoReconciliation = true;
+                    this.networkData.ignoreClientMovement = true;
                 }
             }
             else {

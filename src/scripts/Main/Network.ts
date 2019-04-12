@@ -113,6 +113,8 @@ export default class Network {
         let serverClients = serverData.clients;
         for (let clientId in serverClients) {
             let serverClient: ClientServer = serverClients[clientId];
+
+            // if client doesn't exist locally, create it
             if (!main.clients[clientId]) {
                 main.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
@@ -120,15 +122,20 @@ export default class Network {
             let client = main.clients[clientId];
 
             if (clientId == main.localClientId) {
-                // if there was movement since the last server update, send it now
-                if (serverClient.networkData.forceNoReconciliation)
-                    client.networkData.pendingMovement = [];
-                else
+                // server tells us to ignore out movement, so we just apply authoring, no reconciliation
+                if (serverClient.networkData.ignoreClientMovement) {
+                    client.networkData.reconciliationMovement = [];
+                    this.authoring(client, serverClient);
+                    client.savePositionForReconciliation();
+                }
+                else {
+                    // if there was movement since the last server update, send it now
                     this.sendMovementData(client)
 
-                this.authoring(client, serverClient);
-
-                this.reconciliation(client, serverClient);
+                    // apply authoring and reconciliation
+                    this.authoring(client, serverClient);
+                    this.reconciliation(client, serverClient);
+                }
 
             } else {
                 client.infos.apply(serverClient.infos);
@@ -147,12 +154,6 @@ export default class Network {
         client.position.set(serverClient.position.x, serverClient.position.y);
         client.direction.set(serverClient.direction.x, serverClient.direction.y);
         client.infos.apply(serverClient.infos);
-
-        if (serverClient.networkData.forceNoReconciliation) {
-            client.networkData.lastPosition.set(client.position.x, client.position.y);
-            client.networkData.lastDirection.set(client.direction.x, client.direction.y);
-        }
-
     }
 
     /**
@@ -162,12 +163,12 @@ export default class Network {
      */
     reconciliation(client: ClientLocal, serverClient: ClientServer) {
         var j = 0;
-        while (j < client.networkData.pendingMovement.length) {
-            let movementData = client.networkData.pendingMovement[j];
+        while (j < client.networkData.reconciliationMovement.length) {
+            let movementData = client.networkData.reconciliationMovement[j];
             if (movementData.sequence <= serverClient.networkData.sequence) {
                 // Already processed. Its effect is already taken into account into the world update
                 // we just got, so we can drop it.
-                client.networkData.pendingMovement.splice(j, 1);
+                client.networkData.reconciliationMovement.splice(j, 1);
             } else {
                 client.position.add(movementData.deltaPosition);
                 client.direction.add(movementData.deltaDirection);
@@ -186,7 +187,8 @@ export default class Network {
         let timestamp = +new Date();
         time.setServerDelay(timestamp);
 
-        if (serverClient.networkData.forceNoReconciliation) {
+        // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
+        if (serverClient.networkData.ignoreClientMovement) {
             client.networkData.positionBuffer = [];
             client.networkData.positionBuffer.push(new PositionBuffer(timestamp - 1, serverClient.position, serverClient.direction));
             client.position.set(serverClient.position.x, serverClient.position.y);
@@ -204,15 +206,14 @@ export default class Network {
 
         // If there was movement, notify the server
         if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
-            client.networkData.lastPosition.set(client.position.x, client.position.y);
-            client.networkData.lastDirection.set(client.direction.x, client.direction.y);
+            client.savePositionForReconciliation();
             // send movement to server for validation
             let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.lobbyId);
 
             this.socket.emit('update', movementData);
 
             // store movements for later reconciliation
-            client.networkData.pendingMovement.push(movementData);
+            client.networkData.reconciliationMovement.push(movementData);
         }
     }
 

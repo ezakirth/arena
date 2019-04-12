@@ -8,17 +8,17 @@ export default class NetworkData {
     lastPosition: Vector;
     lastDirection: Vector;
     sequence: number;
-    forceNoReconciliation: boolean;
+    ignoreClientMovement: boolean;
     positionBuffer: PositionBuffer[];
-    pendingMovement: MovementData[];
-    constructor(lobbyId: string, clientId: string, lastPosition: Vector, lastDirection: Vector, sequence: number, forceNoReconciliation: boolean, positionBuffer: PositionBuffer[], pendingMovement: MovementData[]) {
+    reconciliationMovement: MovementData[];
+    constructor(lobbyId: string, clientId: string, lastPosition: Vector, lastDirection: Vector, sequence: number, ignoreClientMovement: boolean, positionBuffer: PositionBuffer[], reconciliationMovement: MovementData[]) {
         this.lobbyId = lobbyId;
         this.clientId = clientId;
         this.lastPosition = lastPosition;
         this.lastDirection = lastDirection;
         this.sequence = sequence;
-        this.forceNoReconciliation = forceNoReconciliation;
+        this.ignoreClientMovement = ignoreClientMovement;
         this.positionBuffer = positionBuffer;
-        this.pendingMovement = pendingMovement;
+        this.reconciliationMovement = reconciliationMovement;
     }
 }
