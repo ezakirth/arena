@@ -99,6 +99,8 @@ export default class Server {
         if (lobby) {
             let client = lobby.clients[socket.id];
 
+            if (movementData.appliedAuthoring) client.networkData.ignoreClientMovement = false;
+
             if (!client.networkData.ignoreClientMovement) {
                 client.position.x += movementData.deltaPosition.x;
                 client.position.y += movementData.deltaPosition.y;
@@ -119,6 +121,7 @@ export default class Server {
             }
 
             client.networkData.sequence = movementData.sequence;
+
         }
     }
 
@@ -136,9 +139,9 @@ export default class Server {
             this.io.to(lobbyId).emit('update', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates });
             lobby.map.processUpdates();
 
-            for (let clientId in lobby.clients) {
-                lobby.clients[clientId].networkData.ignoreClientMovement = false;
-            }
+            /*    for (let clientId in lobby.clients) {
+                    lobby.clients[clientId].networkData.ignoreClientMovement = false;
+                }*/
         }
 
     }

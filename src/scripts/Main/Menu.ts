@@ -50,7 +50,7 @@ export default class Menu {
             let elem = document.createElement('div');
             elem.className = 'itemLobby';
             if (lobby.empty)
-                elem.innerHTML = 'Create Main';
+                elem.innerHTML = 'Create Game';
             else
                 elem.innerHTML = type + ' - ' + lobby.map + ' (' + lobby.current + '/' + lobby.max + ')';
 

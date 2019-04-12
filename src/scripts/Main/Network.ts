@@ -122,13 +122,15 @@ export default class Network {
             let client = main.clients[clientId];
 
             if (clientId == main.localClientId) {
-                // server tells us to ignore out movement, so we just apply authoring, no reconciliation
+                // server tells us to ignore our movement, so we just apply authoring, no reconciliation
                 if (serverClient.networkData.ignoreClientMovement) {
                     client.networkData.reconciliationMovement = [];
                     this.authoring(client, serverClient);
                     client.savePositionForReconciliation();
+                    client.networkData.appliedAuthoring = true;
                 }
                 else {
+                    client.networkData.appliedAuthoring = false;
                     // if there was movement since the last server update, send it now
                     this.sendMovementData(client)
 
@@ -205,12 +207,15 @@ export default class Network {
 
 
         // If there was movement, notify the server
-        if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
+        if (client.networkData.appliedAuthoring || Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
             client.savePositionForReconciliation();
             // send movement to server for validation
-            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.lobbyId);
+            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.appliedAuthoring, client.networkData.lobbyId);
 
             this.socket.emit('update', movementData);
+
+
+            client.networkData.appliedAuthoring = false;
 
             // store movements for later reconciliation
             client.networkData.reconciliationMovement.push(movementData);
