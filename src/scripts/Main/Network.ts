@@ -127,10 +127,10 @@ export default class Network {
                     client.networkData.reconciliationMovement = [];
                     this.authoring(client, serverClient);
                     client.savePositionForReconciliation();
+                    // we let server know we applied authoring asap
                     this.socket.emit('update', new MovementData(new Vector(0, 0), new Vector(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
                 }
                 else {
-                    client.networkData.appliedAuthoring = false;
                     // if there was movement since the last server update, send it now
                     this.sendMovementData(client)
 
