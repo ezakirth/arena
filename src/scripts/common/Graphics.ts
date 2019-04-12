@@ -1,5 +1,6 @@
 import Vector from './Vector';
 
+declare var window: any;
 export default class Graphics {
     width: number;
     height: number;
@@ -13,7 +14,7 @@ export default class Graphics {
     constructor() {
         this.width = 1920;
         this.height = 1080;
-        this.browser = { width: 1920, height: 1080 };
+        this.browser = { width: this.width, height: this.height };
         this.offset = new Vector(0, 0);
         this.ratio = new Vector(0, 0);
         this.cachedImages = {};
@@ -49,16 +50,39 @@ export default class Graphics {
     }
 
     resizeCanvas() {
-        this.ctx.canvas.width = this.width;
-        this.ctx.canvas.height = this.height;
-        this.ratio.x = this.width / this.canvas.clientWidth;
-        this.ratio.y = this.height / this.canvas.clientHeight;
-        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+        let mobile = false;
+        if (mobile) {
+            this.width = window.innerWidth;
+            this.height = window.innerHeight;
+            this.ctx.canvas.width = this.width;
+            this.ctx.canvas.height = this.height;
+
+            this.ratio.x = this.width / this.canvas.clientWidth;
+            this.ratio.y = this.height / this.canvas.clientHeight;
+            this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+
+            let ratioW = window.innerWidth / window.innerHeight;
+            let ratioH = window.innerHeight / window.innerWidth;
+            if (window.innerWidth > window.innerHeight)
+                window.tileSize = (Math.floor(window.innerWidth * ratioH / 6));
+            else
+                window.tileSize = (Math.floor(window.innerHeight * ratioW / 6));
+
+            this.browser.height = window.innerHeight;
+            this.browser.width = window.innerWidth;
+        }
+        else {
+            this.ctx.canvas.width = this.width;
+            this.ctx.canvas.height = this.height;
+            this.ratio.x = this.width / this.canvas.clientWidth;
+            this.ratio.y = this.height / this.canvas.clientHeight;
+            this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+
+            this.browser.height = window.innerHeight;
+            this.browser.width = window.innerWidth;
+        }
 
         this.setStyles();
-
-        this.browser.height = window.innerHeight;
-        this.browser.width = window.innerWidth;
     }
 
     clear() {

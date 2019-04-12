@@ -11,6 +11,7 @@ export default class Main {
     clients: { [name: string]: ClientLocal };
     lobbies: any[];
     mapList: any[];
+    tiles: number;
     menu: Menu;
     localClientId: string;
     localClient: ClientLocal;
@@ -25,6 +26,7 @@ export default class Main {
         this.localClientName = null;
         this.lobbyId = null;
         this.menu = new Menu();
+        this.tiles = 0;
 
     }
 
@@ -32,9 +34,8 @@ export default class Main {
     render() {
         gfx.clear();
         gfx.sprite("bg", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
-
+        this.tiles = 0;
         if (this.localClient) this.localClient.renderLocal();
-
         gfx.sprite("vignette", gfx.width / 2, gfx.height / 2, gfx.width, gfx.height);
 
     }

@@ -2,11 +2,13 @@ import Vector from '../common/Vector';
 import Tile from './Tile';
 import Timer from '../common/Timer';
 import Graphics from '../common/Graphics';
+import Main from '../Main/Main';
 
 declare var time: Timer;
 declare var gfx: Graphics;
 declare var tileSize: number;
 declare var Editor: any;
+declare var main: Main;
 
 export default class Map {
     width: number;
@@ -183,6 +185,7 @@ export default class Map {
                     if (!pass || pass == 1) {
                         if (block.tex && !block.solid) {
                             gfx.sprite(block.tex, px, py, tileSize, tileSize);
+                            main.tiles++;
                         }
 
                         if (block.decals) {
