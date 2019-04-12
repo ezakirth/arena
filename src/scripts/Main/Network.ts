@@ -126,8 +126,9 @@ export default class Network {
                 if (serverClient.networkData.ignoreClientMovement) {
                     client.networkData.reconciliationMovement = [];
                     this.authoring(client, serverClient);
-                    this.sendMovementData(client)
+                    client.savePositionForReconciliation();
                     client.networkData.appliedAuthoring = true;
+                    this.sendMovementData(client)
                 }
                 else {
                     client.networkData.appliedAuthoring = false;
