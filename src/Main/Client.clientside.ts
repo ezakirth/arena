@@ -1,10 +1,10 @@
 import Client from './Client';
 import Vector from '../common/Vector';
-import Map from '../common/Map';
+import Map from '../Map/Map';
 import Input from '../common/Input';
 import Graphics from '../common/Graphics';
 import Timer from '../common/Timer';
-import Game from './Game';
+import Main from './Main';
 import Network from './Network';
 import PositionBuffer from '../types/PositionBuffer';
 
@@ -12,7 +12,7 @@ declare var clamp: Function;
 declare var input: Input;
 declare var gfx: Graphics;
 declare var time: Timer;
-declare var game: Game;
+declare var main: Main;
 declare var map: Map;
 declare var network: Network;
 declare var tileSize: number;
@@ -84,7 +84,7 @@ export default class Clientclientside extends Client {
         this.moving = false;
 
         // if the client is the client, update position based on input
-        if (this.networkData.clientId == game.localClientId) {
+        if (this.networkData.clientId == main.localClientId) {
             this.applyInputs();
         }
         // if the client is not the client (coming from network), interpolate its positions
@@ -147,14 +147,14 @@ export default class Clientclientside extends Client {
 
         this.renderCharacter();
 
-        for (let bullet of game.bullets) {
-            bullet.render();
+        for (let projectile of main.projectiles) {
+            projectile.render();
         }
 
         // render network clients
-        for (let clientId in game.clients) {
-            if (clientId != game.localClientId) {
-                game.clients[clientId].renderNetworkClientCharacter();
+        for (let clientId in main.clients) {
+            if (clientId != main.localClientId) {
+                main.clients[clientId].renderNetworkClientCharacter();
             }
         }
         // second pass
@@ -163,9 +163,9 @@ export default class Clientclientside extends Client {
         this.renderStats();
 
         // render network clients' stats
-        for (let clientId in game.clients) {
-            if (clientId != game.localClientId) {
-                game.clients[clientId].renderNetworkClientStats();
+        for (let clientId in main.clients) {
+            if (clientId != main.localClientId) {
+                main.clients[clientId].renderNetworkClientStats();
             }
         }
 
@@ -174,8 +174,8 @@ export default class Clientclientside extends Client {
     renderNetworkClientCharacter() {
 
         gfx.pushMatrix();
-        let offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize);
-        let offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize);
+        let offsetX = (this.position.x * tileSize - main.clients[main.localClientId].position.x * tileSize);
+        let offsetY = (this.position.y * tileSize - main.clients[main.localClientId].position.y * tileSize);
         gfx.translate(offsetX, offsetY);
 
         this.renderCharacter();
@@ -185,8 +185,8 @@ export default class Clientclientside extends Client {
 
     renderNetworkClientStats() {
         gfx.pushMatrix();
-        let offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize);
-        let offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize);
+        let offsetX = (this.position.x * tileSize - main.clients[main.localClientId].position.x * tileSize);
+        let offsetY = (this.position.y * tileSize - main.clients[main.localClientId].position.y * tileSize);
         gfx.translate(offsetX, offsetY);
 
         this.renderStats();

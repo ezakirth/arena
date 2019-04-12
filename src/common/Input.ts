@@ -1,6 +1,6 @@
 import Vector from './Vector';
 import Timer from './Timer';
-import Map from './Map';
+import Map from '../Map/Map';
 import Graphics from './Graphics';
 
 declare var time: Timer;

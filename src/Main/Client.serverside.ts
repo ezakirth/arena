@@ -1,7 +1,7 @@
 import Client from './Client';
 import Timer from '../common/Timer';
-import Tile from '../types/Tile';
-import Pickups from '../common/Pickups';
+import Tile from '../Map/Tile';
+import Pickups from '../Pickups/Pickups';
 import Vector from '../common/Vector';
 import Server, { clamp } from '../server/Server';
 

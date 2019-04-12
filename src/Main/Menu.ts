@@ -1,7 +1,7 @@
 import Network from "./Network";
-import Game from "./Game";
+import Main from "./Main";
 
-declare var game: Game;
+declare var main: Main;
 declare var network: Network;
 
 var $ = require('jquery');
@@ -30,19 +30,17 @@ export default class Menu {
         $('#clientName').on('blur', function () {
             if (this.value == '') this.value = 'New player';
         });
-
-
     }
 
 
     show() {
         let _this = this;
 
-        game.lobbies.push({ empty: true, id: '' });
+        main.lobbies.push({ empty: true, id: '' });
         $('.lobbyContainer').empty();
 
-        for (let index = 0; index < game.lobbies.length; index++) {
-            let lobby = game.lobbies[index];
+        for (let index = 0; index < main.lobbies.length; index++) {
+            let lobby = main.lobbies[index];
 
             let type = lobby.gameType;
             if (type == "Capture The Flag") type = 'CTF';
@@ -52,7 +50,7 @@ export default class Menu {
             let elem = document.createElement('div');
             elem.className = 'itemLobby';
             if (lobby.empty)
-                elem.innerHTML = 'Create Game';
+                elem.innerHTML = 'Create Main';
             else
                 elem.innerHTML = type + ' - ' + lobby.map + ' (' + lobby.current + '/' + lobby.max + ')';
 
@@ -75,14 +73,14 @@ export default class Menu {
                     }
 
                     window.localStorage.setItem('ARENA_CLIENT_NAME', name);
-                    game.localClientName = name;
+                    main.localClientName = name;
 
                     if (lobby.empty) {
                         _this.showGameTypes();
                         return;
                     }
 
-                    game.lobbyId = lobby.id;
+                    main.lobbyId = lobby.id;
                     network.joinGame('');
                     _this.hide();
 
@@ -109,7 +107,7 @@ export default class Menu {
         DM.onclick = function () { _this.showMaps("Deathmatch"); };
         TDM.onclick = function () { _this.showMaps("Team Deathmatch"); };
         CTF.onclick = function () { _this.showMaps("Capture The Flag"); };
-        back.onclick = function () { game.lobbies.pop(); _this.show() };
+        back.onclick = function () { main.lobbies.pop(); _this.show() };
 
         $('.lobbyContainer').append(DM);
         $('.lobbyContainer').append(TDM);
@@ -120,7 +118,7 @@ export default class Menu {
     showMaps(gameType) {
         $('.lobbyContainer').empty();
         let _this = this;
-        for (let mapInfo of game.mapList) {
+        for (let mapInfo of main.mapList) {
             if (mapInfo.gameType == gameType) {
                 let type = mapInfo.gameType;
                 if (type == "Capture The Flag") type = 'CTF';
@@ -130,7 +128,7 @@ export default class Menu {
                 let mapDiv = $('<div class="itemLobby">' + type + ' - ' + mapInfo.name + ' (' + mapInfo.maxPlayers + ' players)' + '</div>')[0];
                 mapDiv.onclick = function () {
                     $('.lobbyContainer').empty();
-                    game.lobbyId = '';
+                    main.lobbyId = '';
                     network.joinGame(mapInfo.path);
                     _this.hide();
                 }

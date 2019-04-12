@@ -1,4 +1,4 @@
-import Flag from '../types/Flag';
+import Flag from './Flag';
 
 export default class Buffs {
     flag_blue: Flag;

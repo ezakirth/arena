@@ -1,7 +1,7 @@
 {
     "name": "server",
     "version": "0.0.1",
-    "description": "game server",
+    "description": "main server",
     "dependencies": {
         "@types/express": "^4.16.1",
         "@types/socket.io": "^2.1.2",
@@ -18,14 +18,14 @@
     },
     "scripts": {
         "server": "tsc && node ./public/scripts/app.js",
-        "build:game_dev": "browserify ./public/scripts/initGame.js > ./public/gameBundle.js",
+        "build:main_dev": "browserify ./public/scripts/initMain.js > ./public/mainBundle.js",
         "build:editor_dev": "browserify ./public/scripts/initEditor.js > ./public/editorBundle.js",
-        "build:game_prod": "browserify -g uglifyify ./public/scripts/initGame.js > ./public/gameBundle.js",
+        "build:main_prod": "browserify -g uglifyify ./public/scripts/initMain.js > ./public/mainBundle.js",
         "build:editor_prod": "browserify -g uglifyify ./public/scripts/initEditor.js > ./public/editorBundle.js",
-        "build:dev": "tsc && npm run build:game_dev && npm run build:editor_dev",
-        "build:prod": "tsc && npm run build:game_prod && npm run build:editor_prod",
+        "build:dev": "tsc && npm run build:main_dev && npm run build:editor_dev",
+        "build:prod": "tsc && npm run build:main_prod && npm run build:editor_prod",
         "tsc:live": "tsc -w",
-        "live:game": "watchify ./public/scripts/initGame.js -o ./public/gameBundle.js -v",
+        "live:main": "watchify ./public/scripts/initMain.js -o ./public/mainBundle.js -v",
         "live:editor": "watchify ./public/scripts/initEditor.js -o ./public/editorBundle.js -v"
     }
 }

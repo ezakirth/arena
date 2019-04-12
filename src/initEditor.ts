@@ -1,10 +1,10 @@
 
-import Map from './common/Map';
+import Map from './Map/Map';
 import Graphics from './common/Graphics';
 import Input from './common/Input';
 import Timer from './common/Timer';
 import { Editor } from './Editor/EditorBundle';
-import Pickups from './common/Pickups';
+import Pickups from './Pickups/Pickups';
 
 
 declare var window: any;

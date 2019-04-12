@@ -1,10 +1,10 @@
 //import * as io from '/socket.io/socket.io.js';
 import * as io from 'socket.io-client';
 import Client from './Client.clientside';
-import Game from './Game';
-import Map from '../common/Map';
+import Main from './Main';
+import Map from '../Map/Map';
 import Timer from '../common/Timer';
-import Bullet from './Bullet';
+import Projectile from './Projectile';
 import Vector from '../common/Vector';
 import Clientserverside from './Client.serverside';
 import Clientclientside from './Client.clientside';
@@ -13,7 +13,7 @@ import PositionBuffer from '../types/PositionBuffer';
 
 
 //declare var io: Function;
-declare var game: Game;
+declare var main: Main;
 declare var map: Map;
 declare var time: Timer;
 declare var loop: Function;
@@ -46,7 +46,7 @@ export default class Network {
         */
 
         setInterval(function () {
-            let client = game.clients[game.localClientId];
+            let client = main.clients[main.localClientId];
             if (client) {
                 _this.sendMovementData(client);
             }
@@ -57,10 +57,10 @@ export default class Network {
          * serverData : clientId, lobbies, mapList
          */
         this.socket.on('init', function (serverData) {
-            game.localClientId = serverData.clientId;
-            game.lobbies = serverData.lobbies;
-            game.mapList = serverData.mapList;
-            game.menu.show();
+            main.localClientId = serverData.clientId;
+            main.lobbies = serverData.lobbies;
+            main.mapList = serverData.mapList;
+            main.menu.show();
         });
 
         this.socket.on('create', function (serverData) {
@@ -78,16 +78,16 @@ export default class Network {
             _this.updateClient(serverData);
         });
 
-        // bullet updates from the server
-        this.socket.on('bullets', function (bullets) {
-            _this.updateBullets(bullets);
+        // projectile updates from the server
+        this.socket.on('projectiles', function (projectiles) {
+            _this.updateBullets(projectiles);
         });
 
     }
 
 
     joinGame(mapPath: string) {
-        this.socket.emit('join', { clientId: game.localClientId, name: game.localClientName, lobbyId: game.lobbyId, mapPath: mapPath });
+        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapPath: mapPath });
     }
 
     /**
@@ -98,11 +98,11 @@ export default class Network {
         let client = serverData.client;
         let mapInfo = serverData.mapInfo;
         map.parseMap(mapInfo);
-        game.localClient = game.clients[game.localClientId] = new Client(client.name, client.networkData.lobbyId, client.networkData.clientId, client.infos.team, client.position);
+        main.localClient = main.clients[main.localClientId] = new Client(client.name, client.networkData.lobbyId, client.networkData.clientId, client.infos.team, client.position);
     }
 
     deleteClient(clientId: string) {
-        delete game.clients[clientId];
+        delete main.clients[clientId];
     }
 
     updateClient(serverData: any) {
@@ -113,13 +113,13 @@ export default class Network {
         let serverClients = serverData.clients;
         for (let clientId in serverClients) {
             let serverClient: Clientserverside = serverClients[clientId];
-            if (!game.clients[clientId]) {
-                game.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
+            if (!main.clients[clientId]) {
+                main.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
 
-            let client = game.clients[clientId];
+            let client = main.clients[clientId];
 
-            if (clientId == game.localClientId) {
+            if (clientId == main.localClientId) {
                 // if there was movement since the last server update, send it now
                 if (serverClient.networkData.forceNoReconciliation)
                     client.networkData.pendingMovement = [];
@@ -217,48 +217,48 @@ export default class Network {
     }
 
     /**
-     * Shoots a bullet (origin = local)
+     * Shoots a projectile (origin = local)
      * @param client
      */
     shootWeapon(client: Clientclientside) {
-        let bullet: Bullet = null;
+        let projectile: Projectile = null;
 
         if (client.infos.weapon.name == "shotgun") {
-            // random bullets that won't be pushed to server
+            // random projectiles that won't be pushed to server
             for (let i = 0; i < 8; i++) {
                 let ang = (-15 + Math.random() * 30) * Math.PI / 180;
-                bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
-                game.bullets.push(bullet);
+                projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
+                main.projectiles.push(projectile);
             }
-            bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, client.direction, client.infos.weapon);
-            game.bullets.push(bullet);
+            projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, client.direction, client.infos.weapon);
+            main.projectiles.push(projectile);
         }
         else {
             let ang = 0;
             if (client.infos.weapon.name == "blastgun")
                 ang = (-5 + Math.random() * 10) * Math.PI / 180;
-            bullet = new Bullet(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
-            game.bullets.push(bullet);
+            projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
+            main.projectiles.push(projectile);
         }
-        this.socket.emit('shoot', bullet);
+        this.socket.emit('shoot', projectile);
     }
 
     /**
-     * Adds a bullet (origin = server)
-     * @param bullets
+     * Adds a projectile (origin = server)
+     * @param projectiles
      */
-    updateBullets(bullets: Bullet[]) {
-        for (let bullet of bullets) {
-            if (bullet.clientId != game.localClientId) {
-                let newBullet = new Bullet(bullet.lobbyId, bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
-                game.bullets.push(newBullet);
+    updateBullets(projectiles: Projectile[]) {
+        for (let projectile of projectiles) {
+            if (projectile.clientId != main.localClientId) {
+                let newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
+                main.projectiles.push(newBullet);
 
-                if (bullet.type.name == "shotgun") {
-                    // random bullets that won't be pushed to server
+                if (projectile.type.name == "shotgun") {
+                    // random projectiles that won't be pushed to server
                     for (let i = 0; i < 8; i++) {
                         let ang = (-15 + Math.random() * 30) * Math.PI / 180;
-                        newBullet = new Bullet(bullet.lobbyId, bullet.clientId, bullet.targetTeam, bullet.position, Vector._rotate(bullet.direction, ang), bullet.type);
-                        game.bullets.push(newBullet);
+                        newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, Vector._rotate(projectile.direction, ang), projectile.type);
+                        main.projectiles.push(newBullet);
                     }
                 }
             }

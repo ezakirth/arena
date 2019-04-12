@@ -1,7 +1,7 @@
-import Vector from './Vector';
-import Tile from '../types/Tile';
-import Timer from './Timer';
-import Graphics from './Graphics';
+import Vector from '../common/Vector';
+import Tile from './Tile';
+import Timer from '../common/Timer';
+import Graphics from '../common/Graphics';
 
 declare var time: Timer;
 declare var gfx: Graphics;

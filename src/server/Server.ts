@@ -1,8 +1,8 @@
 export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-import Map from '../common/Map';
+import Map from '../Map/Map';
 import Timer from '../common/Timer';
-import Bullet from '../Game/Bullet';
-import Clientserverside from '../Game/Client.serverside';
+import Projectile from '../Main/Projectile';
+import Clientserverside from '../Main/Client.serverside';
 import Lobby from './Lobby';
 import Vector from '../common/Vector';
 import FileSystem = require("fs");
@@ -140,12 +140,12 @@ export default class Server {
 
 
 
-    shootBullet(bullet: Bullet) {
-        let lobby = this.lobbies[bullet.lobbyId];
+    shootBullet(projectile: Projectile) {
+        let lobby = this.lobbies[projectile.lobbyId];
 
-        let newBullet = new Bullet(bullet.lobbyId, bullet.clientId, bullet.targetTeam, bullet.position, bullet.direction, bullet.type);
+        let newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
         lobby.newBullets.push(newBullet);
-        lobby.bullets.push(newBullet);
+        lobby.projectiles.push(newBullet);
     }
 
 
@@ -163,26 +163,26 @@ export default class Server {
     updateBullets() {
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
-            // if there are new bullets, send them to the clients
+            // if there are new projectiles, send them to the clients
             if (lobby.newBullets.length > 0) {
-                this.io.to(lobbyId).emit('bullets', lobby.newBullets);
+                this.io.to(lobbyId).emit('projectiles', lobby.newBullets);
                 lobby.newBullets = [];
             }
 
-            // update all bullets
-            for (let index = lobby.bullets.length - 1; index >= 0; index--) {
-                let bullet = lobby.bullets[index];
-                if (bullet.active) {
-                    bullet.update();
+            // update all projectiles
+            for (let index = lobby.projectiles.length - 1; index >= 0; index--) {
+                let projectile = lobby.projectiles[index];
+                if (projectile.active) {
+                    projectile.update();
 
                     // if one hits a client or a wall, remove it
                     for (let clientId in lobby.clients) {
                         let client = lobby.clients[clientId];
-                        if (bullet.hitTest(client, true)) break;
+                        if (projectile.hitTest(client, true)) break;
                     }
 
                 } else {
-                    lobby.bullets.splice(index, 1);
+                    lobby.projectiles.splice(index, 1);
                 }
             }
         }

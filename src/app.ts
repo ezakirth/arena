@@ -15,11 +15,11 @@ const io = socketIO(http);
 
 import Server from './server/Server';
 
-import Map from './common/Map';
-import Pickups from './common/Pickups';
+import Map from './Map/Map';
+import Pickups from './Pickups/Pickups';
 import Timer from './common/Timer';
 import FileSystem = require("fs");
-import Bullet from './Game/Bullet';
+import Projectile from './Main/Projectile';
 import MovementData from './types/MovementData';
 
 
@@ -57,8 +57,8 @@ io.on('connection', function (socket: SocketIO.Socket) {
         server.createClient(socket, clientData);
     });
 
-    socket.on('shoot', function (bullet: Bullet) {
-        server.shootBullet(bullet);
+    socket.on('shoot', function (projectile: Projectile) {
+        server.shootBullet(projectile);
     });
 
     socket.on('update', function (movementData: MovementData) {

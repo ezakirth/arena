@@ -1,7 +1,7 @@
 var $ = require('jquery');
 
-import Tile from '../types/Tile';
-import Map from '../common/Map';
+import Tile from '../Map/Tile';
+import Map from '../Map/Map';
 import Input from '../common/Input';
 import Graphics from '../common/Graphics';
 declare var clamp: Function;
@@ -149,7 +149,7 @@ export const Editor = {
         Editor.addEditorItem([{ block: "Terrain", block_id: "block_terrain" }]);
         Editor.addEditorItem([{ block_id: "block_terrain", type: "text", label: "Name", value: 'New map' }]);
         Editor.addEditorItem([{
-            block_id: "block_terrain", type: "select", label: "Game type", list: [
+            block_id: "block_terrain", type: "select", label: "Main type", list: [
                 { text: "Deathmatch" }, { text: "Team Deathmatch" }, { text: "Capture The Flag" }
             ]
         }]);

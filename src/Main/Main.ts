@@ -1,13 +1,13 @@
 import Clientclientside from './Client.clientside';
 import Graphics from '../common/Graphics';
-import Bullet from './Bullet';
+import Projectile from './Projectile';
 import Menu from './Menu';
 
 declare var gfx: Graphics
 
 
-export default class Game {
-    bullets: Bullet[];
+export default class Main {
+    projectiles: Projectile[];
     clients: { [name: string]: Clientclientside };
     lobbies: any[];
     mapList: any[];
@@ -18,7 +18,7 @@ export default class Game {
     lobbyId: string;
     constructor() {
         this.clients = {};
-        this.bullets = [];
+        this.projectiles = [];
         this.lobbies = [];
         this.localClientId = null;
         this.localClient = null;
@@ -44,19 +44,19 @@ export default class Game {
             this.clients[clientId].update();
         }
 
-        for (let index = this.bullets.length - 1; index >= 0; index--) {
-            let bullet = this.bullets[index];
-            if (bullet.active) {
-                bullet.update();
+        for (let index = this.projectiles.length - 1; index >= 0; index--) {
+            let projectile = this.projectiles[index];
+            if (projectile.active) {
+                projectile.update();
 
                 for (let clientId in this.clients) {
                     let client = this.clients[clientId];
-                    if (bullet.hitTest(client, false)) break;
+                    if (projectile.hitTest(client, false)) break;
                 }
 
             }
             else {
-                this.bullets.splice(index, 1);
+                this.projectiles.splice(index, 1);
             }
         }
     }

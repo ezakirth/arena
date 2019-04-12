@@ -1,4 +1,4 @@
-import Buff from '../types/Buff';
+import Buff from './Buff';
 
 export default class Buffs {
     medkit: Buff;

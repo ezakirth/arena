@@ -13,6 +13,6 @@ export default class Tile {
     spawn: string;
     // contains portal information (color and destination)
     portal: any;
-    // contains dropped flag texture, only used during game
+    // contains dropped flag texture, only used during main
     flag: string;
 }

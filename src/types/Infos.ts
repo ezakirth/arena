@@ -1,4 +1,4 @@
-import Weapon from "./Weapon";
+import Weapon from "../Pickups/Weapon";
 
 export default class Infos {
     life: number;

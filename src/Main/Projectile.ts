@@ -1,15 +1,15 @@
 import Vector from '../common/Vector';
-import Pickups from '../common/Pickups';
-import Game from './Game';
-import Map from '../common/Map';
+import Pickups from '../Pickups/Pickups';
+import Main from './Main';
+import Map from '../Map/Map';
 import Timer from '../common/Timer';
 import Graphics from '../common/Graphics';
 import Client from './Client';
 import Server from '../server/Server';
 import Clientserverside from './Client.serverside';
-import Weapon from '../types/Weapon';
+import Weapon from '../Pickups/Weapon';
 
-declare var game: Game;
+declare var main: Main;
 declare var map: Map;
 declare var gfx: Graphics;
 declare var pickups: Pickups;
@@ -18,9 +18,9 @@ declare var tileSize: number;
 declare var time: Timer;
 declare var server: Server;
 /**
- * Handles a bullet
+ * Handles a projectile
  */
-export default class Bullet {
+export default class Projectile {
     direction: Vector;
     position: Vector;
     type: Weapon;
@@ -50,8 +50,8 @@ export default class Bullet {
     render() {
         if (this.active) {
             gfx.pushMatrix();
-            let offsetX = (this.position.x * tileSize - game.clients[game.localClientId].position.x * tileSize) + gfx.width / 2;
-            let offsetY = (this.position.y * tileSize - game.clients[game.localClientId].position.y * tileSize) + gfx.height / 2;
+            let offsetX = (this.position.x * tileSize - main.clients[main.localClientId].position.x * tileSize) + gfx.width / 2;
+            let offsetY = (this.position.y * tileSize - main.clients[main.localClientId].position.y * tileSize) + gfx.height / 2;
             gfx.translate(offsetX, offsetY);
 
             gfx.ctx.globalAlpha = this.curve;

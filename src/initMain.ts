@@ -1,11 +1,11 @@
 
-import Map from './common/Map';
+import Map from './Map/Map';
 import Graphics from './common/Graphics';
 import Input from './common/Input';
 import Timer from './common/Timer';
-import Game from './Game/Game';
-import Network from './Game/Network';
-import Pickups from './common/Pickups';
+import Main from './Main/Main';
+import Network from './Main/Network';
+import Pickups from './Pickups/Pickups';
 
 
 declare var window: any;
@@ -20,7 +20,7 @@ window.time = new Timer();
 window.map = new Map();
 window.input = new Input();
 window.network = new Network();
-window.game = new Game();
+window.main = new Main();
 window.pickups = new Pickups();
 
 
@@ -29,11 +29,11 @@ window.loop = function () {
     requestAnimationFrame(loop);
     window.time.update();
 
-    if (window.game.localClient) {
+    if (window.main.localClient) {
         // graphics
-        window.game.render();
+        window.main.render();
         // logic
-        window.game.update();
+        window.main.update();
     }
 }
 
