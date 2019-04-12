@@ -17,7 +17,8 @@
         "watchify": "^3.11.1"
     },
     "scripts": {
-        "server": "tsc && node ./public/scripts/app.js",
+        "start": "node ./public/app.js",
+        "server": "tsc && node ./public/app.js",
         "build:main_dev": "browserify ./public/scripts/initMain.js > ./public/mainBundle.js",
         "build:editor_dev": "browserify ./public/scripts/initEditor.js > ./public/editorBundle.js",
         "build:main_prod": "browserify -g uglifyify ./public/scripts/initMain.js > ./public/mainBundle.js",

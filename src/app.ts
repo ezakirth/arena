@@ -5,22 +5,22 @@ const PORT = process.env.PORT || 3000;
 
 const root = path.resolve(__dirname, '..');
 
-const INDEX = path.join(root, './index.html');
+const INDEX = path.join(__dirname, '/index.html');
 const http = express()
     .use(express.static('/*'))
     .get('/', (req, res) => res.sendFile(INDEX))
-    .get('/*', (req, res, next) => res.sendFile(root + '/' + req.params[0]))
+    .get('/*', (req, res, next) => res.sendFile(__dirname + '/' + req.params[0]))
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socketIO(http);
 
-import Server from './server/Server';
+import Server from './scripts/server/Server';
 
-import Map from './Map/Map';
-import Pickups from './Pickups/Pickups';
-import Timer from './common/Timer';
+import Map from './scripts/Map/Map';
+import Pickups from './scripts/Pickups/Pickups';
+import Timer from './scripts/common/Timer';
 import FileSystem = require("fs");
-import Projectile from './Main/Projectile';
-import MovementData from './Client/MovementData';
+import Projectile from './scripts/Main/Projectile';
+import MovementData from './scripts/Client/MovementData';
 
 
 
@@ -33,8 +33,8 @@ global.pickups = new Pickups();
 global.time = new Timer();
 global.server = new Server(io);
 
-FileSystem.readdirSync(root + '/maps/').forEach(file => {
-    let mapPath = root + '/maps/' + file;
+FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
+    let mapPath = __dirname + '/maps/' + file;
     let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
 
     let mapInfo = {

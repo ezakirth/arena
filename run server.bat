@@ -7,5 +7,5 @@ TITLE nodeServer
 
 TASKKILL /PID %PID%
 
-node ./public/scripts/app.js
+node ./public/app.js
 pause
