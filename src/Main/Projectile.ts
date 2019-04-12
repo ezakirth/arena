@@ -4,9 +4,9 @@ import Main from './Main';
 import Map from '../Map/Map';
 import Timer from '../common/Timer';
 import Graphics from '../common/Graphics';
-import Client from './Client';
+import Client from '../Client/Client';
 import Server from '../server/Server';
-import Clientserverside from './Client.serverside';
+import ClientServer from '../Client/Client.server';
 import Weapon from '../Pickups/Weapon';
 
 declare var main: Main;

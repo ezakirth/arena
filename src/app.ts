@@ -20,7 +20,7 @@ import Pickups from './Pickups/Pickups';
 import Timer from './common/Timer';
 import FileSystem = require("fs");
 import Projectile from './Main/Projectile';
-import MovementData from './types/MovementData';
+import MovementData from './Client/MovementData';
 
 
 

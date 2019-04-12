@@ -2,11 +2,11 @@ export const clamp = (num: number, min: number, max: number): number => Math.min
 import Map from '../Map/Map';
 import Timer from '../common/Timer';
 import Projectile from '../Main/Projectile';
-import Clientserverside from '../Main/Client.serverside';
+import ClientServer from '../Client/Client.server';
 import Lobby from './Lobby';
 import Vector from '../common/Vector';
 import FileSystem = require("fs");
-import MovementData from '../types/MovementData';
+import MovementData from '../Client/MovementData';
 
 declare var time: Timer;
 
@@ -56,7 +56,7 @@ export default class Server {
         let team = (lobby.teams.blue.length >= lobby.teams.green.length ? 'green' : 'blue');
         lobby.teams[team].push(clientData.clientId);
 
-        let client = new Clientserverside(clientData.name, lobby.id, clientData.clientId, team, lobby.map.assignSpawnToClient(team));
+        let client = new ClientServer(clientData.name, lobby.id, clientData.clientId, team, lobby.map.assignSpawnToClient(team));
         lobby.clients[clientData.clientId] = client;
 
         let data = {
@@ -192,7 +192,7 @@ export default class Server {
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
             for (let clientId in lobby.clients) {
-                let client: Clientserverside = lobby.clients[clientId];
+                let client: ClientServer = lobby.clients[clientId];
                 client.update();
             }
         }

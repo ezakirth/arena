@@ -1,9 +1,9 @@
 import Vector from '../common/Vector';
 import Map from '../Map/Map';
 import Pickups from '../Pickups/Pickups';
-import Infos from '../types/Infos';
-import MovementData from '../types/MovementData';
-import NetworkData from '../types/NetworkData';
+import Infos from './Infos';
+import MovementData from './MovementData';
+import NetworkData from './NetworkData';
 
 declare var pickups: Pickups;
 declare var map: Map;
@@ -27,8 +27,8 @@ export default class Client {
         this.direction = new Vector(1, 0);
         this.position = new Vector(position.x, position.y);
         this.name = name;
-        this.infos = new Infos(100, 0, false, pickups.weapons.gun, 0, .05, false, team);
 
+        this.infos = new Infos(100, 0, false, pickups.weapons.gun, 0, .05, false, team);
         this.networkData = new NetworkData(lobbyId, clientId, new Vector(this.position.x, this.position.y), new Vector(this.direction.x, this.direction.y), 0, false, [], []);
 
         this.justUsedPortal = false;

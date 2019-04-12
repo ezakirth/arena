@@ -1,11 +1,11 @@
 import Map from "../Map/Map";
 import UUIDV1 = require('uuid/v1');
-import Clientserverside from "../Main/Client.serverside";
+import ClientServer from "../Client/Client.server";
 import Projectile from "../Main/Projectile";
 
 export default class Lobby {
     id: string;
-    clients: { [name: string]: Clientserverside };
+    clients: { [name: string]: ClientServer };
     teams: any;
     projectiles: Projectile[];
     newBullets: Projectile[];

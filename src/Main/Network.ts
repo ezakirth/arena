@@ -1,15 +1,15 @@
 //import * as io from '/socket.io/socket.io.js';
 import * as io from 'socket.io-client';
-import Client from './Client.clientside';
+import Client from '../Client/Client.local';
 import Main from './Main';
 import Map from '../Map/Map';
 import Timer from '../common/Timer';
 import Projectile from './Projectile';
 import Vector from '../common/Vector';
-import Clientserverside from './Client.serverside';
-import Clientclientside from './Client.clientside';
-import MovementData from '../types/MovementData';
-import PositionBuffer from '../types/PositionBuffer';
+import ClientServer from '../Client/Client.server';
+import ClientLocal from '../Client/Client.local';
+import MovementData from '../Client/MovementData';
+import PositionBuffer from '../Client/PositionBuffer';
 
 
 //declare var io: Function;
@@ -112,7 +112,7 @@ export default class Network {
 
         let serverClients = serverData.clients;
         for (let clientId in serverClients) {
-            let serverClient: Clientserverside = serverClients[clientId];
+            let serverClient: ClientServer = serverClients[clientId];
             if (!main.clients[clientId]) {
                 main.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
@@ -140,10 +140,10 @@ export default class Network {
 
     /**
      * Apply the authoritative position of this client's client.
-     * @param {Clientclientside} client
-     * @param {Clientserverside} serverClient
+     * @param {ClientLocal} client
+     * @param {ClientServer} serverClient
      */
-    authoring(client: Clientclientside, serverClient: Clientserverside) {
+    authoring(client: ClientLocal, serverClient: ClientServer) {
         client.position.set(serverClient.position.x, serverClient.position.y);
         client.direction.set(serverClient.direction.x, serverClient.direction.y);
         client.infos.apply(serverClient.infos);
@@ -157,10 +157,10 @@ export default class Network {
 
     /**
      * Server Reconciliation. Re-apply all the inputs not yet processed by the server.
-     * @param {Clientclientside} client
-     * @param {Clientserverside} serverClient
+     * @param {ClientLocal} client
+     * @param {ClientServer} serverClient
      */
-    reconciliation(client: Clientclientside, serverClient: Clientserverside) {
+    reconciliation(client: ClientLocal, serverClient: ClientServer) {
         var j = 0;
         while (j < client.networkData.pendingMovement.length) {
             let movementData = client.networkData.pendingMovement[j];
@@ -179,10 +179,10 @@ export default class Network {
 
     /**
      * Add the position of non local clients to the position buffer.
-     * @param {Clientclientside} client
-     * @param {Clientserverside} serverClient
+     * @param {ClientLocal} client
+     * @param {ClientServer} serverClient
      */
-    clientsPositionBuffer(client: Clientclientside, serverClient: Clientserverside) {
+    clientsPositionBuffer(client: ClientLocal, serverClient: ClientServer) {
         let timestamp = +new Date();
         time.setServerDelay(timestamp);
 
@@ -196,7 +196,7 @@ export default class Network {
             client.networkData.positionBuffer.push(new PositionBuffer(timestamp, serverClient.position, serverClient.direction));
     }
 
-    sendMovementData(client: Clientclientside) {
+    sendMovementData(client: ClientLocal) {
         // get movement since last one sent to server
         let deltaPosition = new Vector(client.position.x - client.networkData.lastPosition.x, client.position.y - client.networkData.lastPosition.y);
         let deltaDirection = new Vector(client.direction.x - client.networkData.lastDirection.x, client.direction.y - client.networkData.lastDirection.y);
@@ -220,7 +220,7 @@ export default class Network {
      * Shoots a projectile (origin = local)
      * @param client
      */
-    shootWeapon(client: Clientclientside) {
+    shootWeapon(client: ClientLocal) {
         let projectile: Projectile = null;
 
         if (client.infos.weapon.name == "shotgun") {

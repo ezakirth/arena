@@ -9,7 +9,7 @@ declare var server: Server;
 declare var time: Timer;
 declare var pickups: Pickups;
 
-export default class Clientserverside extends Client {
+export default class ClientServer extends Client {
     lastGoodPos: Vector;
     constructor(name, lobbyId, clientId, team, position) {
         super(name, lobbyId, clientId, team, position);

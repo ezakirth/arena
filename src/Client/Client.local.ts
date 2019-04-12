@@ -4,9 +4,9 @@ import Map from '../Map/Map';
 import Input from '../common/Input';
 import Graphics from '../common/Graphics';
 import Timer from '../common/Timer';
-import Main from './Main';
-import Network from './Network';
-import PositionBuffer from '../types/PositionBuffer';
+import Main from '../Main/Main';
+import Network from '../Main/Network';
+import PositionBuffer from './PositionBuffer';
 
 declare var clamp: Function;
 declare var input: Input;
@@ -19,7 +19,7 @@ declare var tileSize: number;
 
 
 
-export default class Clientclientside extends Client {
+export default class ClientLocal extends Client {
     dirSide: Vector;
     canShoot: boolean;
     lastShot: number;
@@ -103,7 +103,7 @@ export default class Clientclientside extends Client {
 
     interpolatePositions() {
         // Find the two authoritative positions surrounding the rendering timestamp.
-        var buffer: PositionBuffer[] = this.networkData.positionBuffer;
+        let buffer: PositionBuffer[] = this.networkData.positionBuffer;
 
         // Drop positions older than 100ms.
         while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
@@ -113,17 +113,17 @@ export default class Clientclientside extends Client {
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
         if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
-            var x0 = buffer[0].position.x;
-            var y0 = buffer[0].position.y;
-            var dx0 = buffer[0].direction.x;
-            var dy0 = buffer[0].direction.y;
-            var t0 = buffer[0].timestamp;
+            let x0 = buffer[0].position.x;
+            let y0 = buffer[0].position.y;
+            let dx0 = buffer[0].direction.x;
+            let dy0 = buffer[0].direction.y;
+            let t0 = buffer[0].timestamp;
 
-            var x1 = buffer[1].position.x;
-            var y1 = buffer[1].position.y;
-            var dx1 = buffer[1].direction.x;
-            var dy1 = buffer[1].direction.y;
-            var t1 = buffer[1].timestamp;
+            let x1 = buffer[1].position.x;
+            let y1 = buffer[1].position.y;
+            let dx1 = buffer[1].direction.x;
+            let dy1 = buffer[1].direction.y;
+            let t1 = buffer[1].timestamp;
 
             this.position.set(x0 + (x1 - x0) * (time.serverRenderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
             this.direction.set(dx0 + (dx1 - dx0) * (time.serverRenderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverRenderTimestamp - t0) / (t1 - t0));

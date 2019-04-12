@@ -1,4 +1,4 @@
-import Clientclientside from './Client.clientside';
+import ClientLocal from '../Client/Client.local';
 import Graphics from '../common/Graphics';
 import Projectile from './Projectile';
 import Menu from './Menu';
@@ -8,12 +8,12 @@ declare var gfx: Graphics
 
 export default class Main {
     projectiles: Projectile[];
-    clients: { [name: string]: Clientclientside };
+    clients: { [name: string]: ClientLocal };
     lobbies: any[];
     mapList: any[];
     menu: Menu;
     localClientId: string;
-    localClient: Clientclientside;
+    localClient: ClientLocal;
     localClientName: string;
     lobbyId: string;
     constructor() {
