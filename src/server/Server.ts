@@ -1,12 +1,12 @@
 export const clamp = (num: number, min: number, max: number): number => Math.min(Math.max(num, min), max);
-import Map from './common/Map';
-import Timer from './common/Timer';
-import Bullet from './Game/Bullet';
-import Clientserverside from './Game/Client.serverside';
+import Map from '../common/Map';
+import Timer from '../common/Timer';
+import Bullet from '../Game/Bullet';
+import Clientserverside from '../Game/Client.serverside';
 import Lobby from './Lobby';
-import Vector from './common/Vector';
+import Vector from '../common/Vector';
 import FileSystem = require("fs");
-import MovementData from './types/MovementData';
+import MovementData from '../types/MovementData';
 
 declare var time: Timer;
 

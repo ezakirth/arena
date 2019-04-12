@@ -3,7 +3,7 @@ import Timer from '../common/Timer';
 import Tile from '../types/Tile';
 import Pickups from '../common/Pickups';
 import Vector from '../common/Vector';
-import Server, { clamp } from '../Server';
+import Server, { clamp } from '../server/Server';
 
 declare var server: Server;
 declare var time: Timer;

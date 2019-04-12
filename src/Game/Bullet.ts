@@ -5,7 +5,7 @@ import Map from '../common/Map';
 import Timer from '../common/Timer';
 import Graphics from '../common/Graphics';
 import Client from './Client';
-import Server from '../Server';
+import Server from '../server/Server';
 import Clientserverside from './Client.serverside';
 import Weapon from '../types/Weapon';
 

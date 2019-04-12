@@ -13,7 +13,7 @@ const http = express()
     .listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socketIO(http);
 
-import Server from './Server';
+import Server from './server/Server';
 
 import Map from './common/Map';
 import Pickups from './common/Pickups';

@@ -1,7 +1,7 @@
-import Map from "./common/Map";
+import Map from "../common/Map";
 import UUIDV1 = require('uuid/v1');
-import Clientserverside from "./Game/Client.serverside";
-import Bullet from "./Game/Bullet";
+import Clientserverside from "../Game/Client.serverside";
+import Bullet from "../Game/Bullet";
 
 export default class Lobby {
     id: string;
