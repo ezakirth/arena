@@ -127,8 +127,7 @@ export default class Network {
                     client.networkData.reconciliationMovement = [];
                     this.authoring(client, serverClient);
                     client.savePositionForReconciliation();
-                    client.networkData.appliedAuthoring = true;
-                    this.sendMovementData(client)
+                    this.socket.emit('update', new MovementData(new Vector(0, 0), new Vector(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
                 }
                 else {
                     client.networkData.appliedAuthoring = false;
@@ -208,15 +207,12 @@ export default class Network {
 
 
         // If there was movement, notify the server
-        if (client.networkData.appliedAuthoring || Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
+        if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
             client.savePositionForReconciliation();
             // send movement to server for validation
-            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.appliedAuthoring, client.networkData.lobbyId);
+            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, false, client.networkData.lobbyId);
 
             this.socket.emit('update', movementData);
-
-
-            client.networkData.appliedAuthoring = false;
 
             // store movements for later reconciliation
             client.networkData.reconciliationMovement.push(movementData);
