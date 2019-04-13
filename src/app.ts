@@ -1,6 +1,7 @@
 import express = require('express');
 import socketIO = require('socket.io');
 import path = require('path');
+import UUIDV1 = require('uuid/v1');
 const PORT = process.env.PORT || 3000;
 
 const root = path.resolve(__dirname, '..');
@@ -38,6 +39,7 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
     let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
 
     let mapInfo = {
+        id: UUIDV1(),
         name: map.name,
         gameType: map.gameType,
         maxPlayers: map.maxPlayers,
@@ -47,7 +49,15 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
         path: mapPath
     }
 
-    server.maps.push(mapInfo);
+    let mapInfoForClients = {
+        id: mapInfo.id,
+        name: mapInfo.name,
+        gameType: mapInfo.gameType,
+        maxPlayers: mapInfo.maxPlayers
+    }
+
+    server.mapsInfo.push(mapInfo);
+    server.mapsInfoForClients.push(mapInfoForClients);
 });
 
 io.on('connection', function (socket: SocketIO.Socket) {

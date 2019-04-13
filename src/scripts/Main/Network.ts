@@ -84,8 +84,8 @@ export default class Network {
     }
 
 
-    joinGame(mapPath: string) {
-        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapPath: mapPath });
+    joinGame(mapId: string) {
+        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapId: mapId });
     }
 
     /**
@@ -104,8 +104,7 @@ export default class Network {
     }
 
     updateClient(serverData: any) {
-        time.serverUpdateTimestamp = +new Date();//serverData.timestamp;
-        time.setServerDelay(time.serverUpdateTimestamp);//serverData.timestamp);
+        time.updateServerDelay();//serverData.timestamp);
 
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();

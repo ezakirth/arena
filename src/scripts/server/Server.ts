@@ -14,27 +14,30 @@ export default class Server {
     io: SocketIO.Server;
     lobbies: { [name: string]: Lobby };
 
-    maps: any[];
+    mapsInfo: any[];
+    mapsInfoForClients: any[];
 
     constructor(io: SocketIO.Server) {
         this.io = io;
 
         this.lobbies = {};
 
-        this.maps = [];
+        this.mapsInfo = [];
 
+        this.mapsInfoForClients = [];
 
     }
 
-    welcome(socket) {
+    welcome(socket: SocketIO.Socket) {
         let lobbies = [];
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
 
-            lobbies.push({ id: lobby.id, map: lobby.map.name, gameType: lobby.map.gameType, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
+            lobbies.push({ id: lobby.id, mapId: lobby.mapId, map: lobby.map.name, gameType: lobby.map.gameType, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
 
         }
-        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.maps });
+
+        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.mapsInfoForClients });
     }
 
     /**
@@ -42,13 +45,19 @@ export default class Server {
      * @param socket
      * @param clientData (clientId, name, lobbyId)
      */
-    createClient(socket: SocketIO.Socket, clientData) {
-        //
+    createClient(socket: SocketIO.Socket, clientData: any) {
         let lobby = this.lobbies[clientData.lobbyId];
         if (!lobby) {
-            let mapPath = clientData.mapPath;
-            let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()))
-            lobby = new Lobby(map);
+            let mapId = clientData.mapId;
+
+            for (let mapInfo of this.mapsInfo) {
+                if (mapInfo.id == mapId) {
+                    let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapInfo.path).toString()))
+                    lobby = new Lobby(map, mapInfo.id);
+                    break;
+                }
+            }
+
             this.lobbies[lobby.id] = lobby;
         }
         socket.join(lobby.id);

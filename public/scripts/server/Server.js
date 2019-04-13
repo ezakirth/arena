@@ -11,15 +11,16 @@ var Server = /** @class */ (function () {
     function Server(io) {
         this.io = io;
         this.lobbies = {};
-        this.maps = [];
+        this.mapsInfo = [];
+        this.mapsInfoForClients = [];
     }
     Server.prototype.welcome = function (socket) {
         var lobbies = [];
         for (var lobbyId in this.lobbies) {
             var lobby = this.lobbies[lobbyId];
-            lobbies.push({ id: lobby.id, map: lobby.map.name, gameType: lobby.map.gameType, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
+            lobbies.push({ id: lobby.id, mapId: lobby.mapId, map: lobby.map.name, gameType: lobby.map.gameType, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
         }
-        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.maps });
+        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.mapsInfoForClients });
     };
     /**
      * Called when client wants to join a lobby
@@ -27,12 +28,17 @@ var Server = /** @class */ (function () {
      * @param clientData (clientId, name, lobbyId)
      */
     Server.prototype.createClient = function (socket, clientData) {
-        //
         var lobby = this.lobbies[clientData.lobbyId];
         if (!lobby) {
-            var mapPath = clientData.mapPath;
-            var map = new Map_1.default().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
-            lobby = new Lobby_1.default(map);
+            var mapId = clientData.mapId;
+            for (var _i = 0, _a = this.mapsInfo; _i < _a.length; _i++) {
+                var mapInfo = _a[_i];
+                if (mapInfo.id == mapId) {
+                    var map = new Map_1.default().parseMap(JSON.parse(FileSystem.readFileSync(mapInfo.path).toString()));
+                    lobby = new Lobby_1.default(map, mapInfo.id);
+                    break;
+                }
+            }
             this.lobbies[lobby.id] = lobby;
         }
         socket.join(lobby.id);

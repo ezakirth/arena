@@ -60,8 +60,8 @@ var Network = /** @class */ (function () {
             _this.updateBullets(projectiles);
         });
     };
-    Network.prototype.joinGame = function (mapPath) {
-        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapPath: mapPath });
+    Network.prototype.joinGame = function (mapId) {
+        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapId: mapId });
     };
     /**
      * Load map from server and add local client
@@ -77,8 +77,7 @@ var Network = /** @class */ (function () {
         delete main.clients[clientId];
     };
     Network.prototype.updateClient = function (serverData) {
-        time.serverUpdateTimestamp = +new Date(); //serverData.timestamp;
-        time.setServerDelay(time.serverUpdateTimestamp); //serverData.timestamp);
+        time.updateServerDelay(); //serverData.timestamp);
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
         var serverClients = serverData.clients;

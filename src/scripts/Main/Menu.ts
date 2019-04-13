@@ -81,7 +81,7 @@ export default class Menu {
                     }
 
                     main.lobbyId = lobby.id;
-                    network.joinGame('');
+                    network.joinGame(lobby.mapId);
                     _this.hide();
 
                 };
@@ -129,7 +129,7 @@ export default class Menu {
                 mapDiv.onclick = function () {
                     $('.lobbyContainer').empty();
                     main.lobbyId = '';
-                    network.joinGame(mapInfo.path);
+                    network.joinGame(mapInfo.id);
                     _this.hide();
                 }
                 $('.lobbyContainer').append(mapDiv);

@@ -19180,14 +19180,13 @@ var ClientLocal = /** @class */ (function (_super) {
         // Find the two authoritative positions surrounding the rendering timestamp.
         var buffer = this.networkData.positionBuffer;
         // Drop positions older than 100ms.
-        //      serverRenderTimestamp
-        //        serverUpdateTimestamp
-        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverTimeSincelastUpdate) {
+        while (buffer.length > 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
             buffer.shift();
         }
+        console.log(buffer.length);
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverTimeSincelastUpdate && buffer[1].timestamp >= time.serverTimeSincelastUpdate) {
+        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
             var x0 = buffer[0].position.x;
             var y0 = buffer[0].position.y;
             var dx0 = buffer[0].direction.x;
@@ -19199,8 +19198,8 @@ var ClientLocal = /** @class */ (function (_super) {
             var dy1 = buffer[1].direction.y;
             var t1 = buffer[1].timestamp;
             var lastServerUpdate = time.now - (t1 - t0);
-            this.position.set(x0 + (x1 - x0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0));
-            this.direction.set(dx0 + (dx1 - dx0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0));
+            this.position.set(x0 + (x1 - x0) * (time.serverRenderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
+            this.direction.set(dx0 + (dx1 - dx0) * (time.serverRenderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
             if (!(x0 == x1 && y0 == y1))
                 this.moving = true;
         }
@@ -19520,7 +19519,7 @@ var Menu = /** @class */ (function () {
                         return;
                     }
                     main.lobbyId = lobby.id;
-                    network.joinGame('');
+                    network.joinGame(lobby.mapId);
                     _this.hide();
                 };
             }
@@ -19566,7 +19565,7 @@ var Menu = /** @class */ (function () {
                 mapDiv.onclick = function () {
                     $('.lobbyContainer').empty();
                     main.lobbyId = '';
-                    network.joinGame(mapInfo.path);
+                    network.joinGame(mapInfo.id);
                     _this.hide();
                 };
                 $('.lobbyContainer').append(mapDiv);
@@ -19647,8 +19646,8 @@ var Network = /** @class */ (function () {
             _this.updateBullets(projectiles);
         });
     };
-    Network.prototype.joinGame = function (mapPath) {
-        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapPath: mapPath });
+    Network.prototype.joinGame = function (mapId) {
+        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapId: mapId });
     };
     /**
      * Load map from server and add local client
@@ -19664,8 +19663,7 @@ var Network = /** @class */ (function () {
         delete main.clients[clientId];
     };
     Network.prototype.updateClient = function (serverData) {
-        time.serverUpdateTimestamp = +new Date(); //serverData.timestamp;
-        time.setServerDelay(time.serverUpdateTimestamp); //serverData.timestamp);
+        time.updateServerDelay(); //serverData.timestamp);
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
         var serverClients = serverData.clients;
@@ -20553,11 +20551,9 @@ var Timer = /** @class */ (function () {
         this.normalize = 0;
         this.morphs = {};
         this.timers = [];
-        this.serverRenderTimestamp = 0;
-        this.serverDelay = 100;
         this.serverUpdateTimestamps = [];
         this.serverUpdateDelay = 0;
-        this.serverTimeSincelastUpdate = 0;
+        this.serverRenderTimestamp = 0;
         this.serverUpdateTimestamp = 0;
     }
     Timer.prototype.update = function () {
@@ -20604,12 +20600,11 @@ var Timer = /** @class */ (function () {
         this.timers.push({ type: type, delay: delay, data: data });
     };
     Timer.prototype.networkUpdate = function () {
-        //  this.serverRenderTimestamp += this.delta;
-        this.serverTimeSincelastUpdate = this.now + this.serverUpdateDelay;
+        this.serverRenderTimestamp = this.now + this.serverUpdateDelay;
     };
-    Timer.prototype.setServerDelay = function (timestamp) {
-        //        this.serverRenderTimestamp = timestamp + this.serverUpdateDelay;
-        this.serverUpdateTimestamps.push(timestamp);
+    Timer.prototype.updateServerDelay = function () {
+        this.serverUpdateTimestamp = +new Date();
+        this.serverUpdateTimestamps.push(this.serverUpdateTimestamp);
         if (this.serverUpdateTimestamps.length > 2)
             this.serverUpdateTimestamps.shift();
         this.serverUpdateDelay = this.serverUpdateTimestamps[0] - this.serverUpdateTimestamps[1];

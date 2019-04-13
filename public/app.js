@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var socketIO = require("socket.io");
 var path = require("path");
+var UUIDV1 = require("uuid/v1");
 var PORT = process.env.PORT || 3000;
 var root = path.resolve(__dirname, '..');
 var INDEX = path.join(__dirname, '/index.html');
@@ -24,6 +25,7 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(function (file) {
     var mapPath = __dirname + '/maps/' + file;
     var map = new Map_1.default().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
     var mapInfo = {
+        id: UUIDV1(),
         name: map.name,
         gameType: map.gameType,
         maxPlayers: map.maxPlayers,
@@ -32,7 +34,14 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(function (file) {
         mapData: map.data,
         path: mapPath
     };
-    server.maps.push(mapInfo);
+    var mapInfoForClients = {
+        id: mapInfo.id,
+        name: mapInfo.name,
+        gameType: mapInfo.gameType,
+        maxPlayers: mapInfo.maxPlayers
+    };
+    server.mapsInfo.push(mapInfo);
+    server.mapsInfoForClients.push(mapInfoForClients);
 });
 io.on('connection', function (socket) {
     server.welcome(socket);

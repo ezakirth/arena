@@ -5,6 +5,7 @@ import Projectile from "../Main/Projectile";
 
 export default class Lobby {
     id: string;
+    mapId: string;
     clients: { [name: string]: ClientServer };
     teams: any;
     projectiles: Projectile[];
@@ -12,8 +13,9 @@ export default class Lobby {
     history: any;
     map: Map;
 
-    constructor(map: Map) {
+    constructor(map: Map, mapId: string) {
         this.id = UUIDV1();
+        this.mapId = mapId;
         this.clients = {};
         this.teams = { blue: [], green: [] };
         this.projectiles = [];
