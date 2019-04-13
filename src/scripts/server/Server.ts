@@ -7,7 +7,7 @@ import Lobby from './Lobby';
 import Vector from '../common/Vector';
 import FileSystem = require("fs");
 import MovementData from '../Client/MovementData';
-
+import Broadcast from './Broacast';
 declare var time: Timer;
 
 export default class Server {
@@ -23,9 +23,7 @@ export default class Server {
         this.lobbies = {};
 
         this.mapsInfo = [];
-
         this.mapsInfoForClients = [];
-
     }
 
     welcome(socket: SocketIO.Socket) {
@@ -37,7 +35,7 @@ export default class Server {
 
         }
 
-        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.mapsInfoForClients });
+        socket.emit('welcome', { clientId: socket.id, lobbies: lobbies, mapList: this.mapsInfoForClients });
     }
 
     /**
@@ -77,7 +75,9 @@ export default class Server {
             height: lobby.map.height
         };
 
-        socket.emit('create', { client: client, mapInfo: data });
+        // tell everyone in lobby a new client joined
+        lobby.broadcast.addJoined({ name: client.name, team: client.infos.team });
+        socket.emit('acceptJoin', { client: client, mapInfo: data });
     }
 
 
@@ -89,6 +89,10 @@ export default class Server {
             let lobby = this.lobbies[clientLobbyId];
             if (lobby.clients[clientId]) {
                 lobbyId = clientLobbyId;
+
+                // tell everyone in lobby a client left
+                lobby.broadcast.addLeft({ name: lobby.clients[clientId].name, team: lobby.clients[clientId].infos.team });
+
                 delete lobby.teams[lobby.clients[clientId].infos.team][clientId];
                 delete lobby.clients[clientId];
                 socket.leave(lobbyId);
@@ -96,11 +100,12 @@ export default class Server {
             }
         }
 
+
         if (lobbyId && Object.keys(this.lobbies[lobbyId].clients).length == 0) {
             delete this.lobbies[lobbyId];
         }
 
-        this.io.to(lobbyId).emit('disconnected', clientId);
+        this.io.to(lobbyId).emit('deleteClient', clientId);
     }
 
     updateClient(socket: SocketIO.Socket, movementData: MovementData) {
@@ -126,7 +131,11 @@ export default class Server {
                     client.networkData.ignoreClientMovement = true;
                 }
 
-                client.checkTile(lobby.map.data[px][py], px, py);
+                let flagAction = client.checkTile(lobby.map.data[px][py], px, py);
+
+                if (flagAction)
+                    lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
+
             }
 
             client.networkData.sequence = movementData.sequence;
@@ -134,27 +143,25 @@ export default class Server {
         }
     }
 
-    notifyClients() {
+    updateClients() {
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
 
             let timestamp = +new Date();
             lobby.history[timestamp] = JSON.parse(JSON.stringify(lobby.clients));
             let list = Object.keys(lobby.history);
-            if (list.length > 10) {
+            if (list.length > 5) {
                 delete lobby.history[list[0]];
             }
 
-            this.io.to(lobbyId).emit('update', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates });
+            this.io.to(lobbyId).emit('updateClients', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates, broadcast: lobby.broadcast.cleanup() });
             lobby.map.processUpdates();
-
+            lobby.broadcast.reset();
         }
 
     }
 
-
-
-    shootBullet(projectile: Projectile) {
+    shootProjectile(projectile: Projectile) {
         let lobby = this.lobbies[projectile.lobbyId];
 
         let newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
@@ -162,24 +169,65 @@ export default class Server {
         lobby.projectiles.push(newBullet);
     }
 
+    /**
+     * Look in lobby history to check if there was indeed a hit
+     * @param projectileData
+     */
+    hitCheckProjectile(projectileData: any) {
+        let timestamp = projectileData.timestamp;
+        let projectile: Projectile = projectileData.projectile;
+        let targetClientId = projectileData.targetClientId;
+
+        let lobby = this.lobbies[projectile.lobbyId];
+        let history = lobby.history[timestamp];
+
+        if (history) {
+            let clientHistory = history[targetClientId];
+
+            if (clientHistory) {
+                let clientPresent = lobby.clients[targetClientId];
+                let dist = Vector._dist(projectile.position, clientHistory.position);
+
+                if (clientPresent && dist < .3) {
+                    let hasFlag = clientPresent.infos.hasEnemyFlag;
+                    clientPresent.modLife(-projectile.type.dmg);
+
+                    if (clientPresent.infos.dead) {
+                        // tell everyone in lobby someone died
+                        let killer = lobby.clients[projectile.clientId];
+                        lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
+
+                        // if he had the flag, tell everyone !
+                        if (hasFlag)
+                            lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
+                    }
+                }
+            }
+        }
+    }
 
 
 
     update() {
         time.update();
 
-        this.updateBullets();
+        this.updateProjectiles();
 
-        this.updateClients();
-
+        for (let lobbyId in this.lobbies) {
+            let lobby = this.lobbies[lobbyId];
+            for (let clientId in lobby.clients) {
+                let client: ClientServer = lobby.clients[clientId];
+                client.update();
+            }
+        }
     }
 
-    updateBullets() {
+    updateProjectiles() {
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
             // if there are new projectiles, send them to the clients
             if (lobby.newBullets.length > 0) {
-                this.io.to(lobbyId).emit('projectiles', lobby.newBullets);
+                this.io.to(lobbyId).emit('updateProjectiles', lobby.newBullets);
                 lobby.newBullets = [];
             }
 
@@ -202,13 +250,4 @@ export default class Server {
         }
     }
 
-    updateClients() {
-        for (let lobbyId in this.lobbies) {
-            let lobby = this.lobbies[lobbyId];
-            for (let clientId in lobby.clients) {
-                let client: ClientServer = lobby.clients[clientId];
-                client.update();
-            }
-        }
-    }
 }

@@ -10,13 +10,14 @@ import ClientServer from '../Client/Client.server';
 import ClientLocal from '../Client/Client.local';
 import MovementData from '../Client/MovementData';
 import PositionBuffer from '../Client/PositionBuffer';
-
+import HUD from '../Main/HUD';
 
 //declare var io: Function;
 declare var main: Main;
 declare var map: Map;
 declare var time: Timer;
 declare var loop: Function;
+declare var hud: HUD;
 
 export default class Network {
     latency: number;
@@ -27,7 +28,7 @@ export default class Network {
         this.socket = null;
     }
 
-    init() {
+    connect() {
         this.socket = io();//'http://localhost:3000');
 
         let _this = this;
@@ -43,6 +44,9 @@ export default class Network {
         });
         */
 
+        /**
+         * We send the server our movement data at a fixed 100ms rate
+         */
         setInterval(function () {
             let client = main.clients[main.localClientId];
             if (client) {
@@ -50,42 +54,45 @@ export default class Network {
             }
         }, 100);
 
+
+
+
         /**
          * Connected to the server
          * serverData : clientId, lobbies, mapList
          */
-        this.socket.on('init', function (serverData) {
+        this.socket.on('welcome', function (serverData) {
             main.localClientId = serverData.clientId;
             main.lobbies = serverData.lobbies;
             main.mapList = serverData.mapList;
             main.menu.show();
         });
 
-        this.socket.on('create', function (serverData) {
+        this.socket.on('acceptJoin', function (serverData) {
             _this.createClient(serverData);
             loop();
         });
 
-        // disconnected to the server
-        this.socket.on('disconnected', function (clientId) {
+        // disconnected from the server
+        this.socket.on('deleteClient', function (clientId) {
             _this.deleteClient(clientId);
         });
 
         // updates from the server
-        this.socket.on('update', function (serverData) {
-            _this.updateClient(serverData);
+        this.socket.on('updateClients', function (serverData) {
+            _this.updateClients(serverData);
         });
 
         // projectile updates from the server
-        this.socket.on('projectiles', function (projectiles) {
-            _this.updateBullets(projectiles);
+        this.socket.on('updateProjectiles', function (projectiles) {
+            _this.updateProjectiles(projectiles);
         });
 
     }
 
 
-    joinGame(mapId: string) {
-        this.socket.emit('join', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapId: mapId });
+    askToJoin(mapId: string) {
+        this.socket.emit('askToJoin', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapId: mapId });
     }
 
     /**
@@ -103,8 +110,9 @@ export default class Network {
         delete main.clients[clientId];
     }
 
-    updateClient(serverData: any) {
-        time.updateServerDelay();//serverData.timestamp);
+    updateClients(serverData: any) {
+        hud.processMessages(serverData.broadcast);
+        time.updateServerDelay(serverData.timestamp);
 
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
@@ -113,12 +121,11 @@ export default class Network {
         for (let clientId in serverClients) {
             let serverClient: ClientServer = serverClients[clientId];
 
-            // if client doesn't exist locally, create it
-            if (!main.clients[clientId]) {
-                main.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
-            }
-
             let client = main.clients[clientId];
+            // if client doesn't exist locally, create it
+            if (!client) {
+                client = main.clients[clientId] = new Client(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
+            }
 
             if (clientId == main.localClientId) {
                 // server tells us to ignore our movement, so we just apply authoring, no reconciliation
@@ -246,10 +253,19 @@ export default class Network {
     }
 
     /**
+     * If we hit another player locally, notify the server for validation
+     * @param projectile
+     * @param targetClientId
+     */
+    requestHit(projectile: Projectile, targetClientId: string) {
+        this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
+    }
+
+    /**
      * Adds a projectile (origin = server)
      * @param projectiles
      */
-    updateBullets(projectiles: Projectile[]) {
+    updateProjectiles(projectiles: Projectile[]) {
         for (let projectile of projectiles) {
             if (projectile.clientId != main.localClientId) {
                 let newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
@@ -267,4 +283,3 @@ export default class Network {
         }
     }
 }
-//var socket = io('https://charpie.herokuapp.com/');

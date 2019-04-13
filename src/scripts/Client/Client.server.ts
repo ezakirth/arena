@@ -69,8 +69,10 @@ export default class ClientServer extends Client {
      * @param tile
      * @param x
      * @param y
+     * @returns flagAction
      */
-    checkTile(tile: Tile, x: number, y: number) {
+    checkTile(tile: Tile, x: number, y: number): string {
+        let flagAction = null;
         if (!this.infos.dead) {
             let map = server.lobbies[this.networkData.lobbyId].map;
 
@@ -82,10 +84,12 @@ export default class ClientServer extends Client {
                 // if it's enemy flag, we take it
                 if (pickup.name == 'flag_' + this.infos.enemyTeam) {
                     this.infos.hasEnemyFlag = true;
+                    flagAction = 'taken'
                 }
                 // else it's our flag, so we return it
                 else {
                     time.addTimer('respawn', 0, { pickup: 'pickup_flag_' + this.infos.team, x: map.flags[this.infos.team].x, y: map.flags[this.infos.team].y, map: map });
+                    flagAction = 'returned'
                 }
                 map.queueUpdate('flag', null, x, y);
             }
@@ -119,6 +123,7 @@ export default class ClientServer extends Client {
                         if (pickup.name == 'flag_' + this.infos.enemyTeam) {
                             this.infos.hasEnemyFlag = true;
                             map.queueUpdate('pickup', null, x, y);
+                            flagAction = 'taken';
                         }
                         // else it's the client's flag
                         else {
@@ -126,6 +131,7 @@ export default class ClientServer extends Client {
                             if (map.flags[this.infos.team].x == x && map.flags[this.infos.team].y == y && this.infos.hasEnemyFlag) {
                                 time.addTimer('respawn', 10, { pickup: 'pickup_flag_' + this.infos.enemyTeam, x: map.flags[this.infos.enemyTeam].x, y: map.flags[this.infos.enemyTeam].y, map: map });
                                 this.infos.hasEnemyFlag = false;
+                                flagAction = 'captured';
                             }
                         }
                     }
@@ -143,6 +149,9 @@ export default class ClientServer extends Client {
             else {
                 this.justUsedPortal = false;
             }
+
         }
+        return flagAction;
+
     }
 }

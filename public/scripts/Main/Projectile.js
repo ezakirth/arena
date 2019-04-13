@@ -16,7 +16,7 @@ var Projectile = /** @class */ (function () {
         this.active = true;
         this.origin = new Vector_1.default(direction.x, direction.y);
         this.distance = 0;
-        this.curve = 1;
+        this.alpha = 1;
     }
     Projectile.prototype.render = function () {
         if (this.active) {
@@ -24,21 +24,21 @@ var Projectile = /** @class */ (function () {
             var offsetX = (this.position.x * tileSize - main.clients[main.localClientId].position.x * tileSize) + gfx.width / 2;
             var offsetY = (this.position.y * tileSize - main.clients[main.localClientId].position.y * tileSize) + gfx.height / 2;
             gfx.translate(offsetX, offsetY);
-            gfx.ctx.globalAlpha = this.curve;
+            gfx.ctx.globalAlpha = this.alpha;
             gfx.sprite(this.type.sprite, 0, 0, tileSize, tileSize);
             gfx.popMatrix();
         }
     };
     Projectile.prototype.update = function () {
-        this.curve = (this.type.range - this.distance);
-        if (this.curve > 1)
-            this.curve = 1;
-        this.position.subtract(Vector_1.default._multiply(this.direction, (this.type.speed * time.normalize) * this.curve));
+        this.alpha = (this.type.range - this.distance);
+        if (this.alpha > 1)
+            this.alpha = 1;
+        this.position.subtract(Vector_1.default._multiply(this.direction, (this.type.speed * time.normalize) * this.alpha));
         this.distance += time.delta;
         if (this.distance > this.type.range)
             this.active = false;
     };
-    Projectile.prototype.hitTest = function (client, serverSide) {
+    Projectile.prototype.hitTest = function (targetClient, serverSide) {
         var px = Math.floor(this.position.x);
         var py = Math.floor(this.position.y);
         var next = Vector_1.default._subtract(this.position, Vector_1.default._multiply(this.direction, this.type.speed * time.normalize));
@@ -67,11 +67,11 @@ var Projectile = /** @class */ (function () {
                 return true;
             }
         }
-        if (!client.infos.dead && (this.targetTeam == client.infos.team || this.targetTeam == 'any') && client.networkData.clientId != this.clientId) {
-            var dist = Vector_1.default._dist(this.position, client.position);
+        if (!targetClient.infos.dead && (this.targetTeam == targetClient.infos.team || this.targetTeam == 'any') && targetClient.networkData.clientId != this.clientId) {
+            var dist = Vector_1.default._dist(this.position, targetClient.position);
             if (dist < .3) {
-                if (serverSide) {
-                    client.modLife(-this.type.dmg);
+                if (!serverSide && main.localClientId == this.clientId) {
+                    network.requestHit(this, targetClient.networkData.clientId);
                 }
                 this.active = false;
                 return true;

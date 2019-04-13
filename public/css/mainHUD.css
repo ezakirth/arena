@@ -1,0 +1,17 @@
+#HUD {
+position:fixed;
+z-index:10;
+top:0px;
+left:0px;
+font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.blueTeam {
+    font-weight: bold;
+    color:blue;
+}
+
+.greenTeam {
+    font-weight: bold;
+    color:green;
+}

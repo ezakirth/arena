@@ -63,12 +63,16 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
 io.on('connection', function (socket: SocketIO.Socket) {
     server.welcome(socket);
 
-    socket.on('join', function (clientData: any) {
+    socket.on('askToJoin', function (clientData: any) {
         server.createClient(socket, clientData);
     });
 
     socket.on('shoot', function (projectile: Projectile) {
-        server.shootBullet(projectile);
+        server.shootProjectile(projectile);
+    });
+
+    socket.on('hitCheck', function (projectileData) {
+        server.hitCheckProjectile(projectileData);
     });
 
     socket.on('update', function (movementData: MovementData) {
@@ -91,5 +95,5 @@ setInterval(function () {
 }, 1000 / 60);
 
 setInterval(function () {
-    server.notifyClients();
+    server.updateClients();
 }, 100);

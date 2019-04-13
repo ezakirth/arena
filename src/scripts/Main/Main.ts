@@ -52,7 +52,8 @@ export default class Main {
 
                 for (let clientId in this.clients) {
                     let client = this.clients[clientId];
-                    if (projectile.hitTest(client, false)) break;
+                    if (projectile.hitTest(client, false))
+                        break;
                 }
 
             }

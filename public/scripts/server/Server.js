@@ -20,7 +20,7 @@ var Server = /** @class */ (function () {
             var lobby = this.lobbies[lobbyId];
             lobbies.push({ id: lobby.id, mapId: lobby.mapId, map: lobby.map.name, gameType: lobby.map.gameType, current: Object.keys(lobby.clients).length, max: lobby.map.maxPlayers });
         }
-        socket.emit('init', { clientId: socket.id, lobbies: lobbies, mapList: this.mapsInfoForClients });
+        socket.emit('welcome', { clientId: socket.id, lobbies: lobbies, mapList: this.mapsInfoForClients });
     };
     /**
      * Called when client wants to join a lobby
@@ -54,7 +54,9 @@ var Server = /** @class */ (function () {
             width: lobby.map.width,
             height: lobby.map.height
         };
-        socket.emit('create', { client: client, mapInfo: data });
+        // tell everyone in lobby a new client joined
+        lobby.broadcast.addJoined({ name: client.name, team: client.infos.team });
+        socket.emit('acceptJoin', { client: client, mapInfo: data });
     };
     Server.prototype.deleteClient = function (socket) {
         var clientId = socket.id;
@@ -63,6 +65,8 @@ var Server = /** @class */ (function () {
             var lobby = this.lobbies[clientLobbyId];
             if (lobby.clients[clientId]) {
                 lobbyId = clientLobbyId;
+                // tell everyone in lobby a client left
+                lobby.broadcast.addLeft({ name: lobby.clients[clientId].name, team: lobby.clients[clientId].infos.team });
                 delete lobby.teams[lobby.clients[clientId].infos.team][clientId];
                 delete lobby.clients[clientId];
                 socket.leave(lobbyId);
@@ -72,7 +76,7 @@ var Server = /** @class */ (function () {
         if (lobbyId && Object.keys(this.lobbies[lobbyId].clients).length == 0) {
             delete this.lobbies[lobbyId];
         }
-        this.io.to(lobbyId).emit('disconnected', clientId);
+        this.io.to(lobbyId).emit('deleteClient', clientId);
     };
     Server.prototype.updateClient = function (socket, movementData) {
         var lobby = this.lobbies[movementData.lobbyId];
@@ -93,41 +97,80 @@ var Server = /** @class */ (function () {
                     client.position = new Vector_1.default(client.lastGoodPos.x, client.lastGoodPos.y);
                     client.networkData.ignoreClientMovement = true;
                 }
-                client.checkTile(lobby.map.data[px][py], px, py);
+                var flagAction = client.checkTile(lobby.map.data[px][py], px, py);
+                if (flagAction)
+                    lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
             }
             client.networkData.sequence = movementData.sequence;
         }
     };
-    Server.prototype.notifyClients = function () {
+    Server.prototype.updateClients = function () {
         for (var lobbyId in this.lobbies) {
             var lobby = this.lobbies[lobbyId];
             var timestamp = +new Date();
             lobby.history[timestamp] = JSON.parse(JSON.stringify(lobby.clients));
             var list = Object.keys(lobby.history);
-            if (list.length > 10) {
+            if (list.length > 5) {
                 delete lobby.history[list[0]];
             }
-            this.io.to(lobbyId).emit('update', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates });
+            this.io.to(lobbyId).emit('updateClients', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates, broadcast: lobby.broadcast.cleanup() });
             lobby.map.processUpdates();
+            lobby.broadcast.reset();
         }
     };
-    Server.prototype.shootBullet = function (projectile) {
+    Server.prototype.shootProjectile = function (projectile) {
         var lobby = this.lobbies[projectile.lobbyId];
         var newBullet = new Projectile_1.default(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
         lobby.newBullets.push(newBullet);
         lobby.projectiles.push(newBullet);
     };
+    /**
+     * Look in lobby history to check if there was indeed a hit
+     * @param projectileData
+     */
+    Server.prototype.hitCheckProjectile = function (projectileData) {
+        var timestamp = projectileData.timestamp;
+        var projectile = projectileData.projectile;
+        var targetClientId = projectileData.targetClientId;
+        var lobby = this.lobbies[projectile.lobbyId];
+        var history = lobby.history[timestamp];
+        if (history) {
+            var clientHistory = history[targetClientId];
+            if (clientHistory) {
+                var clientPresent = lobby.clients[targetClientId];
+                var dist = Vector_1.default._dist(projectile.position, clientHistory.position);
+                if (clientPresent && dist < .3) {
+                    var hasFlag = clientPresent.infos.hasEnemyFlag;
+                    clientPresent.modLife(-projectile.type.dmg);
+                    if (clientPresent.infos.dead) {
+                        // tell everyone in lobby someone died
+                        var killer = lobby.clients[projectile.clientId];
+                        lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
+                        // if he had the flag, tell everyone !
+                        if (hasFlag)
+                            lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
+                    }
+                }
+            }
+        }
+    };
     Server.prototype.update = function () {
         time.update();
-        this.updateBullets();
-        this.updateClients();
+        this.updateProjectiles();
+        for (var lobbyId in this.lobbies) {
+            var lobby = this.lobbies[lobbyId];
+            for (var clientId in lobby.clients) {
+                var client = lobby.clients[clientId];
+                client.update();
+            }
+        }
     };
-    Server.prototype.updateBullets = function () {
+    Server.prototype.updateProjectiles = function () {
         for (var lobbyId in this.lobbies) {
             var lobby = this.lobbies[lobbyId];
             // if there are new projectiles, send them to the clients
             if (lobby.newBullets.length > 0) {
-                this.io.to(lobbyId).emit('projectiles', lobby.newBullets);
+                this.io.to(lobbyId).emit('updateProjectiles', lobby.newBullets);
                 lobby.newBullets = [];
             }
             // update all projectiles
@@ -145,15 +188,6 @@ var Server = /** @class */ (function () {
                 else {
                     lobby.projectiles.splice(index, 1);
                 }
-            }
-        }
-    };
-    Server.prototype.updateClients = function () {
-        for (var lobbyId in this.lobbies) {
-            var lobby = this.lobbies[lobbyId];
-            for (var clientId in lobby.clients) {
-                var client = lobby.clients[clientId];
-                client.update();
             }
         }
     };

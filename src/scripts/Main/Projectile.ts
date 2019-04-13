@@ -8,11 +8,14 @@ import Client from '../Client/Client';
 import Server from '../server/Server';
 import ClientServer from '../Client/Client.server';
 import Weapon from '../Pickups/Weapon';
+import Network from './Network';
+import ClientLocal from '../Client/Client.local';
 
 declare var main: Main;
 declare var map: Map;
 declare var gfx: Graphics;
 declare var pickups: Pickups;
+declare var network: Network;
 
 declare var tileSize: number;
 declare var time: Timer;
@@ -31,7 +34,7 @@ export default class Projectile {
     lobbyId: string;
     clientId: string;
     speed: number;
-    curve: number;
+    alpha: number;
     constructor(lobbyId: string, clientId: string, targetTeam: string, position: Vector, direction: Vector, type: Weapon) {
         this.lobbyId = lobbyId;
         this.clientId = clientId;
@@ -44,7 +47,7 @@ export default class Projectile {
 
         this.origin = new Vector(direction.x, direction.y);
         this.distance = 0;
-        this.curve = 1;
+        this.alpha = 1;
     }
 
     render() {
@@ -54,7 +57,7 @@ export default class Projectile {
             let offsetY = (this.position.y * tileSize - main.clients[main.localClientId].position.y * tileSize) + gfx.height / 2;
             gfx.translate(offsetX, offsetY);
 
-            gfx.ctx.globalAlpha = this.curve;
+            gfx.ctx.globalAlpha = this.alpha;
 
             gfx.sprite(this.type.sprite, 0, 0, tileSize, tileSize);
 
@@ -64,9 +67,9 @@ export default class Projectile {
 
 
     update() {
-        this.curve = (this.type.range - this.distance);
-        if (this.curve > 1) this.curve = 1;
-        this.position.subtract(Vector._multiply(this.direction, (this.type.speed * time.normalize) * this.curve));
+        this.alpha = (this.type.range - this.distance);
+        if (this.alpha > 1) this.alpha = 1;
+        this.position.subtract(Vector._multiply(this.direction, (this.type.speed * time.normalize) * this.alpha));
 
         this.distance += time.delta;
         if (this.distance > this.type.range)
@@ -74,7 +77,7 @@ export default class Projectile {
 
     }
 
-    hitTest(client: any, serverSide: boolean): boolean {
+    hitTest(targetClient: Client, serverSide: boolean): boolean {
         let px: number = Math.floor(this.position.x);
         let py: number = Math.floor(this.position.y);
 
@@ -110,11 +113,11 @@ export default class Projectile {
 
 
 
-        if (!client.infos.dead && (this.targetTeam == client.infos.team || this.targetTeam == 'any') && client.networkData.clientId != this.clientId) {
-            let dist = Vector._dist(this.position, client.position);
+        if (!targetClient.infos.dead && (this.targetTeam == targetClient.infos.team || this.targetTeam == 'any') && targetClient.networkData.clientId != this.clientId) {
+            let dist = Vector._dist(this.position, targetClient.position);
             if (dist < .3) {
-                if (serverSide) {
-                    client.modLife(-this.type.dmg);
+                if (!serverSide && main.localClientId == this.clientId) {
+                    network.requestHit(this, targetClient.networkData.clientId);
                 }
                 this.active = false;
                 return true;
