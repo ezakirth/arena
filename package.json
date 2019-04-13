@@ -17,7 +17,7 @@
         "watchify": "^3.11.1"
     },
     "scripts": {
-        "start": "npm run build:dev && npm run server",
+        "start": "npm run server",
         "server": "node ./public/app.js",
         "build:server": "tsc && node ./public/app.js",
         "build:main_dev": "browserify ./public/scripts/initMain.js > ./public/mainBundle.js",
