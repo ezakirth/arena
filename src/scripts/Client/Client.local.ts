@@ -150,7 +150,7 @@ export default class ClientLocal extends Client {
         let buffer: PositionBuffer[] = this.networkData.positionBuffer;
 
         // Drop positions older than 100ms.
-        while (buffer.length > 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+        while (buffer.length > 2 && buffer[1].timestamp < time.serverRenderTimestamp) {
             buffer.shift();
         }
         console.log(buffer.length);

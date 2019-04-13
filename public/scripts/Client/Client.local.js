@@ -122,7 +122,7 @@ var ClientLocal = /** @class */ (function (_super) {
         // Find the two authoritative positions surrounding the rendering timestamp.
         var buffer = this.networkData.positionBuffer;
         // Drop positions older than 100ms.
-        while (buffer.length > 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+        while (buffer.length > 2 && buffer[1].timestamp < time.serverRenderTimestamp) {
             buffer.shift();
         }
         console.log(buffer.length);
