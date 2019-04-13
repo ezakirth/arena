@@ -50,8 +50,13 @@ var ClientLocal = /** @class */ (function (_super) {
                     // left stick: movement
                     else {
                         if (touch.origin.x < gfx.width / 2) {
-                            var direction = Vector_1.default._subtract(touch.origin, touch.position).normalize();
-                            this.position.subtract(direction.multiply(0.05 * time.normalize));
+                            var direction = Vector_1.default._subtract(touch.origin, touch.position);
+                            //  if (direction.length() != 0)
+                            this.direction.set(direction.x, direction.y);
+                            this.direction.multiply(0.025);
+                            if (this.direction.length() > 1)
+                                this.direction.normalize();
+                            this.position.subtract(Vector_1.default._multiply(this.direction, 0.05 * time.normalize));
                             this.moving = true;
                         }
                     }
