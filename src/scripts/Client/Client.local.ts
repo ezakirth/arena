@@ -158,7 +158,7 @@ export default class ClientLocal extends Client {
 
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length == 2) {
+        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
             let x0 = buffer[0].position.x;
             let y0 = buffer[0].position.y;
             let dx0 = buffer[0].direction.x;

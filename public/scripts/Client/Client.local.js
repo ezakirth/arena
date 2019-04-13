@@ -129,7 +129,7 @@ var ClientLocal = /** @class */ (function (_super) {
         }
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length == 2) {
+        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
             var x0 = buffer[0].position.x;
             var y0 = buffer[0].position.y;
             var dx0 = buffer[0].direction.x;
