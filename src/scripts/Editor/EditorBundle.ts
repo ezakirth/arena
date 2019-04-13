@@ -20,8 +20,7 @@ export const Editor = {
         this.menuSetup();
         map.init(20, 20, false);
 
-        input.view.x = map.width / 2;
-        input.view.y = map.height / 2
+        input.view.set(map.width / 2, map.height / 2);
 
     },
 
@@ -101,8 +100,8 @@ export const Editor = {
      */
     update: function () {
         if (input.mouse.browser.x > 276) {
-            let px = input.mouse.mapX;
-            let py = input.mouse.mapY;
+            let px = input.mouse.map.x;
+            let py = input.mouse.map.y;
 
             if (!(map.data[px] !== undefined && map.data[px][py] !== undefined)) return;
 

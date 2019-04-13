@@ -1,6 +1,8 @@
 import Vector from './Vector';
 
 declare var window: any;
+declare var Editor: any;
+
 export default class Graphics {
     width: number;
     height: number;
@@ -9,6 +11,7 @@ export default class Graphics {
     ratio: Vector;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
+    mobile: boolean;
     cachedImages: { [name: string]: HTMLImageElement };
 
     constructor() {
@@ -22,7 +25,7 @@ export default class Graphics {
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext("2d");
         document.body.appendChild(this.canvas);
-
+        this.mobile = false;
     }
 
     init() {
@@ -50,37 +53,51 @@ export default class Graphics {
     }
 
     resizeCanvas() {
-        let mobile = false;
-        if (mobile) {
-            this.width = window.innerWidth;
-            this.height = window.innerHeight;
-            this.ctx.canvas.width = this.width;
-            this.ctx.canvas.height = this.height;
+        if (navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i))
+            this.mobile = true;
+        else
+            this.mobile = false;
 
-            this.ratio.x = this.width / this.canvas.clientWidth;
-            this.ratio.y = this.height / this.canvas.clientHeight;
-            this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
 
-            let ratioW = window.innerWidth / window.innerHeight;
-            let ratioH = window.innerHeight / window.innerWidth;
-            if (window.innerWidth > window.innerHeight)
-                window.tileSize = (Math.floor(window.innerWidth * ratioH / 6));
-            else
-                window.tileSize = (Math.floor(window.innerHeight * ratioW / 6));
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.ctx.canvas.width = this.width;
+        this.ctx.canvas.height = this.height;
 
-            this.browser.height = window.innerHeight;
-            this.browser.width = window.innerWidth;
-        }
-        else {
-            this.ctx.canvas.width = this.width;
-            this.ctx.canvas.height = this.height;
-            this.ratio.x = this.width / this.canvas.clientWidth;
-            this.ratio.y = this.height / this.canvas.clientHeight;
-            this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+        this.ratio.x = this.width / this.canvas.clientWidth;
+        this.ratio.y = this.height / this.canvas.clientHeight;
+        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
 
-            this.browser.height = window.innerHeight;
-            this.browser.width = window.innerWidth;
-        }
+        let ratioW = window.innerWidth / window.innerHeight;
+        let ratioH = window.innerHeight / window.innerWidth;
+        let tileRatio = 6;
+        if (Editor) tileRatio = 10;
+        if (window.innerWidth > window.innerHeight)
+            window.tileSize = (Math.floor(window.innerWidth * ratioH / tileRatio));
+        else
+            window.tileSize = (Math.floor(window.innerHeight * ratioW / tileRatio));
+
+        this.browser.height = window.innerHeight;
+        this.browser.width = window.innerWidth;
+
+
+        /*
+        this.ctx.canvas.width = this.width;
+        this.ctx.canvas.height = this.height;
+        this.ratio.x = this.width / this.canvas.clientWidth;
+        this.ratio.y = this.height / this.canvas.clientHeight;
+        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+
+        this.browser.height = window.innerHeight;
+        this.browser.width = window.innerWidth;
+        */
+
 
         this.setStyles();
     }

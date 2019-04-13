@@ -32,8 +32,12 @@ window.loop = function () {
     if (window.main.localClient) {
         // graphics
         window.main.render();
+        window.input.drawTouch();
+
+
         // logic
         window.main.update();
+        window.input.update();
     }
 }
 

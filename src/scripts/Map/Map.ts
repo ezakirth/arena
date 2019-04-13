@@ -185,7 +185,7 @@ export default class Map {
                     if (!pass || pass == 1) {
                         if (block.tex && !block.solid) {
                             gfx.sprite(block.tex, px, py, tileSize, tileSize);
-                            main.tiles++;
+                            if (!Editor) main.tiles++;
                         }
 
                         if (block.decals) {

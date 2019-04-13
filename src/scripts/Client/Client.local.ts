@@ -39,45 +39,79 @@ export default class ClientLocal extends Client {
      */
     applyInputs() {
         if (!this.infos.dead) {
-            this.direction = Vector._subtract(new Vector(gfx.width / 2, gfx.height / 2), new Vector(input.mouse.x, input.mouse.y)).normalize();
-            this.dirSide = Vector._rotate(this.direction, Math.PI / 2);
 
-            this.shooting = input.mouse.left;
 
-            if (this.shooting && time.elapsed > this.lastShot + this.infos.weapon.rate) {
-                this.lastShot = time.elapsed
-                network.shootWeapon(this);
-            }
+
+
+
 
             let oldX = this.position.x;
             let oldY = this.position.y;
             let oldPx = Math.floor(this.position.x);
             let oldPy = Math.floor(this.position.y);
 
-            if (input.keyboard.ArrowLeft || input.keyboard.q) {
-                this.moving = true;
-                this.position.x -= this.infos.speed * time.normalize;
+            // if mobile, touch controls
+            if (gfx.mobile) {
+                this.shooting = false;
+                for (let i = 0; i < input.touches.length; i++) {
+                    let touch = input.touches[i];
+                    // right stick: direction
+                    if (touch.origin.x > gfx.width / 2) {
+                        let direction = Vector._subtract(touch.origin, touch.position);
+                        this.shooting = true;
+
+                        if (direction.length() != 0)
+                            this.direction.set(direction.x, direction.y).normalize();
+                    }
+                    // left stick: movement
+                    else {
+                        if (touch.origin.x < gfx.width / 2) {
+                            let direction = Vector._subtract(touch.origin, touch.position).normalize();
+                            this.position.subtract(direction.multiply(0.05 * time.normalize));
+                            this.moving = true;
+                        }
+                    }
+                }
             }
-            if (input.keyboard.ArrowRight || input.keyboard.d) {
-                this.moving = true;
-                this.position.x += this.infos.speed * time.normalize;
+            // else, use mouse+keyboard
+            else {
+
+                this.direction = Vector._subtract(new Vector(gfx.width / 2, gfx.height / 2), input.mouse.position).normalize();
+                this.shooting = input.mouse.left;
+
+                if (input.keyboard.ArrowLeft || input.keyboard.q) {
+                    this.moving = true;
+                    this.position.x -= this.infos.speed * time.normalize;
+                }
+                if (input.keyboard.ArrowRight || input.keyboard.d) {
+                    this.moving = true;
+                    this.position.x += this.infos.speed * time.normalize;
+                }
+
+                if (input.keyboard.ArrowUp || input.keyboard.z) {
+                    this.moving = true;
+                    this.position.y -= this.infos.speed * time.normalize;
+                }
+                if (input.keyboard.ArrowDown || input.keyboard.s) {
+                    this.moving = true;
+                    this.position.y += this.infos.speed * time.normalize;
+                }
+
             }
 
-            if (input.keyboard.ArrowUp || input.keyboard.z) {
-                this.moving = true;
-                this.position.y -= this.infos.speed * time.normalize;
-            }
-            if (input.keyboard.ArrowDown || input.keyboard.s) {
-                this.moving = true;
-                this.position.y += this.infos.speed * time.normalize;
-            }
-
+            // new position check
             this.position.set(clamp(this.position.x, 0, map.width - 1), clamp(this.position.y, 0, map.height - 1));
             let px = Math.floor(this.position.x);
             let py = Math.floor(this.position.y);
 
             if (map.data[oldPx][py].solid) this.position.y = oldY;
             if (map.data[px][oldPy].solid) this.position.x = oldX;
+
+            // if we're trying to shoot and we're ready, shoot !
+            if (this.shooting && time.elapsed > this.lastShot + this.infos.weapon.rate) {
+                this.lastShot = time.elapsed
+                network.shootWeapon(this);
+            }
 
         }
     }

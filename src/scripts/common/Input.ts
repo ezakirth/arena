@@ -16,18 +16,21 @@ export default class Input {
     inertia: Vector;
     keyboard: any;
     speed: number;
+    touches: any[];
 
     constructor() {
         this.mouse = {
             left: false,
             middle: false,
             right: false,
-            browser: { x: 0, y: 0 },
-            x: 0,
-            y: 0,
-            mapX: 0,
-            mapY: 0,
+            browser: new Vector(0, 0),
+            position: new Vector(0, 0),
+            origin: new Vector(0, 0),
+            map: new Vector(0, 0)
         };
+
+        this.touches = [];
+
 
         this.view = new Vector(0, 0);
         this.inertia = new Vector(0, 0);
@@ -39,13 +42,13 @@ export default class Input {
 
     init() {
         let _this = this;
-        window.addEventListener('mousedown', function (e) { _this.inputDown(e); });
-        window.addEventListener('mouseup', function (e) { _this.inputUp(e); });
-        window.addEventListener('mousemove', function (e) { _this.inputMove(e); });
+        window.addEventListener('mousedown', function (e) { _this.mouseDown(e); });
+        window.addEventListener('mouseup', function (e) { _this.mouseUp(e); });
+        window.addEventListener('mousemove', function (e) { _this.mouseMove(e); });
 
-        document.addEventListener('touchstart', function (e) { _this.inputDown(e); });
-        document.addEventListener('touchend', function (e) { _this.inputUp(e); });
-        document.addEventListener('touchmove', function (e) { _this.inputMove(e); });
+        window.addEventListener('touchstart', function (e) { _this.touchStart(e); });
+        window.addEventListener('touchend', function (e) { _this.touchEnd(e); });
+        window.addEventListener('touchmove', function (e) { _this.touchMove(e); });
 
 
         window.addEventListener('keyup', function (e) { _this.keyHandler(e); });
@@ -56,8 +59,23 @@ export default class Input {
 
     }
 
-
     update() {
+
+    }
+
+    drawTouch() {
+        if (gfx.mobile) {
+            for (let i = 0; i < this.touches.length; i++) {
+                let touch = this.touches[i];
+
+                gfx.sprite('stick_bg', touch.origin.x, touch.origin.y, 128, 128);
+                gfx.sprite('stick', touch.position.x, touch.position.y, 64, 64);
+            }
+        }
+    }
+
+
+    updateEditorInput() {
         this.updateMapPosition();
 
         let deltaMovement = time.normalize * this.speed;
@@ -106,26 +124,67 @@ export default class Input {
         return false;
     }
 
-    inputUp(e) {
+    mouseUp(e) {
         this.mouse.active = false;
         if (e.button == 0) this.mouse.left = false;
         if (e.button == 1) this.mouse.middle = false;
         if (e.button == 2) this.mouse.right = false;
-        this.getPosition(e);
+        this.getMousePosition(e);
         if (Editor) Editor.calculateShadows();
     }
 
-    inputDown(e) {
+    mouseDown(e) {
         this.mouse.active = true;
         this.mouse.left = (e.button == 0);
         this.mouse.middle = (e.button == 1);
         this.mouse.right = (e.button == 2);
-        this.getPosition(e);
+        this.getMousePosition(e);
     }
 
-    inputMove(e) {
-        this.getPosition(e);
+    mouseMove(e) {
+        this.getMousePosition(e);
+    }
 
+    touchStart(e: TouchEvent) {
+        let touches: TouchList = e.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            let position = new Vector(touches[i].pageX * gfx.ratio.x, (touches[i].pageY - gfx.offset.y) * gfx.ratio.y);
+            let origin = new Vector(position.x, position.y);
+
+            this.touches.push({ id: touches[i].identifier, position: position, origin: origin });
+        }
+    }
+
+    touchMove(e: TouchEvent) {
+        let touches: TouchList = e.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            let id = touches[i].identifier;
+            let index = this.getCurrentTouch(id);
+            if (index >= 0) {
+                let currentTouch = this.touches[index];
+                this.touches.splice(index, 1, { id: id, position: new Vector(touches[i].pageX * gfx.ratio.x, (touches[i].pageY - gfx.offset.y) * gfx.ratio.y), origin: currentTouch.origin });
+            }
+        }
+    }
+
+    touchEnd(e: TouchEvent) {
+        let touches: TouchList = e.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+            let id = touches[i].identifier;
+            let index = this.getCurrentTouch(id);
+            if (index >= 0) {
+                this.touches.splice(index, 1);
+            }
+        }
+    }
+
+    getCurrentTouch(id: number) {
+        for (let i = 0; i < this.touches.length; i++) {
+            if (this.touches[i].id == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     keyHandler(e) {
@@ -134,31 +193,20 @@ export default class Input {
     }
 
 
-    getPosition(event) {
-        let x, y;
+    getMousePosition(event) {
 
-        if (event.touches) {
-            x = (event.touches[0] ? event.touches[0].pageX : this.mouse.browser.x);
-            y = (event.touches[0] ? event.touches[0].pageY : this.mouse.browser.y);
-            this.keyboard.ArrowUp = this.mouse.active;
-        }
-        else {
-            x = event.clientX;
-            y = event.clientY;
-        }
+        this.mouse.browser.set(event.clientX, event.clientY);
 
-        this.mouse.browser.x = x;
-        this.mouse.browser.y = y;
+        this.mouse.position.set(this.mouse.browser.x * gfx.ratio.x, (this.mouse.browser.y - gfx.offset.y) * gfx.ratio.y);
 
-        this.mouse.x = this.mouse.browser.x * gfx.ratio.x;
-        this.mouse.y = (this.mouse.browser.y - gfx.offset.y) * gfx.ratio.y;
+        if (event.type == 'mousedown')
+            this.mouse.origin.set(this.mouse.position.x, this.mouse.position.y);
     }
 
     updateMapPosition() {
-        var screenX = this.mouse.x + this.view.x * tileSize - gfx.width / 2;
-        var screenY = this.mouse.y + this.view.y * tileSize - gfx.height / 2;
+        var screenX = this.mouse.position.x + this.view.x * tileSize - gfx.width / 2;
+        var screenY = this.mouse.position.y + this.view.y * tileSize - gfx.height / 2;
 
-        this.mouse.mapX = Math.floor(screenX / tileSize);
-        this.mouse.mapY = Math.floor(screenY / tileSize);
+        this.mouse.map.set(Math.floor(screenX / tileSize), Math.floor(screenY / tileSize));
     }
 }

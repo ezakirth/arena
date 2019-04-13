@@ -26,7 +26,7 @@ var loop = function () {
     requestAnimationFrame(loop);
     window.time.update();
     // logic
-    window.input.update();
+    window.input.updateEditorInput();
     window.Editor.update();
     // graphics
     window.Editor.render();
