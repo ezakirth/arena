@@ -21,6 +21,7 @@ declare var hud: HUD;
 
 export default class Network {
     latency: number;
+    startTime: number;
     socket: SocketIOClient.Socket;
 
     constuctor() {
@@ -33,16 +34,16 @@ export default class Network {
 
         let _this = this;
 
-        /*
+
         setInterval(function () {
             _this.startTime = Date.now();
             _this.socket.emit('pingtest');
         }, 2000);
         this.socket.on('pongtest', function () {
             _this.latency = Date.now() - _this.startTime;
-             document.getElementById('ping').innerText = _this.latency + 'ms';
+            hud.log.innerText = _this.latency + 'ms';
         });
-        */
+
 
         /**
          * We send the server our movement data at a fixed 100ms rate

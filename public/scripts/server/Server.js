@@ -113,9 +113,9 @@ var Server = /** @class */ (function () {
             if (list.length > 5) {
                 delete lobby.history[list[0]];
             }
-            this.io.to(lobbyId).emit('updateClients', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates, broadcast: lobby.broadcast.cleanup() });
-            lobby.map.processUpdates();
+            this.io.to(lobbyId).emit('updateClients', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates, broadcast: lobby.broadcast.extract() });
             lobby.broadcast.reset();
+            lobby.map.processUpdates();
         }
     };
     Server.prototype.shootProjectile = function (projectile) {

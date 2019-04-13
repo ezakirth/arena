@@ -1,20 +1,26 @@
-import Main from "./Main";
+import Timer from '../common/Timer';
 import Broadcast from "../server/Broacast";
 var $ = require('jquery');
 
+declare var time: Timer;
 
 export default class HUD {
-    elem: HTMLElement;
-    log: string;
+    log: HTMLDivElement;
+    ping: HTMLDivElement;
     constructor() {
-        this.elem = $('<div id="HUD"></div>')[0];
-        this.log = '';
-        $("body").append(this.elem);
+        this.log = document.createElement('div');
+        this.log.id = 'HUD';
+
+        this.ping = document.createElement('div');
+        this.ping.id = 'ping';
+
+        document.body.appendChild(this.log);
+        document.body.appendChild(this.ping);
     }
 
 
     render() {
-        this.elem.innerHTML = this.log;
+
     }
 
     processMessages(broadcast: Broadcast) {
@@ -24,29 +30,49 @@ export default class HUD {
         if (broadcast.flagAction) this.parseFlagAction(broadcast.flagAction);
     }
 
+    addRemoveTimer(logMsg) {
+        window.setTimeout(function () {
+            $(logMsg).animate({
+                height: "0px",
+                opacity: 0
+            }, 500, function () {
+                this.parentNode.removeChild(this);
+            });
+        }, 3000);
+    }
+
     parseJoined(messages) {
         for (let message of messages) {
-            this.log = '<p><span class="' + message.team + 'Team">' + message.name + '</span> joined the game !</p>';
+            let logMsg = $('<p><span class="' + message.team + 'Team">' + message.name + '</span> has joined the game !</p>')[0];
+            this.log.appendChild(logMsg);
+            this.addRemoveTimer(logMsg);
         }
+
+
     }
 
     parseLeft(messages) {
         for (let message of messages) {
-            this.log = '<p><span class="' + message.team + 'Team">' + message.name + '</span> left the game !</p>';
+            let logMsg = $('<p><span class="' + message.team + 'Team">' + message.name + '</span> has left the game !</p>')[0];
+            this.log.appendChild(logMsg);
+            this.addRemoveTimer(logMsg);
         }
 
     }
 
     parseCombat(messages) {
         for (let message of messages) {
-            this.log = '<p><span class="' + message.team + 'Team">' + message.name + '</span> has killed ';
-            this.log += '<span class="' + message.killedTeam + 'Team">' + message.killed + '</span> with a ' + message.weapon + '</p>';
+            let logMsg = $('<p><span class="' + message.team + 'Team">' + message.name + '</span> has killed <span class="' + message.killedTeam + 'Team">' + message.killed + '</span> with a ' + message.weapon + ' !</p>')[0];
+            this.log.appendChild(logMsg);
+            this.addRemoveTimer(logMsg);
         }
 
     }
     parseFlagAction(messages) {
         for (let message of messages) {
-            this.log = '<p><span class="' + message.team + 'Team">' + message.name + '</span> has ' + message.action + ' the flag !</p>';
+            let logMsg = $('<p><span class="' + message.team + 'Team">' + message.name + '</span> has ' + message.action + ' the flag !</p>')[0];
+            this.log.appendChild(logMsg);
+            this.addRemoveTimer(logMsg);
         }
 
     }

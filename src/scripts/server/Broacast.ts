@@ -8,12 +8,13 @@ export default class Broadcast {
         this.reset();
     }
 
-    cleanup() {
-        if (this.joined.length == 0) delete this.joined;
-        if (this.combat.length == 0) delete this.combat;
-        if (this.left.length == 0) delete this.left;
-        if (this.flagAction.length == 0) delete this.flagAction;
-        return this;
+    extract() {
+        let extract = {};
+        if (this.joined.length > 0) extract['joined'] = this.joined;;
+        if (this.combat.length > 0) extract['combat'] = this.combat;
+        if (this.left.length > 0) extract['left'] = this.left;
+        if (this.flagAction.length > 0) extract['flagAction'] = this.flagAction;
+        return extract;
     }
 
     reset() {

@@ -1,9 +1,21 @@
+#ping {
+    position:fixed;
+    z-index:10;
+    top:10px;
+    right:10px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color:white;
+    opacity: .8;
+}
+
+
 #HUD {
-position:fixed;
-z-index:10;
-top:0px;
-left:0px;
-font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    position:fixed;
+    z-index:10;
+    top:10px;
+    left:10px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    opacity: .8;
 }
 
 .blueTeam {
