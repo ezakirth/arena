@@ -53,6 +53,7 @@ export default class Graphics {
     }
 
     resizeCanvas() {
+
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
             || navigator.userAgent.match(/iPhone/i)
@@ -88,14 +89,15 @@ export default class Graphics {
 
 
         /*
-        this.ctx.canvas.width = this.width;
-        this.ctx.canvas.height = this.height;
-        this.ratio.x = this.width / this.canvas.clientWidth;
-        this.ratio.y = this.height / this.canvas.clientHeight;
-        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+                this.mobile = true;
+                this.ctx.canvas.width = this.width;
+                this.ctx.canvas.height = this.height;
+                this.ratio.x = this.width / this.canvas.clientWidth;
+                this.ratio.y = this.height / this.canvas.clientHeight;
+                this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
 
-        this.browser.height = window.innerHeight;
-        this.browser.width = window.innerWidth;
+                this.browser.height = window.innerHeight;
+                this.browser.width = window.innerWidth;
         */
 
 

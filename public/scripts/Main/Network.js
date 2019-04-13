@@ -16,7 +16,7 @@ var Network = /** @class */ (function () {
         this.socket = null;
     };
     Network.prototype.init = function () {
-        this.socket = io('http://localhost:3000');
+        this.socket = io(); //'http://localhost:3000');
         var _this = this;
         /*
         setInterval(function () {

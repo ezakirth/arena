@@ -62,14 +62,15 @@ var Graphics = /** @class */ (function () {
         this.browser.height = window.innerHeight;
         this.browser.width = window.innerWidth;
         /*
-        this.ctx.canvas.width = this.width;
-        this.ctx.canvas.height = this.height;
-        this.ratio.x = this.width / this.canvas.clientWidth;
-        this.ratio.y = this.height / this.canvas.clientHeight;
-        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+                this.mobile = true;
+                this.ctx.canvas.width = this.width;
+                this.ctx.canvas.height = this.height;
+                this.ratio.x = this.width / this.canvas.clientWidth;
+                this.ratio.y = this.height / this.canvas.clientHeight;
+                this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
 
-        this.browser.height = window.innerHeight;
-        this.browser.width = window.innerWidth;
+                this.browser.height = window.innerHeight;
+                this.browser.width = window.innerWidth;
         */
         this.setStyles();
     };
