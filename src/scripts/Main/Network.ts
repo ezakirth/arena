@@ -30,7 +30,7 @@ export default class Network {
     }
 
     init() {
-        this.socket = io('http://localhost:3000');
+        this.socket = io();//'http://localhost:3000');
 
         let _this = this;
 
