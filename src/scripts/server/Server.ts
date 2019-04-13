@@ -186,15 +186,15 @@ export default class Server {
 
             if (clientHistory) {
                 let clientPresent = lobby.clients[targetClientId];
-                let dist = Vector._dist(projectile.position, clientHistory.position);
 
-                if (clientPresent && dist < .3) {
+                if (clientPresent && !clientPresent.infos.dead && Vector._dist(projectile.position, clientHistory.position) < .3) {
                     let hasFlag = clientPresent.infos.hasEnemyFlag;
                     clientPresent.modLife(-projectile.type.dmg);
 
                     if (clientPresent.infos.dead) {
                         // tell everyone in lobby someone died
                         let killer = lobby.clients[projectile.clientId];
+                        killer.infos.score.kills++;
                         lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
 
                         // if he had the flag, tell everyone !

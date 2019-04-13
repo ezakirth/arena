@@ -12,6 +12,12 @@ var Infos = /** @class */ (function () {
         this.team = team;
         this.enemyTeam = (team == 'green' ? 'blue' : 'green');
         this.respawnTime = 0;
+        this.score = {
+            kills: 0,
+            deaths: 0,
+            captures: 0,
+            returns: 0
+        };
     }
     Infos.prototype.apply = function (infos) {
         this.life = infos.life;
@@ -24,6 +30,7 @@ var Infos = /** @class */ (function () {
         this.team = infos.team;
         this.enemyTeam = infos.enemyTeam;
         this.respawnTime = infos.respawnTime;
+        this.score = infos.score;
     };
     return Infos;
 }());

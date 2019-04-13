@@ -1,29 +1,89 @@
-#ping {
+#HUD_ping {
     position:fixed;
     z-index:10;
-    top:10px;
-    right:10px;
+    font-size:12px;
+    top:2px;
+    left:2px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color:white;
     opacity: 0.8;
 }
 
-
-#HUD {
+#HUD_log {
     position:fixed;
     z-index:10;
-    top:10px;
+    top:15px;
     left:10px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     opacity: 0.8;
 }
 
+
+
+#HUD_fullscreen {
+    position:fixed;
+    z-index:10;
+    bottom:15px;
+    right:15px;
+    font-size:32px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    cursor:pointer;
+    color:white;
+    opacity: 0.8;
+}
+
+
+#HUD_score {
+    position:fixed;
+    z-index:10;
+    font-size:14px;
+    top:15px;
+    right:10px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    opacity: 0.8;
+    text-shadow:1px 1px rgba(0, 0, 0, 0.664);
+}
+
+
+.inline {
+    clear: both;
+}
 .blueTeam {
+    display:inline-block;
     font-weight: bold;
-    color:blue;
+    color:rgb(21, 126, 196);
 }
 
 .greenTeam {
+    display:inline-block;
     font-weight: bold;
-    color:green;
+    color:rgb(35, 185, 98);
+}
+
+.white {
+    display:inline-block;
+    font-weight: bold;
+    color:white;
+}
+
+.red {
+    display:inline-block;
+    font-weight: bold;
+    color:rgb(207, 11, 11);
+}
+
+.kills, .deaths {
+    display:inline-block;
+    position:relative;
+    top:2px;
+    width:16px;
+    height:16px;
+    background-size:cover;
+}
+
+.kills {
+    background-image:url('../assets/kills.png');
+}
+.deaths {
+    background-image:url('../assets/deaths.png');
 }

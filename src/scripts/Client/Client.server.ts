@@ -57,6 +57,7 @@ export default class ClientServer extends Client {
             this.infos.hasEnemyFlag = false;
         }
         this.infos.dead = true;
+        this.infos.score.deaths++;
 
         this.infos.respawnTime = 8;
     }
@@ -89,7 +90,8 @@ export default class ClientServer extends Client {
                 // else it's our flag, so we return it
                 else {
                     time.addTimer('respawn', 0, { pickup: 'pickup_flag_' + this.infos.team, x: map.flags[this.infos.team].x, y: map.flags[this.infos.team].y, map: map });
-                    flagAction = 'returned'
+                    this.infos.score.returns++;
+                    flagAction = 'returned';
                 }
                 map.queueUpdate('flag', null, x, y);
             }
@@ -131,6 +133,7 @@ export default class ClientServer extends Client {
                             if (map.flags[this.infos.team].x == x && map.flags[this.infos.team].y == y && this.infos.hasEnemyFlag) {
                                 time.addTimer('respawn', 10, { pickup: 'pickup_flag_' + this.infos.enemyTeam, x: map.flags[this.infos.enemyTeam].x, y: map.flags[this.infos.enemyTeam].y, map: map });
                                 this.infos.hasEnemyFlag = false;
+                                this.infos.score.captures++;
                                 flagAction = 'captured';
                             }
                         }

@@ -11,6 +11,12 @@ export default class Infos {
     team: string;
     enemyTeam: string;
     respawnTime: number;
+    score: {
+        kills: number,
+        deaths: number,
+        captures: number,
+        returns: number
+    };
 
     constructor(life: number, shield: number, dead: boolean, weapon: Weapon, ammo: number, speed: number, hasEnemyFlag: boolean, team: string) {
         this.life = life;
@@ -24,6 +30,13 @@ export default class Infos {
 
         this.enemyTeam = (team == 'green' ? 'blue' : 'green');
         this.respawnTime = 0;
+
+        this.score = {
+            kills: 0,
+            deaths: 0,
+            captures: 0,
+            returns: 0
+        }
     }
 
     apply(infos: Infos) {
@@ -37,5 +50,6 @@ export default class Infos {
         this.team = infos.team;
         this.enemyTeam = infos.enemyTeam;
         this.respawnTime = infos.respawnTime;
+        this.score = infos.score;
     }
 }

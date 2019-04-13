@@ -15,7 +15,7 @@ var Network = /** @class */ (function () {
         this.socket = null;
     };
     Network.prototype.connect = function () {
-        this.socket = io(); //'http://localhost:3000');
+        this.socket = io(); //'http://192.168.1.21:3000');
         var _this = this;
         setInterval(function () {
             _this.startTime = Date.now();
@@ -23,7 +23,7 @@ var Network = /** @class */ (function () {
         }, 2000);
         this.socket.on('pongtest', function () {
             _this.latency = Date.now() - _this.startTime;
-            hud.ping.innerText = _this.latency + 'ms';
+            hud.HUD_ping.innerText = _this.latency + 'ms';
         });
         /**
          * We send the server our movement data at a fixed 100ms rate
@@ -78,7 +78,6 @@ var Network = /** @class */ (function () {
         delete main.clients[clientId];
     };
     Network.prototype.updateClients = function (serverData) {
-        hud.processMessages(serverData.broadcast);
         time.updateServerDelay(serverData.timestamp);
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
@@ -112,6 +111,7 @@ var Network = /** @class */ (function () {
                 this.clientsPositionBuffer(client, serverClient);
             }
         }
+        hud.processMessages(serverData.broadcast);
     };
     /**
      * Apply the authoritative position of this client's client.

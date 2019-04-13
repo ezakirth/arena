@@ -138,13 +138,13 @@ var Server = /** @class */ (function () {
             var clientHistory = history[targetClientId];
             if (clientHistory) {
                 var clientPresent = lobby.clients[targetClientId];
-                var dist = Vector_1.default._dist(projectile.position, clientHistory.position);
-                if (clientPresent && dist < .3) {
+                if (clientPresent && !clientPresent.infos.dead && Vector_1.default._dist(projectile.position, clientHistory.position) < .3) {
                     var hasFlag = clientPresent.infos.hasEnemyFlag;
                     clientPresent.modLife(-projectile.type.dmg);
                     if (clientPresent.infos.dead) {
                         // tell everyone in lobby someone died
                         var killer = lobby.clients[projectile.clientId];
+                        killer.infos.score.kills++;
                         lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
                         // if he had the flag, tell everyone !
                         if (hasFlag)

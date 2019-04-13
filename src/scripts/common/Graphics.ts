@@ -53,6 +53,7 @@ export default class Graphics {
     }
 
     resizeCanvas() {
+        //        screen.orientation.lock("landscape-primary");
 
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
@@ -65,40 +66,39 @@ export default class Graphics {
         else
             this.mobile = false;
 
-
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        this.ctx.canvas.width = this.width;
-        this.ctx.canvas.height = this.height;
-
-        this.ratio.x = this.width / this.canvas.clientWidth;
-        this.ratio.y = this.height / this.canvas.clientHeight;
-        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
-
-        let ratioW = window.innerWidth / window.innerHeight;
-        let ratioH = window.innerHeight / window.innerWidth;
-        let tileRatio = 6;
-        if (Editor) tileRatio = 10;
-        if (window.innerWidth > window.innerHeight)
-            window.tileSize = (Math.floor(window.innerWidth * ratioH / tileRatio));
-        else
-            window.tileSize = (Math.floor(window.innerHeight * ratioW / tileRatio));
-
-        this.browser.height = window.innerHeight;
-        this.browser.width = window.innerWidth;
-
-
         /*
-                this.mobile = true;
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
                 this.ctx.canvas.width = this.width;
                 this.ctx.canvas.height = this.height;
+
                 this.ratio.x = this.width / this.canvas.clientWidth;
                 this.ratio.y = this.height / this.canvas.clientHeight;
                 this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
 
+                let ratioW = window.innerWidth / window.innerHeight;
+                let ratioH = window.innerHeight / window.innerWidth;
+                let tileRatio = 6;
+                if (Editor) tileRatio = 10;
+                if (window.innerWidth > window.innerHeight)
+                    window.tileSize = (Math.floor(window.innerWidth * ratioH / tileRatio));
+                else
+                    window.tileSize = (Math.floor(window.innerHeight * ratioW / tileRatio));
+
                 this.browser.height = window.innerHeight;
                 this.browser.width = window.innerWidth;
+
         */
+
+        this.ctx.canvas.width = this.width;
+        this.ctx.canvas.height = this.height;
+        this.ratio.x = this.width / this.canvas.clientWidth;
+        this.ratio.y = this.height / this.canvas.clientHeight;
+        this.offset.y = (window.innerHeight - this.canvas.clientHeight) / 2;
+
+        this.browser.height = window.innerHeight;
+        this.browser.width = window.innerWidth;
+
 
 
         this.setStyles();
