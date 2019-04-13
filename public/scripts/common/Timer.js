@@ -13,7 +13,7 @@ var Timer = /** @class */ (function () {
         this.serverDelay = 100;
         this.serverUpdateTimeStamps = [];
         this.serverUpdateDelay = 0;
-        this.serverLastUpdate = 0;
+        this.serverTimeSincelastUpdate = 0;
     }
     Timer.prototype.update = function () {
         this.now = +new Date();
@@ -60,7 +60,7 @@ var Timer = /** @class */ (function () {
     };
     Timer.prototype.networkUpdate = function () {
         this.serverRenderTimestamp = this.now + this.serverUpdateDelay;
-        this.serverLastUpdate += this.delta;
+        this.serverTimeSincelastUpdate = this.now + this.serverUpdateDelay;
     };
     Timer.prototype.setServerDelay = function (timestamp) {
         this.serverUpdateTimeStamps.push(timestamp);

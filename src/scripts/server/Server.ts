@@ -99,9 +99,12 @@ export default class Server {
         if (lobby) {
             let client = lobby.clients[socket.id];
 
+            console.log('update from: ' + client.name + "(" + movementData.deltaPosition.x.toFixed(3) + ', ' + movementData.deltaPosition.y.toFixed(3) + ")");
+
             if (movementData.appliedAuthoring) client.networkData.ignoreClientMovement = false;
 
             if (!client.networkData.ignoreClientMovement) {
+                console.log(' - updated1: ' + client.name + "(" + client.position.x.toFixed(3) + ', ' + client.position.y.toFixed(3) + ")");
                 client.position.x += movementData.deltaPosition.x;
                 client.position.y += movementData.deltaPosition.y;
                 client.direction.x += movementData.deltaDirection.x;
@@ -118,6 +121,7 @@ export default class Server {
                 }
 
                 client.checkTile(lobby.map.data[px][py], px, py);
+                console.log(' - updated2: ' + client.name + "(" + client.position.x.toFixed(3) + ', ' + client.position.y.toFixed(3) + ")");
             }
 
             client.networkData.sequence = movementData.sequence;
@@ -126,8 +130,14 @@ export default class Server {
     }
 
     notifyClients() {
+        let players = [];
         for (let lobbyId in this.lobbies) {
             let lobby = this.lobbies[lobbyId];
+
+            for (let clientId in lobby.clients) {
+                let client = lobby.clients[clientId];
+                players.push(client.name + "(" + client.position.x.toFixed(3) + ', ' + client.position.y.toFixed(3) + ")");
+            }
 
             let timestamp = +new Date();
             lobby.history[timestamp] = JSON.parse(JSON.stringify(lobby.clients));
@@ -139,10 +149,11 @@ export default class Server {
             this.io.to(lobbyId).emit('update', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates });
             lobby.map.processUpdates();
 
-            /*    for (let clientId in lobby.clients) {
-                    lobby.clients[clientId].networkData.ignoreClientMovement = false;
-                }*/
         }
+
+        if (players.length > 0)
+            console.log("Notify: " + players.join(', '));
+
 
     }
 

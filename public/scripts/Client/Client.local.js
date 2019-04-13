@@ -122,12 +122,12 @@ var ClientLocal = /** @class */ (function (_super) {
         // Find the two authoritative positions surrounding the rendering timestamp.
         var buffer = this.networkData.positionBuffer;
         // Drop positions older than 100ms.
-        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+        while (buffer.length > 2) {
             buffer.shift();
         }
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
+        if (buffer.length == 2) {
             var x0 = buffer[0].position.x;
             var y0 = buffer[0].position.y;
             var dx0 = buffer[0].direction.x;
@@ -138,8 +138,9 @@ var ClientLocal = /** @class */ (function (_super) {
             var dx1 = buffer[1].direction.x;
             var dy1 = buffer[1].direction.y;
             var t1 = buffer[1].timestamp;
-            this.position.set(x0 + (x1 - x0) * (time.serverRenderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
-            this.direction.set(dx0 + (dx1 - dx0) * (time.serverRenderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
+            var lastServerUpdate = time.now - (t1 - t0);
+            this.position.set(x0 + (x1 - x0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0));
+            this.direction.set(dx0 + (dx1 - dx0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverTimeSincelastUpdate - t0) / (t1 - t0));
             if (!(x0 == x1 && y0 == y1))
                 this.moving = true;
         }

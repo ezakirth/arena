@@ -30,7 +30,7 @@ export default class Network {
     }
 
     init() {
-        this.socket = io();//'http://localhost:3000');
+        this.socket = io('http://localhost:3000');
 
         let _this = this;
 
@@ -106,7 +106,9 @@ export default class Network {
     }
 
     updateClient(serverData: any) {
+        time.setServerDelay(serverData.timestamp);
         this.lastServerTimestamp = serverData.timestamp;
+
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
 
@@ -186,18 +188,18 @@ export default class Network {
      * @param {ClientServer} serverClient
      */
     clientsPositionBuffer(client: ClientLocal, serverClient: ClientServer) {
-        let timestamp = +new Date();
-        time.setServerDelay(timestamp);
 
         // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
         if (serverClient.networkData.ignoreClientMovement) {
             client.networkData.positionBuffer = [];
-            client.networkData.positionBuffer.push(new PositionBuffer(timestamp - 1, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer(this.lastServerTimestamp, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer(this.lastServerTimestamp + 1, serverClient.position, serverClient.direction));
             client.position.set(serverClient.position.x, serverClient.position.y);
             client.direction.set(serverClient.direction.x, serverClient.direction.y);
         }
-        else
-            client.networkData.positionBuffer.push(new PositionBuffer(timestamp, serverClient.position, serverClient.direction));
+        else {
+            client.networkData.positionBuffer.push(new PositionBuffer(this.lastServerTimestamp, serverClient.position, serverClient.direction));
+        }
     }
 
     sendMovementData(client: ClientLocal) {

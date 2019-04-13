@@ -72,9 +72,11 @@ var Server = /** @class */ (function () {
         var lobby = this.lobbies[movementData.lobbyId];
         if (lobby) {
             var client = lobby.clients[socket.id];
+            console.log('update from: ' + client.name + "(" + movementData.deltaPosition.x.toFixed(3) + ', ' + movementData.deltaPosition.y.toFixed(3) + ")");
             if (movementData.appliedAuthoring)
                 client.networkData.ignoreClientMovement = false;
             if (!client.networkData.ignoreClientMovement) {
+                console.log(' - updated1: ' + client.name + "(" + client.position.x.toFixed(3) + ', ' + client.position.y.toFixed(3) + ")");
                 client.position.x += movementData.deltaPosition.x;
                 client.position.y += movementData.deltaPosition.y;
                 client.direction.x += movementData.deltaDirection.x;
@@ -88,13 +90,19 @@ var Server = /** @class */ (function () {
                     client.networkData.ignoreClientMovement = true;
                 }
                 client.checkTile(lobby.map.data[px][py], px, py);
+                console.log(' - updated2: ' + client.name + "(" + client.position.x.toFixed(3) + ', ' + client.position.y.toFixed(3) + ")");
             }
             client.networkData.sequence = movementData.sequence;
         }
     };
     Server.prototype.notifyClients = function () {
+        var players = [];
         for (var lobbyId in this.lobbies) {
             var lobby = this.lobbies[lobbyId];
+            for (var clientId in lobby.clients) {
+                var client = lobby.clients[clientId];
+                players.push(client.name + "(" + client.position.x.toFixed(3) + ', ' + client.position.y.toFixed(3) + ")");
+            }
             var timestamp = +new Date();
             lobby.history[timestamp] = JSON.parse(JSON.stringify(lobby.clients));
             var list = Object.keys(lobby.history);
@@ -103,10 +111,9 @@ var Server = /** @class */ (function () {
             }
             this.io.to(lobbyId).emit('update', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates });
             lobby.map.processUpdates();
-            /*    for (let clientId in lobby.clients) {
-                    lobby.clients[clientId].networkData.ignoreClientMovement = false;
-                }*/
         }
+        if (players.length > 0)
+            console.log("Notify: " + players.join(', '));
     };
     Server.prototype.shootBullet = function (projectile) {
         var lobby = this.lobbies[projectile.lobbyId];
