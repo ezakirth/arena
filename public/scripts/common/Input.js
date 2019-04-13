@@ -23,9 +23,9 @@ var Input = /** @class */ (function () {
         window.addEventListener('mousedown', function (e) { _this.mouseDown(e); });
         window.addEventListener('mouseup', function (e) { _this.mouseUp(e); });
         window.addEventListener('mousemove', function (e) { _this.mouseMove(e); });
-        window.addEventListener('touchstart', function (e) { _this.touchStart(e); });
-        window.addEventListener('touchend', function (e) { _this.touchEnd(e); });
-        window.addEventListener('touchmove', function (e) { _this.touchMove(e); });
+        window.addEventListener('touchstart', function (e) { _this.touchStart(e); }, { passive: false });
+        window.addEventListener('touchend', function (e) { _this.touchEnd(e); }, { passive: false });
+        window.addEventListener('touchmove', function (e) { _this.touchMove(e); }, { passive: false });
         window.addEventListener('keyup', function (e) { _this.keyHandler(e); });
         window.addEventListener('keydown', function (e) { _this.keyHandler(e); });
         window.addEventListener('contextmenu', function (e) { _this.rightClick(e); });
@@ -114,6 +114,7 @@ var Input = /** @class */ (function () {
         }
     };
     Input.prototype.touchMove = function (e) {
+        e.preventDefault();
         var touches = e.changedTouches;
         for (var i = 0; i < touches.length; i++) {
             var id = touches[i].identifier;

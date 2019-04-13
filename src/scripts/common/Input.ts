@@ -46,9 +46,9 @@ export default class Input {
         window.addEventListener('mouseup', function (e) { _this.mouseUp(e); });
         window.addEventListener('mousemove', function (e) { _this.mouseMove(e); });
 
-        window.addEventListener('touchstart', function (e) { _this.touchStart(e); });
-        window.addEventListener('touchend', function (e) { _this.touchEnd(e); });
-        window.addEventListener('touchmove', function (e) { _this.touchMove(e); });
+        window.addEventListener('touchstart', function (e) { _this.touchStart(e); }, { passive: false });
+        window.addEventListener('touchend', function (e) { _this.touchEnd(e); }, { passive: false });
+        window.addEventListener('touchmove', function (e) { _this.touchMove(e); }, { passive: false });
 
 
         window.addEventListener('keyup', function (e) { _this.keyHandler(e); });
@@ -156,6 +156,7 @@ export default class Input {
     }
 
     touchMove(e: TouchEvent) {
+        e.preventDefault();
         let touches: TouchList = e.changedTouches;
         for (let i = 0; i < touches.length; i++) {
             let id = touches[i].identifier;
