@@ -22,7 +22,7 @@
 
 #HUD_fullscreen {
     position:fixed;
-    z-index:10;
+    z-index:100;
     bottom:15px;
     right:15px;
     font-size:32px;
