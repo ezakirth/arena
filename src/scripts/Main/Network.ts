@@ -41,7 +41,7 @@ export default class Network {
         }, 2000);
         this.socket.on('pongtest', function () {
             _this.latency = Date.now() - _this.startTime;
-            hud.log.innerText = _this.latency + 'ms';
+            hud.ping.innerText = _this.latency + 'ms';
         });
 
 
