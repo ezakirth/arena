@@ -60,10 +60,11 @@ var Timer = /** @class */ (function () {
         this.timers.push({ type: type, delay: delay, data: data });
     };
     Timer.prototype.networkUpdate = function () {
-        this.serverRenderTimestamp = this.serverUpdateTimestamp + this.serverUpdateDelay;
+        //  this.serverRenderTimestamp += this.delta;
         this.serverTimeSincelastUpdate = this.now + this.serverUpdateDelay;
     };
     Timer.prototype.setServerDelay = function (timestamp) {
+        //        this.serverRenderTimestamp = timestamp + this.serverUpdateDelay;
         this.serverUpdateTimestamps.push(timestamp);
         if (this.serverUpdateTimestamps.length > 2)
             this.serverUpdateTimestamps.shift();

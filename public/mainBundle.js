@@ -19182,12 +19182,12 @@ var ClientLocal = /** @class */ (function (_super) {
         // Drop positions older than 100ms.
         //      serverRenderTimestamp
         //        serverUpdateTimestamp
-        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverTimeSincelastUpdate) {
             buffer.shift();
         }
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
+        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverTimeSincelastUpdate && buffer[1].timestamp >= time.serverTimeSincelastUpdate) {
             var x0 = buffer[0].position.x;
             var y0 = buffer[0].position.y;
             var dx0 = buffer[0].direction.x;
@@ -19664,8 +19664,8 @@ var Network = /** @class */ (function () {
         delete main.clients[clientId];
     };
     Network.prototype.updateClient = function (serverData) {
-        time.setServerDelay(serverData.timestamp);
-        time.serverUpdateTimestamp = serverData.timestamp;
+        time.serverUpdateTimestamp = +new Date(); //serverData.timestamp;
+        time.setServerDelay(time.serverUpdateTimestamp); //serverData.timestamp);
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
         var serverClients = serverData.clients;
@@ -20604,10 +20604,11 @@ var Timer = /** @class */ (function () {
         this.timers.push({ type: type, delay: delay, data: data });
     };
     Timer.prototype.networkUpdate = function () {
-        this.serverRenderTimestamp = this.serverUpdateTimestamp + this.serverUpdateDelay;
+        //  this.serverRenderTimestamp += this.delta;
         this.serverTimeSincelastUpdate = this.now + this.serverUpdateDelay;
     };
     Timer.prototype.setServerDelay = function (timestamp) {
+        //        this.serverRenderTimestamp = timestamp + this.serverUpdateDelay;
         this.serverUpdateTimestamps.push(timestamp);
         if (this.serverUpdateTimestamps.length > 2)
             this.serverUpdateTimestamps.shift();

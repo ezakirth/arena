@@ -152,13 +152,13 @@ export default class ClientLocal extends Client {
         // Drop positions older than 100ms.
         //      serverRenderTimestamp
         //        serverUpdateTimestamp
-        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverTimeSincelastUpdate) {
             buffer.shift();
         }
 
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
+        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverTimeSincelastUpdate && buffer[1].timestamp >= time.serverTimeSincelastUpdate) {
             let x0 = buffer[0].position.x;
             let y0 = buffer[0].position.y;
             let dx0 = buffer[0].direction.x;

@@ -77,8 +77,8 @@ var Network = /** @class */ (function () {
         delete main.clients[clientId];
     };
     Network.prototype.updateClient = function (serverData) {
-        time.setServerDelay(serverData.timestamp);
-        time.serverUpdateTimestamp = serverData.timestamp;
+        time.serverUpdateTimestamp = +new Date(); //serverData.timestamp;
+        time.setServerDelay(time.serverUpdateTimestamp); //serverData.timestamp);
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
         var serverClients = serverData.clients;

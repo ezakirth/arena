@@ -90,10 +90,11 @@ export default class Timer {
 
 
     networkUpdate() {
-        this.serverRenderTimestamp = this.serverUpdateTimestamp + this.serverUpdateDelay;
+        //  this.serverRenderTimestamp += this.delta;
         this.serverTimeSincelastUpdate = this.now + this.serverUpdateDelay;
     }
     setServerDelay(timestamp: number) {
+        //        this.serverRenderTimestamp = timestamp + this.serverUpdateDelay;
         this.serverUpdateTimestamps.push(timestamp);
         if (this.serverUpdateTimestamps.length > 2) this.serverUpdateTimestamps.shift();
         this.serverUpdateDelay = this.serverUpdateTimestamps[0] - this.serverUpdateTimestamps[1];
