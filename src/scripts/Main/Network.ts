@@ -20,12 +20,10 @@ declare var loop: Function;
 
 export default class Network {
     latency: number;
-    lastServerTimestamp: 0;
     socket: SocketIOClient.Socket;
 
     constuctor() {
         this.latency = 0;
-        this.lastServerTimestamp = 0;
         this.socket = null;
     }
 
@@ -107,7 +105,7 @@ export default class Network {
 
     updateClient(serverData: any) {
         time.setServerDelay(serverData.timestamp);
-        this.lastServerTimestamp = serverData.timestamp;
+        time.serverUpdateTimestamp = serverData.timestamp;
 
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
@@ -192,13 +190,13 @@ export default class Network {
         // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
         if (serverClient.networkData.ignoreClientMovement) {
             client.networkData.positionBuffer = [];
-            client.networkData.positionBuffer.push(new PositionBuffer(this.lastServerTimestamp, serverClient.position, serverClient.direction));
-            client.networkData.positionBuffer.push(new PositionBuffer(this.lastServerTimestamp + 1, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp + 1, serverClient.position, serverClient.direction));
             client.position.set(serverClient.position.x, serverClient.position.y);
             client.direction.set(serverClient.direction.x, serverClient.direction.y);
         }
         else {
-            client.networkData.positionBuffer.push(new PositionBuffer(this.lastServerTimestamp, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
         }
     }
 

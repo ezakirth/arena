@@ -12,7 +12,6 @@ var Network = /** @class */ (function () {
     }
     Network.prototype.constuctor = function () {
         this.latency = 0;
-        this.lastServerTimestamp = 0;
         this.socket = null;
     };
     Network.prototype.init = function () {
@@ -79,7 +78,7 @@ var Network = /** @class */ (function () {
     };
     Network.prototype.updateClient = function (serverData) {
         time.setServerDelay(serverData.timestamp);
-        this.lastServerTimestamp = serverData.timestamp;
+        time.serverUpdateTimestamp = serverData.timestamp;
         map.updates = serverData.mapUpdates || [];
         map.processUpdates();
         var serverClients = serverData.clients;
@@ -153,13 +152,13 @@ var Network = /** @class */ (function () {
         // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
         if (serverClient.networkData.ignoreClientMovement) {
             client.networkData.positionBuffer = [];
-            client.networkData.positionBuffer.push(new PositionBuffer_1.default(this.lastServerTimestamp, serverClient.position, serverClient.direction));
-            client.networkData.positionBuffer.push(new PositionBuffer_1.default(this.lastServerTimestamp + 1, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp + 1, serverClient.position, serverClient.direction));
             client.position.set(serverClient.position.x, serverClient.position.y);
             client.direction.set(serverClient.direction.x, serverClient.direction.y);
         }
         else {
-            client.networkData.positionBuffer.push(new PositionBuffer_1.default(this.lastServerTimestamp, serverClient.position, serverClient.direction));
+            client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
         }
     };
     Network.prototype.sendMovementData = function (client) {

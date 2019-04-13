@@ -122,7 +122,9 @@ var ClientLocal = /** @class */ (function (_super) {
         // Find the two authoritative positions surrounding the rendering timestamp.
         var buffer = this.networkData.positionBuffer;
         // Drop positions older than 100ms.
-        while (buffer.length > 2) {
+        //      serverRenderTimestamp
+        //        serverUpdateTimestamp
+        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
             buffer.shift();
         }
         // Interpolate between the two surrounding authoritative positions.
@@ -145,6 +147,43 @@ var ClientLocal = /** @class */ (function (_super) {
                 this.moving = true;
         }
     };
+    /*
+
+        interpolatePositions() {
+            // Find the two authoritative positions surrounding the rendering timestamp.
+            let buffer: PositionBuffer[] = this.networkData.positionBuffer;
+
+            // Drop positions older than 100ms.
+            while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+                console.log(buffer[1].timestamp, time.serverRenderTimestamp);
+                buffer.shift();
+            }
+            if (buffer.length > 1)
+                console.log('P' + this.name + "(" + buffer[0].position.x.toFixed(2) + "," + (buffer[0].position.y.toFixed(2) + ") - (" + buffer[1].position.x.toFixed(2) + "," + (buffer[1].position.y.toFixed(2) + ")")));
+            else
+                console.log('P' + this.name + "(" + buffer[0].position.x.toFixed(2) + "," + (buffer[0].position.y.toFixed(2) + ")"));
+            // Interpolate between the two surrounding authoritative positions.
+            // startpoint is older than 100ms, endpoint is less than 100ms ago
+            if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
+                let x0 = buffer[0].position.x;
+                let y0 = buffer[0].position.y;
+                let dx0 = buffer[0].direction.x;
+                let dy0 = buffer[0].direction.y;
+                let t0 = buffer[0].timestamp;
+
+                let x1 = buffer[1].position.x;
+                let y1 = buffer[1].position.y;
+                let dx1 = buffer[1].direction.x;
+                let dy1 = buffer[1].direction.y;
+                let t1 = buffer[1].timestamp;
+
+                this.position.set(x0 + (x1 - x0) * (time.serverRenderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
+                this.direction.set(dx0 + (dx1 - dx0) * (time.serverRenderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
+
+                if (!(x0 == x1 && y0 == y1)) this.moving = true;
+            }
+        }
+        */
     /**
      * Renders the client and his view of the map
      * first map pass renders the floor, decals, spawn and portals
