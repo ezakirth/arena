@@ -7,6 +7,7 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color:white;
     opacity: 0.8;
+    cursor:cell;
 }
 
 #HUD_log {
@@ -16,6 +17,7 @@
     left:10px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     opacity: 0.8;
+    cursor:cell;
 }
 
 
@@ -32,6 +34,9 @@
     opacity: 0.8;
 }
 
+body {
+    cursor:cell;
+}
 
 #HUD_score {
     position:fixed;
@@ -42,8 +47,8 @@
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     opacity: 0.8;
     text-shadow:1px 1px rgba(0, 0, 0, 0.664);
+    cursor:cell;
 }
-
 
 .inline {
     clear: both;
