@@ -63,7 +63,7 @@ export default class Timer {
                 }
 
                 if (timer.type == 'buff') {
-                    timer.data.client.infos[timer.data.stat] = timer.data.value;
+                    timer.data.client.infos[timer.data.stat] -= timer.data.value;
                 }
                 this.timers.splice(index, 1);
             }

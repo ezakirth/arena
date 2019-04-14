@@ -41,7 +41,7 @@ var Timer = /** @class */ (function () {
                     timer.data.map.queueUpdate('pickup', timer.data.pickup, timer.data.x, timer.data.y);
                 }
                 if (timer.type == 'buff') {
-                    timer.data.client.infos[timer.data.stat] = timer.data.value;
+                    timer.data.client.infos[timer.data.stat] -= timer.data.value;
                 }
                 this.timers.splice(index, 1);
             }
