@@ -111,7 +111,7 @@ export default class ClientServer extends Client {
                         this.infos.life = clamp(this.infos.life, 0, 100);
                         this.infos.shield = clamp(this.infos.shield, 0, 100);
                         if (pickup.speed != 0) time.addTimer('buff', 3, { stat: 'speed', value: this.infos.speed, client: this });
-                        this.infos.speed += pickup.speed;
+                        this.infos.speed = pickup.speed;
                         time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y, map: map });
                         map.queueUpdate('pickup', null, x, y);
                     }
