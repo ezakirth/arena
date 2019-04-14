@@ -105,7 +105,7 @@ var ClientServer = /** @class */ (function (_super) {
                         this.infos.life = Server_1.clamp(this.infos.life, 0, 100);
                         this.infos.shield = Server_1.clamp(this.infos.shield, 0, 100);
                         if (pickup.speed != 0)
-                            time.addTimer('buff', 3, { stat: 'speed', value: pickup.speed, client: this });
+                            time.addTimer('buff', 1, { stat: 'speed', value: pickup.speed, client: this });
                         this.infos.speed += pickup.speed;
                         time.addTimer('respawn', 10, { pickup: tile.pickup, x: x, y: y, map: map });
                         map.queueUpdate('pickup', null, x, y);
