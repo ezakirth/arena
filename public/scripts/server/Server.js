@@ -82,26 +82,29 @@ var Server = /** @class */ (function () {
         var lobby = this.lobbies[movementData.lobbyId];
         if (lobby) {
             var client = lobby.clients[socket.id];
-            if (movementData.appliedAuthoring)
-                client.networkData.ignoreClientMovement = false;
-            if (!client.networkData.ignoreClientMovement) {
-                client.position.x += movementData.deltaPosition.x;
-                client.position.y += movementData.deltaPosition.y;
-                client.direction.x += movementData.deltaDirection.x;
-                client.direction.y += movementData.deltaDirection.y;
-                var px = exports.clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
-                var py = exports.clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
-                if (!lobby.map.data[px][py].solid)
-                    client.lastGoodPos = new Vector_1.default(client.position.x, client.position.y);
-                else {
-                    client.position = new Vector_1.default(client.lastGoodPos.x, client.lastGoodPos.y);
-                    client.networkData.ignoreClientMovement = true;
+            if (client) {
+                if (movementData.appliedAuthoring)
+                    client.networkData.forceAuthoring = false;
+                if (!client.networkData.forceAuthoring) {
+                    client.position.x += movementData.deltaPosition.x;
+                    client.position.y += movementData.deltaPosition.y;
+                    client.direction.x += movementData.deltaDirection.x;
+                    client.direction.y += movementData.deltaDirection.y;
+                    var px = exports.clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
+                    var py = exports.clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
+                    if (!lobby.map.data[px][py].solid)
+                        client.lastGoodPos = new Vector_1.default(client.position.x, client.position.y);
+                    else {
+                        client.position = new Vector_1.default(client.lastGoodPos.x, client.lastGoodPos.y);
+                        client.networkData.forceAuthoring = true;
+                    }
+                    var flagAction = client.checkTile(lobby.map.data[px][py], px, py);
+                    //             client.checkPortal(lobby.map.data[px][py]);
+                    if (flagAction)
+                        lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
                 }
-                var flagAction = client.checkTile(lobby.map.data[px][py], px, py);
-                if (flagAction)
-                    lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
+                client.networkData.sequence = movementData.sequence;
             }
-            client.networkData.sequence = movementData.sequence;
         }
     };
     Server.prototype.updateClients = function () {
@@ -110,10 +113,13 @@ var Server = /** @class */ (function () {
             var timestamp = +new Date();
             lobby.history[timestamp] = JSON.parse(JSON.stringify(lobby.clients));
             var list = Object.keys(lobby.history);
-            if (list.length > 5) {
+            if (list.length > 20) {
                 delete lobby.history[list[0]];
             }
             this.io.to(lobbyId).emit('updateClients', { timestamp: timestamp, clients: lobby.clients, mapUpdates: lobby.map.updates, broadcast: lobby.broadcast.extract() });
+            for (var clientId in lobby.clients) {
+                lobby.clients[clientId].infos.spawned = true;
+            }
             lobby.broadcast.reset();
             lobby.map.processUpdates();
         }

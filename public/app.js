@@ -45,23 +45,60 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(function (file) {
 });
 io.on('connection', function (socket) {
     server.welcome(socket);
+    var fakeLag = false;
+    var lagValue = Math.floor(40 + 20 * Math.random());
     socket.on('askToJoin', function (clientData) {
         server.createClient(socket, clientData);
     });
     socket.on('shoot', function (projectile) {
-        server.shootProjectile(projectile);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.shootProjectile(projectile);
+            }, lagValue);
+        }
+        else {
+            server.shootProjectile(projectile);
+        }
     });
     socket.on('hitCheck', function (projectileData) {
-        server.hitCheckProjectile(projectileData);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.hitCheckProjectile(projectileData);
+            }, lagValue);
+        }
+        else {
+            server.hitCheckProjectile(projectileData);
+        }
     });
     socket.on('update', function (movementData) {
-        server.updateClient(socket, movementData);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.updateClient(socket, movementData);
+            }, lagValue);
+        }
+        else {
+            server.updateClient(socket, movementData);
+        }
     });
     socket.on('disconnect', function () {
-        server.deleteClient(socket);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.deleteClient(socket);
+            }, lagValue);
+        }
+        else {
+            server.deleteClient(socket);
+        }
     });
     socket.on('pingtest', function () {
-        socket.emit('pongtest');
+        if (fakeLag) {
+            setTimeout(function () {
+                socket.emit('pongtest');
+            }, lagValue);
+        }
+        else {
+            socket.emit('pongtest');
+        }
     });
 });
 setInterval(function () {

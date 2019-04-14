@@ -11,8 +11,6 @@ export default class Timer {
     timers: any[];
 
     serverRenderTimestamp: number;
-    serverUpdateTimestamps: number[];
-    serverUpdateDelay: number;
     serverUpdateTimestamp: number;
     serverLastTimestamp: number;
 
@@ -27,8 +25,6 @@ export default class Timer {
 
         this.timers = [];
 
-        this.serverUpdateTimestamps = [];
-        this.serverUpdateDelay = 0;
         this.serverRenderTimestamp = 0;
         this.serverUpdateTimestamp = 0;
         this.serverLastTimestamp = 0;
@@ -87,13 +83,10 @@ export default class Timer {
 
 
     networkUpdate() {
-        this.serverRenderTimestamp = this.now + this.serverUpdateDelay;
+        this.serverRenderTimestamp = this.now - 300;
     }
     updateServerDelay(serverLastTimestamp: number) {
         this.serverLastTimestamp = serverLastTimestamp;
         this.serverUpdateTimestamp = +new Date();
-        this.serverUpdateTimestamps.push(this.serverUpdateTimestamp);
-        if (this.serverUpdateTimestamps.length > 2) this.serverUpdateTimestamps.shift();
-        this.serverUpdateDelay = this.serverUpdateTimestamps[0] - this.serverUpdateTimestamps[1];
     }
 }

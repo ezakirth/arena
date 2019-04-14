@@ -30,7 +30,7 @@ export default class Network {
     }
 
     connect() {
-        this.socket = io();//'http://192.168.1.21:3000');
+        this.socket = io('http://192.168.1.21:3000');
 
         let _this = this;
 
@@ -128,8 +128,10 @@ export default class Network {
             }
 
             if (clientId == main.localClientId) {
+
+
                 // server tells us to ignore our movement, so we just apply authoring, no reconciliation
-                if (serverClient.networkData.ignoreClientMovement) {
+                if (serverClient.networkData.forceAuthoring) {
                     client.networkData.reconciliationMovement = [];
                     this.authoring(client, serverClient);
                     client.savePositionForReconciliation();
@@ -137,6 +139,10 @@ export default class Network {
                     this.socket.emit('update', new MovementData(new Vector(0, 0), new Vector(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
                 }
                 else {
+                    if (!serverClient.infos.spawned) {
+                        client.respawn();
+                    }
+
                     // if there was movement since the last server update, send it now
                     this.sendMovementData(client)
 
@@ -196,7 +202,7 @@ export default class Network {
     clientsPositionBuffer(client: ClientLocal, serverClient: ClientServer) {
 
         // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
-        if (serverClient.networkData.ignoreClientMovement) {
+        if (serverClient.networkData.forceAuthoring) {
             client.networkData.positionBuffer = [];
             client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
             client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp + 1, serverClient.position, serverClient.direction));

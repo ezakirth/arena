@@ -68,7 +68,7 @@ export default class HUD {
 
 
     toggleFullScreen() {
-        if (!document.fullscreenElement) {
+        if (!document['fullscreenElement']) {
             document.documentElement.requestFullscreen();
         } else {
             if (document.exitFullscreen) {

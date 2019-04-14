@@ -27,18 +27,15 @@ var ClientServer = /** @class */ (function (_super) {
         if (this.infos.dead) {
             this.infos.respawnTime -= time.delta;
             if (this.infos.respawnTime <= 0) {
-                this.respawn();
+                this.respawnPosition = server.lobbies[this.networkData.lobbyId].map.assignSpawnToClient(this.infos.team);
+                this.infos.life = 100;
+                this.infos.shield = 0;
+                this.infos.dead = false;
+                this.infos.speed = 0.05;
+                this.infos.weapon = pickups.weapons.gun;
+                this.infos.spawned = false;
             }
         }
-    };
-    ClientServer.prototype.respawn = function () {
-        this.position = server.lobbies[this.networkData.lobbyId].map.assignSpawnToClient(this.infos.team);
-        this.infos.life = 100;
-        this.infos.shield = 100;
-        this.infos.dead = false;
-        this.infos.speed = 0.05;
-        this.infos.weapon = pickups.weapons.gun;
-        this.networkData.ignoreClientMovement = true;
     };
     ClientServer.prototype.modLife = function (delta) {
         this.infos.life += delta;
@@ -133,17 +130,6 @@ var ClientServer = /** @class */ (function (_super) {
                         }
                     }
                 }
-            }
-            // if it's a portal
-            if (tile.portal) {
-                if (!this.justUsedPortal) {
-                    this.position.set(tile.portal.dx + 0.5, tile.portal.dy + 0.5);
-                    this.justUsedPortal = true;
-                    this.networkData.ignoreClientMovement = true;
-                }
-            }
-            else {
-                this.justUsedPortal = false;
             }
         }
         return flagAction;

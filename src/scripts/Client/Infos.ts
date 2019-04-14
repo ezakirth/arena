@@ -11,6 +11,8 @@ export default class Infos {
     team: string;
     enemyTeam: string;
     respawnTime: number;
+    spawned: boolean;
+
     score: {
         kills: number,
         deaths: number,
@@ -30,7 +32,7 @@ export default class Infos {
 
         this.enemyTeam = (team == 'green' ? 'blue' : 'green');
         this.respawnTime = 0;
-
+        this.spawned = true;
         this.score = {
             kills: 0,
             deaths: 0,

@@ -47,7 +47,7 @@ var HUD = /** @class */ (function () {
         }
     };
     HUD.prototype.toggleFullScreen = function () {
-        if (!document.fullscreenElement) {
+        if (!document['fullscreenElement']) {
             document.documentElement.requestFullscreen();
         }
         else {

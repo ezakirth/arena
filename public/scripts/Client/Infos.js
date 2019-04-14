@@ -12,6 +12,7 @@ var Infos = /** @class */ (function () {
         this.team = team;
         this.enemyTeam = (team == 'green' ? 'blue' : 'green');
         this.respawnTime = 0;
+        this.spawned = true;
         this.score = {
             kills: 0,
             deaths: 0,

@@ -15,7 +15,7 @@ var Network = /** @class */ (function () {
         this.socket = null;
     };
     Network.prototype.connect = function () {
-        this.socket = io(); //'http://192.168.1.21:3000');
+        this.socket = io('http://192.168.1.21:3000');
         var _this = this;
         setInterval(function () {
             _this.startTime = Date.now();
@@ -91,7 +91,7 @@ var Network = /** @class */ (function () {
             }
             if (clientId == main.localClientId) {
                 // server tells us to ignore our movement, so we just apply authoring, no reconciliation
-                if (serverClient.networkData.ignoreClientMovement) {
+                if (serverClient.networkData.forceAuthoring) {
                     client.networkData.reconciliationMovement = [];
                     this.authoring(client, serverClient);
                     client.savePositionForReconciliation();
@@ -99,6 +99,9 @@ var Network = /** @class */ (function () {
                     this.socket.emit('update', new MovementData_1.default(new Vector_1.default(0, 0), new Vector_1.default(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
                 }
                 else {
+                    if (!serverClient.infos.spawned) {
+                        client.respawn();
+                    }
                     // if there was movement since the last server update, send it now
                     this.sendMovementData(client);
                     // apply authoring and reconciliation
@@ -151,7 +154,7 @@ var Network = /** @class */ (function () {
      */
     Network.prototype.clientsPositionBuffer = function (client, serverClient) {
         // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
-        if (serverClient.networkData.ignoreClientMovement) {
+        if (serverClient.networkData.forceAuthoring) {
             client.networkData.positionBuffer = [];
             client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
             client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp + 1, serverClient.position, serverClient.direction));

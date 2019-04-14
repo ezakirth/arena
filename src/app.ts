@@ -24,8 +24,6 @@ import Projectile from './scripts/Main/Projectile';
 import MovementData from './scripts/Client/MovementData';
 
 
-
-
 declare var global: any;
 declare var server: Server;
 
@@ -63,28 +61,67 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
 io.on('connection', function (socket: SocketIO.Socket) {
     server.welcome(socket);
 
+    let fakeLag = false;
+    let lagValue = Math.floor(40 + 20 * Math.random());
+
     socket.on('askToJoin', function (clientData: any) {
         server.createClient(socket, clientData);
     });
 
     socket.on('shoot', function (projectile: Projectile) {
-        server.shootProjectile(projectile);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.shootProjectile(projectile);
+            }, lagValue);
+        }
+        else {
+            server.shootProjectile(projectile);
+        }
     });
 
     socket.on('hitCheck', function (projectileData) {
-        server.hitCheckProjectile(projectileData);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.hitCheckProjectile(projectileData);
+            }, lagValue);
+        }
+        else {
+            server.hitCheckProjectile(projectileData);
+        }
+
     });
 
     socket.on('update', function (movementData: MovementData) {
-        server.updateClient(socket, movementData);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.updateClient(socket, movementData);
+            }, lagValue);
+        }
+        else {
+            server.updateClient(socket, movementData);
+        }
     });
 
     socket.on('disconnect', function () {
-        server.deleteClient(socket);
+        if (fakeLag) {
+            setTimeout(function () {
+                server.deleteClient(socket);
+            }, lagValue);
+        }
+        else {
+            server.deleteClient(socket);
+        }
     });
 
     socket.on('pingtest', function () {
-        socket.emit('pongtest');
+        if (fakeLag) {
+            setTimeout(function () {
+                socket.emit('pongtest');
+            }, lagValue);
+        }
+        else {
+            socket.emit('pongtest');
+        }
     });
 
 });
@@ -93,6 +130,8 @@ io.on('connection', function (socket: SocketIO.Socket) {
 setInterval(function () {
     server.update();
 }, 1000 / 60);
+
+
 
 setInterval(function () {
     server.updateClients();
