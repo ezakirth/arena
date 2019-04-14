@@ -15,7 +15,7 @@ var Network = /** @class */ (function () {
         this.socket = null;
     };
     Network.prototype.connect = function () {
-        this.socket = io('http://192.168.1.21:3000');
+        this.socket = io(); //'http://192.168.1.21:3000');
         var _this = this;
         setInterval(function () {
             _this.startTime = Date.now();

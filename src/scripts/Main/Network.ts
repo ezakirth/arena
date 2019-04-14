@@ -30,7 +30,7 @@ export default class Network {
     }
 
     connect() {
-        this.socket = io('http://192.168.1.21:3000');
+        this.socket = io();//'http://192.168.1.21:3000');
 
         let _this = this;
 
