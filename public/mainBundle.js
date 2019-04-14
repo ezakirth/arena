@@ -203,7 +203,7 @@ function toArray(r,o){for(var t=[],e=(o=o||0)||0;e<r.length;e++)t[e-o]=r[e];retu
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});var Buff=function(){return function(e,t,s,i,f){this.type=e,this.name=t,this.life=s,this.shield=i,this.speed=f}}();exports.default=Buff;
 
 },{}],64:[function(require,module,exports){
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var Buff_1=require("./Buff"),Buffs=function(){return function(){this.medkit=new Buff_1.default("buff","medkit",30,0,0),this.shield=new Buff_1.default("buff","shield",0,25,0),this.speed=new Buff_1.default("buff","speed",0,0,.1)}}();exports.default=Buffs;
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var Buff_1=require("./Buff"),Buffs=function(){return function(){this.medkit=new Buff_1.default("buff","medkit",30,0,0),this.shield=new Buff_1.default("buff","shield",0,25,0),this.speed=new Buff_1.default("buff","speed",0,0,.05)}}();exports.default=Buffs;
 
 },{"./Buff":63}],65:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});var Flag=function(){return function(e,t){this.type=e,this.name=t}}();exports.default=Flag;
