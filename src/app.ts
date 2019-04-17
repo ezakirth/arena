@@ -61,7 +61,7 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
 io.on('connection', function (socket: SocketIO.Socket) {
     server.welcome(socket);
 
-    let fakeLag = true;
+    let fakeLag = false;
     let lagValue = Math.floor(300 + 20 * Math.random());
 
     socket.on('askToJoin', function (clientData: any) {

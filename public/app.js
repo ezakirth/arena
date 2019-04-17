@@ -45,7 +45,7 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(function (file) {
 });
 io.on('connection', function (socket) {
     server.welcome(socket);
-    var fakeLag = true;
+    var fakeLag = false;
     var lagValue = Math.floor(300 + 20 * Math.random());
     socket.on('askToJoin', function (clientData) {
         server.createClient(socket, clientData);
