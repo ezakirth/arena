@@ -36,6 +36,12 @@ var Client = /** @class */ (function () {
         this.position.set(this.respawnPosition.x, this.respawnPosition.y);
         this.infos.spawned = true;
     };
+    Client.prototype.modLife = function (delta) {
+        this.infos.life += delta;
+        if (this.infos.life <= 0) {
+            this.infos.life = 0;
+        }
+    };
     return Client;
 }());
 exports.default = Client;

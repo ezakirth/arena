@@ -61,8 +61,8 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
 io.on('connection', function (socket: SocketIO.Socket) {
     server.welcome(socket);
 
-    let fakeLag = false;
-    let lagValue = Math.floor(40 + 20 * Math.random());
+    let fakeLag = true;
+    let lagValue = Math.floor(300 + 20 * Math.random());
 
     socket.on('askToJoin', function (clientData: any) {
         server.createClient(socket, clientData);
@@ -89,6 +89,17 @@ io.on('connection', function (socket: SocketIO.Socket) {
             server.hitCheckProjectile(projectileData);
         }
 
+    });
+
+    socket.on('hitCheckAuthored', function (projectileData) {
+        if (fakeLag) {
+            setTimeout(function () {
+                server.hitCheckAuthoredProjectile(projectileData);
+            }, lagValue);
+        }
+        else {
+            server.hitCheckAuthoredProjectile(projectileData);
+        }
     });
 
     socket.on('update', function (movementData: MovementData) {

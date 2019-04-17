@@ -57,4 +57,11 @@ export default class Client {
         this.infos.spawned = true;
     }
 
+    modLife(delta) {
+        this.infos.life += delta;
+        if (this.infos.life <= 0) {
+            this.infos.life = 0;
+        }
+    }
+
 }

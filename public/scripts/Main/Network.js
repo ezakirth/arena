@@ -90,23 +90,31 @@ var Network = /** @class */ (function () {
                 client = main.clients[clientId] = new Client_local_1.default(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
             if (clientId == main.localClientId) {
-                // server tells us to ignore our movement, so we just apply authoring, no reconciliation
-                if (serverClient.networkData.forceAuthoring) {
-                    client.networkData.reconciliationMovement = [];
-                    this.authoring(client, serverClient);
-                    client.savePositionForReconciliation();
-                    // we let server know we applied authoring asap
-                    this.socket.emit('update', new MovementData_1.default(new Vector_1.default(0, 0), new Vector_1.default(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
-                }
-                else {
+                if (main.noAuthoring) {
                     if (!serverClient.infos.spawned) {
                         client.respawn();
                     }
-                    // if there was movement since the last server update, send it now
-                    this.sendMovementData(client);
-                    // apply authoring and reconciliation
-                    this.authoring(client, serverClient);
-                    this.reconciliation(client, serverClient);
+                    client.infos.apply(serverClient.infos);
+                }
+                else {
+                    // server tells us to ignore our movement, so we just apply authoring, no reconciliation
+                    if (serverClient.networkData.forceAuthoring) {
+                        client.networkData.reconciliationMovement = [];
+                        this.authoring(client, serverClient);
+                        client.savePositionForReconciliation();
+                        // we let server know we applied authoring asap
+                        this.socket.emit('update', new MovementData_1.default(new Vector_1.default(0, 0), new Vector_1.default(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
+                    }
+                    else {
+                        if (!serverClient.infos.spawned) {
+                            client.respawn();
+                        }
+                        // if there was movement since the last server update, send it now
+                        this.sendMovementData(client);
+                        // apply authoring and reconciliation
+                        this.authoring(client, serverClient);
+                        this.reconciliation(client, serverClient);
+                    }
                 }
             }
             else {
@@ -210,7 +218,10 @@ var Network = /** @class */ (function () {
      * @param targetClientId
      */
     Network.prototype.requestHit = function (projectile, targetClientId) {
-        this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
+        if (main.noAuthoring)
+            this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
+        else
+            this.socket.emit('hitCheckAuthored', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
     };
     /**
      * Adds a projectile (origin = server)

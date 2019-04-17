@@ -45,8 +45,8 @@ FileSystem.readdirSync(__dirname + '/maps/').forEach(function (file) {
 });
 io.on('connection', function (socket) {
     server.welcome(socket);
-    var fakeLag = false;
-    var lagValue = Math.floor(40 + 20 * Math.random());
+    var fakeLag = true;
+    var lagValue = Math.floor(300 + 20 * Math.random());
     socket.on('askToJoin', function (clientData) {
         server.createClient(socket, clientData);
     });
@@ -68,6 +68,16 @@ io.on('connection', function (socket) {
         }
         else {
             server.hitCheckProjectile(projectileData);
+        }
+    });
+    socket.on('hitCheckAuthored', function (projectileData) {
+        if (fakeLag) {
+            setTimeout(function () {
+                server.hitCheckAuthoredProjectile(projectileData);
+            }, lagValue);
+        }
+        else {
+            server.hitCheckAuthoredProjectile(projectileData);
         }
     });
     socket.on('update', function (movementData) {

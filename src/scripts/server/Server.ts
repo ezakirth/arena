@@ -166,7 +166,6 @@ export default class Server {
                 lobby.clients[clientId].infos.spawned = true;
             }
 
-
             lobby.broadcast.reset();
             lobby.map.processUpdates();
         }
@@ -175,17 +174,18 @@ export default class Server {
 
     shootProjectile(projectile: Projectile) {
         let lobby = this.lobbies[projectile.lobbyId];
-
-        let newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
-        lobby.newBullets.push(newBullet);
-        lobby.projectiles.push(newBullet);
+        if (lobby) {
+            let newBullet = new Projectile(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
+            lobby.newBullets.push(newBullet);
+            lobby.projectiles.push(newBullet);
+        }
     }
 
     /**
      * Look in lobby history to check if there was indeed a hit
      * @param projectileData
      */
-    hitCheckProjectile(projectileData: any) {
+    hitCheckAuthoredProjectile(projectileData: any) {
         let timestamp = projectileData.timestamp;
         let projectile: Projectile = projectileData.projectile;
         let targetClientId = projectileData.targetClientId;
@@ -213,6 +213,37 @@ export default class Server {
                         if (hasFlag)
                             lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Look in lobby history to check if there was indeed a hit
+     * @param projectileData
+     */
+    hitCheckProjectile(projectileData: any) {
+        let projectile: Projectile = projectileData.projectile;
+        let targetClientId = projectileData.targetClientId;
+
+        let lobby = this.lobbies[projectile.lobbyId];
+        if (lobby) {
+
+            let clientPresent = lobby.clients[targetClientId];
+
+            if (clientPresent && !clientPresent.infos.dead) {
+                let hasFlag = clientPresent.infos.hasEnemyFlag;
+                clientPresent.modLife(-projectile.type.dmg);
+
+                if (clientPresent.infos.dead) {
+                    // tell everyone in lobby someone died
+                    let killer = lobby.clients[projectile.clientId];
+                    killer.infos.score.kills++;
+                    lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
+
+                    // if he had the flag, tell everyone !
+                    if (hasFlag)
+                        lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
                 }
             }
         }

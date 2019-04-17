@@ -126,15 +126,17 @@ var Server = /** @class */ (function () {
     };
     Server.prototype.shootProjectile = function (projectile) {
         var lobby = this.lobbies[projectile.lobbyId];
-        var newBullet = new Projectile_1.default(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
-        lobby.newBullets.push(newBullet);
-        lobby.projectiles.push(newBullet);
+        if (lobby) {
+            var newBullet = new Projectile_1.default(projectile.lobbyId, projectile.clientId, projectile.targetTeam, projectile.position, projectile.direction, projectile.type);
+            lobby.newBullets.push(newBullet);
+            lobby.projectiles.push(newBullet);
+        }
     };
     /**
      * Look in lobby history to check if there was indeed a hit
      * @param projectileData
      */
-    Server.prototype.hitCheckProjectile = function (projectileData) {
+    Server.prototype.hitCheckAuthoredProjectile = function (projectileData) {
         var timestamp = projectileData.timestamp;
         var projectile = projectileData.projectile;
         var targetClientId = projectileData.targetClientId;
@@ -156,6 +158,31 @@ var Server = /** @class */ (function () {
                         if (hasFlag)
                             lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
                     }
+                }
+            }
+        }
+    };
+    /**
+     * Look in lobby history to check if there was indeed a hit
+     * @param projectileData
+     */
+    Server.prototype.hitCheckProjectile = function (projectileData) {
+        var projectile = projectileData.projectile;
+        var targetClientId = projectileData.targetClientId;
+        var lobby = this.lobbies[projectile.lobbyId];
+        if (lobby) {
+            var clientPresent = lobby.clients[targetClientId];
+            if (clientPresent && !clientPresent.infos.dead) {
+                var hasFlag = clientPresent.infos.hasEnemyFlag;
+                clientPresent.modLife(-projectile.type.dmg);
+                if (clientPresent.infos.dead) {
+                    // tell everyone in lobby someone died
+                    var killer = lobby.clients[projectile.clientId];
+                    killer.infos.score.kills++;
+                    lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
+                    // if he had the flag, tell everyone !
+                    if (hasFlag)
+                        lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
                 }
             }
         }
