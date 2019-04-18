@@ -109,7 +109,7 @@ io.on('connection', function (socket) {
         socket.emit('admin', server.lobbies);
     });
     socket.on('kick', function (socketId) {
-        io.sockets.connected[socketId].disconnect();
+        io.sockets.connected[socketId].disconnect(true);
         socket.emit('admin', server.lobbies);
     });
 });

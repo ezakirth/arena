@@ -137,7 +137,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
     });
 
     socket.on('kick', function (socketId) {
-        io.sockets.connected[socketId].disconnect();
+        io.sockets.connected[socketId].disconnect(true);
         socket.emit('admin', server.lobbies);
     });
 
