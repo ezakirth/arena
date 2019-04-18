@@ -193,13 +193,15 @@ export default class Server {
         let lobby = this.lobbies[projectile.lobbyId];
         let history = lobby.history[timestamp];
 
+
         if (history) {
             let clientHistory = history[targetClientId];
 
             if (clientHistory) {
                 let clientPresent = lobby.clients[targetClientId];
 
-                if (clientPresent && !clientPresent.infos.dead && Vector._dist(projectile.position, clientHistory.position) < .3) {
+                // @todo prendre en compte l'interpolation côté serveur !!!!
+                if (clientPresent && !clientPresent.infos.dead && Vector._dist(projectile.position, clientHistory.position) < 1.5) {
                     let hasFlag = clientPresent.infos.hasEnemyFlag;
                     clientPresent.modLife(-projectile.type.dmg);
 

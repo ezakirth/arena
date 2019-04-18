@@ -19,7 +19,7 @@ export default class Main {
     lobbyId: string;
     noAuthoring: boolean;
     constructor() {
-        this.noAuthoring = true;
+        this.noAuthoring = false;
         this.clients = {};
         this.projectiles = [];
         this.lobbies = [];

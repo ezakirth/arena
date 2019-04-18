@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Menu_1 = require("./Menu");
 var Main = /** @class */ (function () {
     function Main() {
-        this.noAuthoring = true;
+        this.noAuthoring = false;
         this.clients = {};
         this.projectiles = [];
         this.lobbies = [];

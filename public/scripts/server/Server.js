@@ -146,7 +146,8 @@ var Server = /** @class */ (function () {
             var clientHistory = history[targetClientId];
             if (clientHistory) {
                 var clientPresent = lobby.clients[targetClientId];
-                if (clientPresent && !clientPresent.infos.dead && Vector_1.default._dist(projectile.position, clientHistory.position) < .3) {
+                // @todo prendre en compte l'interpolation côté serveur !!!!
+                if (clientPresent && !clientPresent.infos.dead && Vector_1.default._dist(projectile.position, clientHistory.position) < 1.5) {
                     var hasFlag = clientPresent.infos.hasEnemyFlag;
                     clientPresent.modLife(-projectile.type.dmg);
                     if (clientPresent.infos.dead) {
