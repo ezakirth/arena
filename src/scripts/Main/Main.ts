@@ -17,9 +17,7 @@ export default class Main {
     localClient: ClientLocal;
     localClientName: string;
     lobbyId: string;
-    noAuthoring: boolean;
     constructor() {
-        this.noAuthoring = false;
         this.clients = {};
         this.projectiles = [];
         this.lobbies = [];

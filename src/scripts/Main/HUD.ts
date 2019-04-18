@@ -37,7 +37,6 @@ export default class HUD {
         let scores = [];
         for (let clientId in main.clients) {
             let client = main.clients[clientId];
-            console.log(client.name);
 
             let kills = client.infos.score.kills;
             let deaths = client.infos.score.deaths;

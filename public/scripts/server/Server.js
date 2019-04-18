@@ -83,26 +83,15 @@ var Server = /** @class */ (function () {
         if (lobby) {
             var client = lobby.clients[socket.id];
             if (client) {
-                if (movementData.appliedAuthoring)
-                    client.networkData.forceAuthoring = false;
-                if (!client.networkData.forceAuthoring) {
-                    client.position.x += movementData.deltaPosition.x;
-                    client.position.y += movementData.deltaPosition.y;
-                    client.direction.x += movementData.deltaDirection.x;
-                    client.direction.y += movementData.deltaDirection.y;
-                    var px = exports.clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
-                    var py = exports.clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
-                    if (!lobby.map.data[px][py].solid)
-                        client.lastGoodPos = new Vector_1.default(client.position.x, client.position.y);
-                    else {
-                        client.position = new Vector_1.default(client.lastGoodPos.x, client.lastGoodPos.y);
-                        client.networkData.forceAuthoring = true;
-                    }
-                    var flagAction = client.checkTile(lobby.map.data[px][py], px, py);
-                    //             client.checkPortal(lobby.map.data[px][py]);
-                    if (flagAction)
-                        lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
-                }
+                client.position.x += movementData.deltaPosition.x;
+                client.position.y += movementData.deltaPosition.y;
+                client.direction.x += movementData.deltaDirection.x;
+                client.direction.y += movementData.deltaDirection.y;
+                var px = exports.clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
+                var py = exports.clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
+                var flagAction = client.checkTile(lobby.map.data[px][py], px, py);
+                if (flagAction)
+                    lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
                 client.networkData.sequence = movementData.sequence;
             }
         }
@@ -136,7 +125,7 @@ var Server = /** @class */ (function () {
      * Look in lobby history to check if there was indeed a hit
      * @param projectileData
      */
-    Server.prototype.hitCheckAuthoredProjectile = function (projectileData) {
+    Server.prototype.hitCheckProjectile = function (projectileData) {
         var timestamp = projectileData.timestamp;
         var projectile = projectileData.projectile;
         var targetClientId = projectileData.targetClientId;
@@ -159,31 +148,6 @@ var Server = /** @class */ (function () {
                         if (hasFlag)
                             lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
                     }
-                }
-            }
-        }
-    };
-    /**
-     * Look in lobby history to check if there was indeed a hit
-     * @param projectileData
-     */
-    Server.prototype.hitCheckProjectile = function (projectileData) {
-        var projectile = projectileData.projectile;
-        var targetClientId = projectileData.targetClientId;
-        var lobby = this.lobbies[projectile.lobbyId];
-        if (lobby) {
-            var clientPresent = lobby.clients[targetClientId];
-            if (clientPresent && !clientPresent.infos.dead) {
-                var hasFlag = clientPresent.infos.hasEnemyFlag;
-                clientPresent.modLife(-projectile.type.dmg);
-                if (clientPresent.infos.dead) {
-                    // tell everyone in lobby someone died
-                    var killer = lobby.clients[projectile.clientId];
-                    killer.infos.score.kills++;
-                    lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
-                    // if he had the flag, tell everyone !
-                    if (hasFlag)
-                        lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
                 }
             }
         }

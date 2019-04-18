@@ -84,7 +84,7 @@ export default class Timer {
 
 
     networkUpdate() {
-        this.serverRenderTimestamp = this.now - 300;
+        this.serverRenderTimestamp = this.now - 500;
     }
     updateServerDelay(serverLastTimestamp: number) {
         this.serverLastTimestamp = serverLastTimestamp;

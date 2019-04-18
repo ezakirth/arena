@@ -117,7 +117,7 @@ export default class Projectile {
             let dist = Vector._dist(this.position, targetClient.position);
             if (dist < .3) {
                 if (!serverSide && main.localClientId == this.clientId) {
-                    if (main.noAuthoring) targetClient.modLife(-this.type.dmg);
+                    targetClient.modLife(-this.type.dmg);
                     network.requestHit(this, targetClient.networkData.clientId);
                 }
                 this.active = false;

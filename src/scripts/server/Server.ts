@@ -117,31 +117,17 @@ export default class Server {
 
             if (client) {
 
-                if (movementData.appliedAuthoring) client.networkData.forceAuthoring = false;
+                client.position.x += movementData.deltaPosition.x;
+                client.position.y += movementData.deltaPosition.y;
+                client.direction.x += movementData.deltaDirection.x;
+                client.direction.y += movementData.deltaDirection.y;
 
-                if (!client.networkData.forceAuthoring) {
-                    client.position.x += movementData.deltaPosition.x;
-                    client.position.y += movementData.deltaPosition.y;
-                    client.direction.x += movementData.deltaDirection.x;
-                    client.direction.y += movementData.deltaDirection.y;
+                let px = clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
+                let py = clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
 
-                    let px = clamp(Math.floor(client.position.x), 0, lobby.map.width - 1);
-                    let py = clamp(Math.floor(client.position.y), 0, lobby.map.height - 1);
-
-                    if (!lobby.map.data[px][py].solid)
-                        client.lastGoodPos = new Vector(client.position.x, client.position.y);
-                    else {
-                        client.position = new Vector(client.lastGoodPos.x, client.lastGoodPos.y);
-                        client.networkData.forceAuthoring = true;
-                    }
-
-                    let flagAction = client.checkTile(lobby.map.data[px][py], px, py);
-                    //             client.checkPortal(lobby.map.data[px][py]);
-
-                    if (flagAction)
-                        lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
-
-                }
+                let flagAction = client.checkTile(lobby.map.data[px][py], px, py);
+                if (flagAction)
+                    lobby.broadcast.addFlagAction({ name: client.name, team: client.infos.team, action: flagAction });
 
                 client.networkData.sequence = movementData.sequence;
             }
@@ -185,7 +171,7 @@ export default class Server {
      * Look in lobby history to check if there was indeed a hit
      * @param projectileData
      */
-    hitCheckAuthoredProjectile(projectileData: any) {
+    hitCheckProjectile(projectileData: any) {
         let timestamp = projectileData.timestamp;
         let projectile: Projectile = projectileData.projectile;
         let targetClientId = projectileData.targetClientId;
@@ -219,39 +205,6 @@ export default class Server {
             }
         }
     }
-
-    /**
-     * Look in lobby history to check if there was indeed a hit
-     * @param projectileData
-     */
-    hitCheckProjectile(projectileData: any) {
-        let projectile: Projectile = projectileData.projectile;
-        let targetClientId = projectileData.targetClientId;
-
-        let lobby = this.lobbies[projectile.lobbyId];
-        if (lobby) {
-
-            let clientPresent = lobby.clients[targetClientId];
-
-            if (clientPresent && !clientPresent.infos.dead) {
-                let hasFlag = clientPresent.infos.hasEnemyFlag;
-                clientPresent.modLife(-projectile.type.dmg);
-
-                if (clientPresent.infos.dead) {
-                    // tell everyone in lobby someone died
-                    let killer = lobby.clients[projectile.clientId];
-                    killer.infos.score.kills++;
-                    lobby.broadcast.addCombat({ name: killer.name, team: killer.infos.team, killed: clientPresent.name, killedTeam: clientPresent.infos.team, weapon: projectile.type.name });
-
-                    // if he had the flag, tell everyone !
-                    if (hasFlag)
-                        lobby.broadcast.addFlagAction({ name: clientPresent.name, team: clientPresent.infos.team, action: 'dropped' });
-                }
-            }
-        }
-    }
-
-
 
     update() {
         time.update();

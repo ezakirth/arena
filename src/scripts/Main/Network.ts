@@ -89,6 +89,10 @@ export default class Network {
             _this.updateProjectiles(projectiles);
         });
 
+        this.socket.on('disconnect', function () {
+            window.location.reload();
+        });
+
     }
 
 
@@ -128,35 +132,16 @@ export default class Network {
             }
 
             if (clientId == main.localClientId) {
-                if (main.noAuthoring) {
-                    if (!serverClient.infos.spawned) {
-                        client.respawn();
-                    }
-                    client.infos.apply(serverClient.infos);
+                if (!serverClient.infos.spawned) {
+                    client.respawn();
                 }
-                else {
-                    // server tells us to ignore our movement, so we just apply authoring, no reconciliation
-                    if (serverClient.networkData.forceAuthoring) {
-                        client.networkData.reconciliationMovement = [];
-                        this.authoring(client, serverClient);
-                        client.savePositionForReconciliation();
-                        // we let server know we applied authoring asap
-                        this.socket.emit('update', new MovementData(new Vector(0, 0), new Vector(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
-                    }
-                    else {
-                        if (!serverClient.infos.spawned) {
-                            client.respawn();
-                        }
 
-                        // if there was movement since the last server update, send it now
-                        this.sendMovementData(client)
+                // if there was movement since the last server update, send it now
+                this.sendMovementData(client)
 
-                        // apply authoring and reconciliation
-                        this.authoring(client, serverClient);
-                        this.reconciliation(client, serverClient);
-                    }
-
-                }
+                // apply authoring and reconciliation
+                this.authoring(client, serverClient);
+                this.reconciliation(client, serverClient);
             } else {
                 client.infos.apply(serverClient.infos);
                 this.clientsPositionBuffer(client, serverClient);
@@ -206,18 +191,7 @@ export default class Network {
      * @param {ClientServer} serverClient
      */
     clientsPositionBuffer(client: ClientLocal, serverClient: ClientServer) {
-
-        // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
-        if (serverClient.networkData.forceAuthoring) {
-            client.networkData.positionBuffer = [];
-            client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
-            client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp + 1, serverClient.position, serverClient.direction));
-            client.position.set(serverClient.position.x, serverClient.position.y);
-            client.direction.set(serverClient.direction.x, serverClient.direction.y);
-        }
-        else {
-            client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
-        }
+        client.networkData.positionBuffer.push(new PositionBuffer(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
     }
 
     sendMovementData(client: ClientLocal) {
@@ -230,7 +204,7 @@ export default class Network {
         if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
             client.savePositionForReconciliation();
             // send movement to server for validation
-            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, false, client.networkData.lobbyId);
+            let movementData: MovementData = new MovementData(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.lobbyId);
 
             this.socket.emit('update', movementData);
 
@@ -272,10 +246,7 @@ export default class Network {
      * @param targetClientId
      */
     requestHit(projectile: Projectile, targetClientId: string) {
-        if (main.noAuthoring)
-            this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
-        else
-            this.socket.emit('hitCheckAuthored', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
+        this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
     }
 
     /**

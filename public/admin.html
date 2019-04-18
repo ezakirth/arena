@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="./css/mainStyles.css">
+</head>
+
+<body style="cursor:default;">
+    <div id="content">
+        <div id="lobbies"></div>
+
+
+    </div>
+
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        function show(lobbies) {
+            let lobbyElem = $('#lobbies');
+            lobbyElem.empty();
+
+            let lobbyNumber = 0;
+            for (let lobbyId in lobbies) {
+                lobbyNumber++;
+                let lobby = lobbies[lobbyId];
+
+                let block = $('<div style="margin-bottom:25px;"><span class="white">Lobby ' + lobbyNumber + ' - ' + lobbyId + '</span></div>');
+
+                let mapElem = $('<div style="padding-left:10px;">' + lobby.map.name + ' (' + lobby.map.gameType + ')</div>')
+                block.append(mapElem);
+
+                for (let clientId in lobby.clients) {
+                    let client = lobby.clients[clientId];
+                    let clientElem = $('<div style="cursor:pointer;margin-left:20px;display:block;" id="' + client.clientId + '" class="' + client.infos.team + 'Team">' + client.name + '</div>');
+                    clientElem.on('click', function () {
+                        socket.emit('kick', clientId);
+                    })
+                    block.append(clientElem);
+                }
+
+                lobbyElem.append(block);
+            }
+
+
+
+            console.log(lobbies);
+
+        }
+        let socket = io();//'http://192.168.1.21:3000');
+        $(document).ready(function () {
+
+
+            let startTime = 0;
+            let latency = 0;
+
+
+            socket.on('admin', function (lobbies) {
+                latency = Date.now() - startTime;
+                show(lobbies);
+                //                console.clear();
+                console.log('latency: ' + latency + 'ms');
+            });
+
+            socket.on('kick', function (serverData) {
+                console.log(serverData);
+            });
+
+            socket.on('welcome', function (serverData) {
+                socket.emit('admin');
+                setInterval(function () {
+                    startTime = Date.now();
+                    socket.emit('admin');
+                }, 4000);
+            });
+        });
+
+    </script>
+</body>
+
+</html>

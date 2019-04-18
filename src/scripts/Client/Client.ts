@@ -30,7 +30,7 @@ export default class Client {
         this.name = name;
 
         this.infos = new Infos(100, 0, false, pickups.weapons.gun, 0, .05, false, team);
-        this.networkData = new NetworkData(lobbyId, clientId, new Vector(this.position.x, this.position.y), new Vector(this.direction.x, this.direction.y), 0, false, [], []);
+        this.networkData = new NetworkData(lobbyId, clientId, new Vector(this.position.x, this.position.y), new Vector(this.direction.x, this.direction.y), 0, [], []);
 
         this.justUsedPortal = false;
         this.respawnPosition = new Vector(this.position.x, this.position.y);

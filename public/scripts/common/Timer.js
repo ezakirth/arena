@@ -58,7 +58,7 @@ var Timer = /** @class */ (function () {
         this.timers.push({ type: type, delay: delay, data: data });
     };
     Timer.prototype.networkUpdate = function () {
-        this.serverRenderTimestamp = this.now - 300;
+        this.serverRenderTimestamp = this.now - 500;
     };
     Timer.prototype.updateServerDelay = function (serverLastTimestamp) {
         this.serverLastTimestamp = serverLastTimestamp;

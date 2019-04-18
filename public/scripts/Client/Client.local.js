@@ -122,30 +122,31 @@ var ClientLocal = /** @class */ (function (_super) {
     ClientLocal.prototype.interpolatePositions = function () {
         // Find the two authoritative positions surrounding the rendering timestamp.
         var buffer = this.networkData.positionBuffer;
+        if (buffer.length <= 1)
+            return;
         // Drop positions older than 100ms.
-        while (buffer.length >= 2 && buffer[1].timestamp <= time.serverRenderTimestamp) {
+        while (buffer[1].timestamp < time.serverRenderTimestamp) {
             buffer.shift();
         }
+        var previous = buffer[0];
+        var target = buffer[1];
         // Interpolate between the two surrounding authoritative positions.
         // startpoint is older than 100ms, endpoint is less than 100ms ago
-        if (buffer.length >= 2 && buffer[0].timestamp <= time.serverRenderTimestamp && buffer[1].timestamp >= time.serverRenderTimestamp) {
-            var x0 = buffer[0].position.x;
-            var y0 = buffer[0].position.y;
-            var dx0 = buffer[0].direction.x;
-            var dy0 = buffer[0].direction.y;
-            var t0 = buffer[0].timestamp;
-            var x1 = buffer[1].position.x;
-            var y1 = buffer[1].position.y;
-            var dx1 = buffer[1].direction.x;
-            var dy1 = buffer[1].direction.y;
-            var t1 = buffer[1].timestamp;
-            if (Vector_1.default._dist(buffer[0].position, buffer[1].position) > 2) {
+        if (previous.timestamp <= time.serverRenderTimestamp && time.serverRenderTimestamp <= target.timestamp) {
+            var timeFrame = (time.serverRenderTimestamp - previous.timestamp) / (target.timestamp - previous.timestamp);
+            var x0 = previous.position.x;
+            var y0 = previous.position.y;
+            var dx0 = previous.direction.x;
+            var dy0 = previous.direction.y;
+            var x1 = target.position.x;
+            var y1 = target.position.y;
+            var dx1 = target.direction.x;
+            var dy1 = target.direction.y;
+            if (Vector_1.default._dist(previous.position, target.position) > 2)
                 this.position.set(x1, y1);
-            }
-            else {
-                this.position.set(x0 + (x1 - x0) * (time.serverRenderTimestamp - t0) / (t1 - t0), y0 + (y1 - y0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
-            }
-            this.direction.set(dx0 + (dx1 - dx0) * (time.serverRenderTimestamp - t0) / (t1 - t0), dy0 + (dy1 - dy0) * (time.serverRenderTimestamp - t0) / (t1 - t0));
+            else
+                this.position.set(x0 + (x1 - x0) * timeFrame, y0 + (y1 - y0) * timeFrame);
+            this.direction.set(dx0 + (dx1 - dx0) * timeFrame, dy0 + (dy1 - dy0) * timeFrame);
             if (!(x0 == x1 && y0 == y1))
                 this.moving = true;
         }

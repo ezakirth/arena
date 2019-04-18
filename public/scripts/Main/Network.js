@@ -60,6 +60,9 @@ var Network = /** @class */ (function () {
         this.socket.on('updateProjectiles', function (projectiles) {
             _this.updateProjectiles(projectiles);
         });
+        this.socket.on('disconnect', function () {
+            window.location.reload();
+        });
     };
     Network.prototype.askToJoin = function (mapId) {
         this.socket.emit('askToJoin', { clientId: main.localClientId, name: main.localClientName, lobbyId: main.lobbyId, mapId: mapId });
@@ -90,32 +93,14 @@ var Network = /** @class */ (function () {
                 client = main.clients[clientId] = new Client_local_1.default(serverClient.name, serverClient.networkData.lobbyId, serverClient.networkData.clientId, serverClient.infos.team, serverClient.position);
             }
             if (clientId == main.localClientId) {
-                if (main.noAuthoring) {
-                    if (!serverClient.infos.spawned) {
-                        client.respawn();
-                    }
-                    client.infos.apply(serverClient.infos);
+                if (!serverClient.infos.spawned) {
+                    client.respawn();
                 }
-                else {
-                    // server tells us to ignore our movement, so we just apply authoring, no reconciliation
-                    if (serverClient.networkData.forceAuthoring) {
-                        client.networkData.reconciliationMovement = [];
-                        this.authoring(client, serverClient);
-                        client.savePositionForReconciliation();
-                        // we let server know we applied authoring asap
-                        this.socket.emit('update', new MovementData_1.default(new Vector_1.default(0, 0), new Vector_1.default(0, 0), ++client.networkData.sequence, true, client.networkData.lobbyId));
-                    }
-                    else {
-                        if (!serverClient.infos.spawned) {
-                            client.respawn();
-                        }
-                        // if there was movement since the last server update, send it now
-                        this.sendMovementData(client);
-                        // apply authoring and reconciliation
-                        this.authoring(client, serverClient);
-                        this.reconciliation(client, serverClient);
-                    }
-                }
+                // if there was movement since the last server update, send it now
+                this.sendMovementData(client);
+                // apply authoring and reconciliation
+                this.authoring(client, serverClient);
+                this.reconciliation(client, serverClient);
             }
             else {
                 client.infos.apply(serverClient.infos);
@@ -161,17 +146,7 @@ var Network = /** @class */ (function () {
      * @param {ClientServer} serverClient
      */
     Network.prototype.clientsPositionBuffer = function (client, serverClient) {
-        // if client was forced to a position by server, we don't want to interpolate (after using a portal for example)
-        if (serverClient.networkData.forceAuthoring) {
-            client.networkData.positionBuffer = [];
-            client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
-            client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp + 1, serverClient.position, serverClient.direction));
-            client.position.set(serverClient.position.x, serverClient.position.y);
-            client.direction.set(serverClient.direction.x, serverClient.direction.y);
-        }
-        else {
-            client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
-        }
+        client.networkData.positionBuffer.push(new PositionBuffer_1.default(time.serverUpdateTimestamp, serverClient.position, serverClient.direction));
     };
     Network.prototype.sendMovementData = function (client) {
         // get movement since last one sent to server
@@ -181,7 +156,7 @@ var Network = /** @class */ (function () {
         if (Math.abs(deltaPosition.x) + Math.abs(deltaPosition.y) + Math.abs(deltaDirection.x) + Math.abs(deltaDirection.y) > 0) {
             client.savePositionForReconciliation();
             // send movement to server for validation
-            var movementData = new MovementData_1.default(deltaPosition, deltaDirection, ++client.networkData.sequence, false, client.networkData.lobbyId);
+            var movementData = new MovementData_1.default(deltaPosition, deltaDirection, ++client.networkData.sequence, client.networkData.lobbyId);
             this.socket.emit('update', movementData);
             // store movements for later reconciliation
             client.networkData.reconciliationMovement.push(movementData);
@@ -218,10 +193,7 @@ var Network = /** @class */ (function () {
      * @param targetClientId
      */
     Network.prototype.requestHit = function (projectile, targetClientId) {
-        if (main.noAuthoring)
-            this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
-        else
-            this.socket.emit('hitCheckAuthored', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
+        this.socket.emit('hitCheck', { timestamp: time.serverLastTimestamp, projectile: projectile, targetClientId: targetClientId });
     };
     /**
      * Adds a projectile (origin = server)

@@ -71,8 +71,7 @@ var Projectile = /** @class */ (function () {
             var dist = Vector_1.default._dist(this.position, targetClient.position);
             if (dist < .3) {
                 if (!serverSide && main.localClientId == this.clientId) {
-                    if (main.noAuthoring)
-                        targetClient.modLife(-this.type.dmg);
+                    targetClient.modLife(-this.type.dmg);
                     network.requestHit(this, targetClient.networkData.clientId);
                 }
                 this.active = false;

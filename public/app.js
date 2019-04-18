@@ -9,8 +9,12 @@ var root = path.resolve(__dirname, '..');
 var INDEX = path.join(__dirname, '/index.html');
 var http = express()
     .use(express.static('/*'))
-    .get('/', function (req, res) { return res.sendFile(INDEX); })
-    .get('/*', function (req, res, next) { return res.sendFile(__dirname + '/' + req.params[0]); })
+    .get('/', function (req, res) {
+    if (typeof (req.query.admin) == 'string')
+        return res.sendFile(__dirname + '/admin.html');
+    else
+        return res.sendFile(INDEX);
+}).get('/*', function (req, res, next) { return res.sendFile(__dirname + '/' + req.params[0]); })
     .listen(PORT, function () { return console.log("Listening on " + PORT); });
 var io = socketIO(http);
 var Server_1 = require("./scripts/server/Server");
@@ -70,16 +74,6 @@ io.on('connection', function (socket) {
             server.hitCheckProjectile(projectileData);
         }
     });
-    socket.on('hitCheckAuthored', function (projectileData) {
-        if (fakeLag) {
-            setTimeout(function () {
-                server.hitCheckAuthoredProjectile(projectileData);
-            }, lagValue);
-        }
-        else {
-            server.hitCheckAuthoredProjectile(projectileData);
-        }
-    });
     socket.on('update', function (movementData) {
         if (fakeLag) {
             setTimeout(function () {
@@ -109,6 +103,14 @@ io.on('connection', function (socket) {
         else {
             socket.emit('pongtest');
         }
+    });
+    // admin stuff
+    socket.on('admin', function () {
+        socket.emit('admin', server.lobbies);
+    });
+    socket.on('kick', function (socketId) {
+        io.sockets.connected[socketId].disconnect();
+        socket.emit('admin', server.lobbies);
     });
 });
 setInterval(function () {

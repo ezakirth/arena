@@ -22,7 +22,6 @@ var HUD = /** @class */ (function () {
         var scores = [];
         for (var clientId in main.clients) {
             var client = main.clients[clientId];
-            console.log(client.name);
             var kills = client.infos.score.kills;
             var deaths = client.infos.score.deaths;
             var captures = client.infos.score.captures;
