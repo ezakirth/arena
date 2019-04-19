@@ -7,6 +7,8 @@ import Lobby from './Lobby';
 import Vector from '../common/Vector';
 import FileSystem = require("fs");
 import MovementData from '../Client/MovementData';
+import UUIDV1 = require('uuid/v1');
+
 import Broadcast from './Broacast';
 
 
@@ -248,4 +250,34 @@ export default class Server {
         }
     }
 
+    loadMaps(path: string) {
+        this.mapsInfo = [];
+        this.mapsInfoForClients = [];
+
+        FileSystem.readdirSync(path).forEach(file => {
+            let mapPath = path + file;
+            let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
+
+            let mapInfo = {
+                id: UUIDV1(),
+                name: map.name,
+                gameType: map.gameType,
+                maxPlayers: map.maxPlayers,
+                width: map.width,
+                height: map.height,
+                mapData: map.data,
+                path: mapPath
+            }
+
+            let mapInfoForClients = {
+                id: mapInfo.id,
+                name: mapInfo.name,
+                gameType: mapInfo.gameType,
+                maxPlayers: mapInfo.maxPlayers
+            }
+
+            this.mapsInfo.push(mapInfo);
+            this.mapsInfoForClients.push(mapInfoForClients);
+        });
+    }
 }

@@ -48,7 +48,7 @@ export default class Map {
 
         if (!this.data || forceNew) {
             this.name = 'New map';
-            this.gameType = 'Deathmatch';
+            this.gameType = 'Free For All';
             this.maxPlayers = 4;
             this.width = width;
             this.height = height;
@@ -104,7 +104,7 @@ export default class Map {
     assignSpawnToClient(team: string) {
         let spawnPoint = new Vector(0, 0);
 
-        if (this.gameType == "Deathmatch")
+        if (this.gameType == "Free For All")
             spawnPoint = this.spawns.any[Math.floor(Math.random() * this.spawns.any.length)];
         else
             spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];

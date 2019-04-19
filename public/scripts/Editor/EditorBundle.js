@@ -1,21 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var $ = require('jquery');
+var io = require("socket.io-client");
+var Menu_1 = require("../Main/Menu");
 exports.Editor = {
+    menu: null,
     active: true,
     elem: null,
     showGrid: true,
+    socket: null,
     portalOrigin: null,
     init: function () {
+        var self = this;
+        this.menu = new Menu_1.default();
         this.menuSetup();
         map.init(20, 20, false);
         input.view.set(map.width / 2, map.height / 2);
+        //        this.socket = io();
+        this.socket = io('http://192.168.1.21:3000');
+        this.socket.on('loadMaps', function (mapsInfos) {
+            console.log(mapsInfos);
+            self.menu.show();
+            self.menu.showGameTypes(mapsInfos);
+        });
+        this.socket.on('saveMap', function () {
+            console.log('map saved');
+        });
     },
     /**
      * Saves the map to a json file (Editor method)
      */
     saveData: function () {
-        var gameType = $("#editor_Game_type_id").val();
+        var gameType = $("#editor_Game_type_id option:selected").text();
         var maxPlayers = $("#editor_Max_players_id").val();
         var width = $("#editor_Width_id").val();
         var height = $("#editor_Height_id").val();
@@ -36,34 +52,42 @@ exports.Editor = {
             width: width,
             height: height
         };
-        var filename = (gameType + '_' + name).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.json';
-        var json = JSON.stringify(data);
-        localStorage.setItem('tileData', json);
-        var blob = new Blob([json], { type: "octet/stream" });
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        document.body.append(a);
-        a.href = url;
-        a.download = filename;
-        a.click();
-        $(a).remove();
-        window.URL.revokeObjectURL(url);
+        this.socket.emit('saveMap', data);
+        /*        let filename = (gameType + '_' + name).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.json';
+
+                var json = JSON.stringify(data);
+                localStorage.setItem('tileData', json);
+
+                var blob = new Blob([json], { type: "octet/stream" });
+                var url = window.URL.createObjectURL(blob);
+
+                var a = document.createElement('a');
+                document.body.append(a);
+                a.href = url;
+                a.download = filename;
+                a.click();
+                $(a).remove();
+                window.URL.revokeObjectURL(url);*/
     },
     /**
      * Loads the json file into the map (Editor method)
      */
-    loadData: function (e) {
+    loadData: function () {
+        this.socket.emit('loadMaps');
+        /*
         if (e.target.files[0]) {
             var tmppath = URL.createObjectURL(e.target.files[0]);
             $.getJSON(tmppath, function (data) {
+
                 $("#editor_Game_type_id").val(data.gameType);
                 $("#editor_Max_players_id").val(data.maxPlayers);
                 $("#editor_Width_id").val(data.width);
                 $("#editor_Height_id").val(data.height);
                 $("#editor_Name_id").val(data.name);
+
                 map.parseMap(data);
             });
-        }
+        }*/
     },
     /**
      * perform user interactions with the map
@@ -74,7 +98,7 @@ exports.Editor = {
             var py = input.mouse.map.y;
             if (!(map.data[px] !== undefined && map.data[px][py] !== undefined))
                 return;
-            var selected = $("#editor_Brush_type_id").val();
+            var selected = $("#editor_Brush_type_id option:selected").text();
             if (selected == "Smart Paint") {
                 if (input.mouse.left)
                     this.paint(px, py);
@@ -84,15 +108,15 @@ exports.Editor = {
             else {
                 if (input.mouse.left) {
                     if (selected == "Add Spawn")
-                        this.addPickup("spawn_" + $("#editor_Spawn_team_id").val(), px, py);
+                        this.addPickup("spawn_" + $("#editor_Spawn_team_id option:selected").text(), px, py);
                     if (selected == "Add Flag (CTF)")
-                        this.addPickup("flag_" + $("#editor_Flag_team_id").val(), px, py);
+                        this.addPickup("flag_" + $("#editor_Flag_team_id option:selected").text(), px, py);
                     if (selected == "Add Weapons")
-                        this.addPickup($("#editor_Weapon_id").val(), px, py);
+                        this.addPickup($("#editor_Weapon_id option:selected").text(), px, py);
                     if (selected == "Add Pickups")
-                        this.addPickup($("#editor_Pickup_id").val(), px, py);
+                        this.addPickup($("#editor_Pickup_id option:selected").text(), px, py);
                     if (selected == "Add Portals")
-                        this.addPortal($("#editor_Portal_id").val(), px, py);
+                        this.addPortal($("#editor_Portal_id option:selected").text(), px, py);
                 }
                 if (input.mouse.right) {
                     if (selected == "Add Portals")
@@ -111,14 +135,14 @@ exports.Editor = {
         exports.Editor.elem = document.getElementById("Editor");
         exports.Editor.addEditorItem([{ block: "File", block_id: "block_file" }]);
         exports.Editor.addEditorItem([
-            { block_id: "block_file", type: "file", label: "Load", accept: ".json", onchangeEvent: function (e) { exports.Editor.loadData(e); } },
+            { block_id: "block_file", type: "button", value: "Load", onclick: "Editor.loadData()" },
             { block_id: "block_file", type: "button", value: "Save", onclick: "Editor.saveData()" }
         ]);
         exports.Editor.addEditorItem([{ block: "Terrain", block_id: "block_terrain" }]);
         exports.Editor.addEditorItem([{ block_id: "block_terrain", type: "text", label: "Name", value: 'New map' }]);
         exports.Editor.addEditorItem([{
-                block_id: "block_terrain", type: "select", label: "Main type", list: [
-                    { text: "Deathmatch" }, { text: "Team Deathmatch" }, { text: "Capture The Flag" }
+                block_id: "block_terrain", type: "select", label: "Game type", list: [
+                    { text: "Free For All" }, { text: "Team Deathmatch" }, { text: "Capture The Flag" }
                 ]
             }]);
         exports.Editor.addEditorItem([{ block_id: "block_terrain", type: "number", label: "Max players", value: 4 }]);
@@ -245,10 +269,10 @@ exports.Editor = {
                 input = document.createElement("select");
                 for (var i = 0; i < item.list.length; i++) {
                     var opt = document.createElement("option");
-                    var option = option = item.list[i].text;
-                    opt.value = option;
-                    opt.text = option;
-                    opt.selected = (opt.value == item.value);
+                    var option = item.list[i];
+                    opt.value = 'val' + i;
+                    opt.text = option.text;
+                    opt.selected = (opt.text == item.text);
                     if (item.linkedList) {
                         var link = item.list[i].link;
                         opt.setAttribute("data-link", link);

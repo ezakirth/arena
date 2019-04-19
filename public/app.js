@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var socketIO = require("socket.io");
 var path = require("path");
-var UUIDV1 = require("uuid/v1");
 var PORT = process.env.PORT || 3000;
 var root = path.resolve(__dirname, '..');
 var INDEX = path.join(__dirname, '/index.html');
@@ -12,41 +11,21 @@ var http = express()
     .get('/', function (req, res) {
     if (typeof (req.query.admin) == 'string')
         return res.sendFile(__dirname + '/admin.html');
+    if (typeof (req.query.editor) == 'string')
+        return res.sendFile(__dirname + '/editor.html');
     else
         return res.sendFile(INDEX);
 }).get('/*', function (req, res, next) { return res.sendFile(__dirname + '/' + req.params[0]); })
     .listen(PORT, function () { return console.log("Listening on " + PORT); });
 var io = socketIO(http);
 var Server_1 = require("./scripts/server/Server");
-var Map_1 = require("./scripts/Map/Map");
 var Pickups_1 = require("./scripts/Pickups/Pickups");
 var Timer_1 = require("./scripts/common/Timer");
 var FileSystem = require("fs");
 global.pickups = new Pickups_1.default();
 global.time = new Timer_1.default();
 global.server = new Server_1.default(io);
-FileSystem.readdirSync(__dirname + '/maps/').forEach(function (file) {
-    var mapPath = __dirname + '/maps/' + file;
-    var map = new Map_1.default().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
-    var mapInfo = {
-        id: UUIDV1(),
-        name: map.name,
-        gameType: map.gameType,
-        maxPlayers: map.maxPlayers,
-        width: map.width,
-        height: map.height,
-        mapData: map.data,
-        path: mapPath
-    };
-    var mapInfoForClients = {
-        id: mapInfo.id,
-        name: mapInfo.name,
-        gameType: mapInfo.gameType,
-        maxPlayers: mapInfo.maxPlayers
-    };
-    server.mapsInfo.push(mapInfo);
-    server.mapsInfoForClients.push(mapInfoForClients);
-});
+server.loadMaps(__dirname + '/maps/');
 io.on('connection', function (socket) {
     server.welcome(socket);
     var fakeLag = false;
@@ -103,6 +82,15 @@ io.on('connection', function (socket) {
         else {
             socket.emit('pongtest');
         }
+    });
+    // editor stuff
+    socket.on('saveMap', function (mapData) {
+        var filename = (mapData.gameType + '_' + mapData.name).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.json';
+        FileSystem.writeFileSync(__dirname + '/maps/' + filename, JSON.stringify(mapData));
+    });
+    socket.on('loadMaps', function () {
+        server.loadMaps(__dirname + '/maps/');
+        socket.emit('loadMaps', server.mapsInfo);
     });
     // admin stuff
     socket.on('admin', function () {

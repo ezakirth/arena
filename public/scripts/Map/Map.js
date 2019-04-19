@@ -27,7 +27,7 @@ var Map = /** @class */ (function () {
         var data = JSON.parse(localStorage.getItem('tileData'));
         if (!this.data || forceNew) {
             this.name = 'New map';
-            this.gameType = 'Deathmatch';
+            this.gameType = 'Free For All';
             this.maxPlayers = 4;
             this.width = width;
             this.height = height;
@@ -75,7 +75,7 @@ var Map = /** @class */ (function () {
      */
     Map.prototype.assignSpawnToClient = function (team) {
         var spawnPoint = new Vector_1.default(0, 0);
-        if (this.gameType == "Deathmatch")
+        if (this.gameType == "Free For All")
             spawnPoint = this.spawns.any[Math.floor(Math.random() * this.spawns.any.length)];
         else
             spawnPoint = this.spawns[team][Math.floor(Math.random() * this.spawns[team].length)];

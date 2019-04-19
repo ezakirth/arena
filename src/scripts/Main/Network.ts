@@ -66,7 +66,7 @@ export default class Network {
             main.localClientId = serverData.clientId;
             main.lobbies = serverData.lobbies;
             main.mapList = serverData.mapList;
-            main.menu.show();
+            main.menu.showLobbies();
         });
 
         this.socket.on('acceptJoin', function (serverData) {
@@ -224,17 +224,17 @@ export default class Network {
             // random projectiles that won't be pushed to server
             for (let i = 0; i < 8; i++) {
                 let ang = (-15 + Math.random() * 30) * Math.PI / 180;
-                projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
+                projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Free For All' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
                 main.projectiles.push(projectile);
             }
-            projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, client.direction, client.infos.weapon);
+            projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Free For All' ? 'any' : client.infos.enemyTeam), client.position, client.direction, client.infos.weapon);
             main.projectiles.push(projectile);
         }
         else {
             let ang = 0;
             if (client.infos.weapon.name == "blastgun")
                 ang = (-5 + Math.random() * 10) * Math.PI / 180;
-            projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Deathmatch' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
+            projectile = new Projectile(client.networkData.lobbyId, client.networkData.clientId, (map.gameType == 'Free For All' ? 'any' : client.infos.enemyTeam), client.position, Vector._rotate(client.direction, ang), client.infos.weapon);
             main.projectiles.push(projectile);
         }
         this.socket.emit('shoot', projectile);

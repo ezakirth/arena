@@ -7,6 +7,7 @@ var Client_server_1 = require("../Client/Client.server");
 var Lobby_1 = require("./Lobby");
 var Vector_1 = require("../common/Vector");
 var FileSystem = require("fs");
+var UUIDV1 = require("uuid/v1");
 var Server = /** @class */ (function () {
     function Server(io) {
         this.io = io;
@@ -188,6 +189,33 @@ var Server = /** @class */ (function () {
                 }
             }
         }
+    };
+    Server.prototype.loadMaps = function (path) {
+        var _this = this;
+        this.mapsInfo = [];
+        this.mapsInfoForClients = [];
+        FileSystem.readdirSync(path).forEach(function (file) {
+            var mapPath = path + file;
+            var map = new Map_1.default().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
+            var mapInfo = {
+                id: UUIDV1(),
+                name: map.name,
+                gameType: map.gameType,
+                maxPlayers: map.maxPlayers,
+                width: map.width,
+                height: map.height,
+                mapData: map.data,
+                path: mapPath
+            };
+            var mapInfoForClients = {
+                id: mapInfo.id,
+                name: mapInfo.name,
+                gameType: mapInfo.gameType,
+                maxPlayers: mapInfo.maxPlayers
+            };
+            _this.mapsInfo.push(mapInfo);
+            _this.mapsInfoForClients.push(mapInfoForClients);
+        });
     };
     return Server;
 }());

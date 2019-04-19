@@ -1,7 +1,9 @@
 import Network from "./Network";
 import Main from "./Main";
+import Map from "../Map/Map";
 
 declare var main: Main;
+declare var map: Map;
 declare var network: Network;
 
 var $ = require('jquery');
@@ -32,8 +34,15 @@ export default class Menu {
         });
     }
 
-
     show() {
+        $('#Menu').css({ 'display': 'flex' });
+    }
+
+    hide() {
+        $('#Menu').css({ 'display': 'none' });
+    }
+
+    showLobbies() {
         let _this = this;
 
         main.lobbies.push({ empty: true, id: '' });
@@ -44,7 +53,7 @@ export default class Menu {
 
             let type = lobby.gameType;
             if (type == "Capture The Flag") type = 'CTF';
-            if (type == "Deathmatch") type = 'DM';
+            if (type == "Free For All") type = 'FFA';
             if (type == "Team Deathmatch") type = 'Team DM';
 
             let elem = document.createElement('div');
@@ -76,7 +85,7 @@ export default class Menu {
                     main.localClientName = name;
 
                     if (lobby.empty) {
-                        _this.showGameTypes();
+                        _this.showGameTypes(main.mapList, main);
                         return;
                     }
 
@@ -89,54 +98,79 @@ export default class Menu {
 
             $('.lobbyContainer').append(elem);
         }
-        $('#Menu').css({ 'display': 'flex' });
+        this.show();
     }
 
-    hide() {
-        $('#Menu').css({ 'display': 'none' });
-    }
 
-    showGameTypes() {
+    showGameTypes(mapList, main) {
         $('.lobbyContainer').empty();
-        let DM = $('<div class="itemLobby">Deathmatch (DM)</div>')[0];
+        let _this = this;
+
+        let FFA = $('<div class="itemLobby">Free For All (FFA)</div>')[0];
+        FFA.onclick = function () { _this.showMaps(mapList, "Free For All", main); };
+        $('.lobbyContainer').append(FFA);
+
         let TDM = $('<div class="itemLobby">Team Deathmatch (Team DM)</div>')[0];
-        let CTF = $('<div class="itemLobby">Capture The Flag (CTF)</div>')[0];
-        let back = $('<div class="itemLobby">Go back</div>')[0];
-
-        let _this = this;
-        DM.onclick = function () { _this.showMaps("Deathmatch"); };
-        TDM.onclick = function () { _this.showMaps("Team Deathmatch"); };
-        CTF.onclick = function () { _this.showMaps("Capture The Flag"); };
-        back.onclick = function () { main.lobbies.pop(); _this.show() };
-
-        $('.lobbyContainer').append(DM);
+        TDM.onclick = function () { _this.showMaps(mapList, "Team Deathmatch", main); };
         $('.lobbyContainer').append(TDM);
+
+        let CTF = $('<div class="itemLobby">Capture The Flag (CTF)</div>')[0];
+        CTF.onclick = function () { _this.showMaps(mapList, "Capture The Flag", main); };
         $('.lobbyContainer').append(CTF);
-        $('.lobbyContainer').append(back);
+
+        if (main) {
+            let back = $('<div class="itemLobby">Go back</div>')[0];
+            back.onclick = function () { main.lobbies.pop(); _this.show() };
+            $('.lobbyContainer').append(back);
+        }
     }
 
-    showMaps(gameType) {
+    showMaps(mapList, gameType, main) {
         $('.lobbyContainer').empty();
         let _this = this;
-        for (let mapInfo of main.mapList) {
+        for (let mapInfo of mapList) {
             if (mapInfo.gameType == gameType) {
                 let type = mapInfo.gameType;
                 if (type == "Capture The Flag") type = 'CTF';
-                if (type == "Deathmatch") type = 'DM';
+                if (type == "Free For All") type = 'FFA';
                 if (type == "Team Deathmatch") type = 'Team DM';
 
                 let mapDiv = $('<div class="itemLobby">' + type + ' - ' + mapInfo.name + ' (' + mapInfo.maxPlayers + ' players)' + '</div>')[0];
                 mapDiv.onclick = function () {
                     $('.lobbyContainer').empty();
-                    main.lobbyId = '';
-                    network.askToJoin(mapInfo.id);
+                    if (main) {
+                        main.lobbyId = '';
+                        network.askToJoin(mapInfo.id);
+                    }
+                    else {
+                        let data = {
+                            name: mapInfo.name,
+                            gameType: mapInfo.gameType,
+                            maxPlayers: mapInfo.maxPlayers,
+                            mapData: mapInfo.mapData,
+                            width: mapInfo.width,
+                            height: mapInfo.height
+                        };
+
+                        let gameTypeVal = $('#editor_Game_type_id option').filter(function () {
+                            return $(this).text() === data.gameType;
+                        }).val();
+
+                        $("#editor_Game_type_id").val(gameTypeVal);
+                        $("#editor_Max_players_id").val(data.maxPlayers);
+                        $("#editor_Width_id").val(data.width);
+                        $("#editor_Height_id").val(data.height);
+                        $("#editor_Name_id").val(data.name);
+
+                        map.parseMap(data);
+                    }
                     _this.hide();
                 }
                 $('.lobbyContainer').append(mapDiv);
             }
         }
         let back = $('<div class="itemLobby">Go back</div>')[0];
-        back.onclick = function () { _this.showGameTypes() };
+        back.onclick = function () { _this.showGameTypes(mapList, null) };
         $('.lobbyContainer').append(back);
 
     }

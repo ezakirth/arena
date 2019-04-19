@@ -1,7 +1,6 @@
 import express = require('express');
 import socketIO = require('socket.io');
 import path = require('path');
-import UUIDV1 = require('uuid/v1');
 const PORT = process.env.PORT || 3000;
 
 const root = path.resolve(__dirname, '..');
@@ -12,6 +11,8 @@ const http = express()
     .get('/', function (req, res) {
         if (typeof (req.query.admin) == 'string')
             return res.sendFile(__dirname + '/admin.html');
+        if (typeof (req.query.editor) == 'string')
+            return res.sendFile(__dirname + '/editor.html');
         else
             return res.sendFile(INDEX);
     }).get('/*', (req, res, next) => res.sendFile(__dirname + '/' + req.params[0]))
@@ -36,31 +37,8 @@ global.pickups = new Pickups();
 global.time = new Timer();
 global.server = new Server(io);
 
-FileSystem.readdirSync(__dirname + '/maps/').forEach(file => {
-    let mapPath = __dirname + '/maps/' + file;
-    let map = new Map().parseMap(JSON.parse(FileSystem.readFileSync(mapPath).toString()));
+server.loadMaps(__dirname + '/maps/');
 
-    let mapInfo = {
-        id: UUIDV1(),
-        name: map.name,
-        gameType: map.gameType,
-        maxPlayers: map.maxPlayers,
-        width: map.width,
-        height: map.height,
-        mapData: map.data,
-        path: mapPath
-    }
-
-    let mapInfoForClients = {
-        id: mapInfo.id,
-        name: mapInfo.name,
-        gameType: mapInfo.gameType,
-        maxPlayers: mapInfo.maxPlayers
-    }
-
-    server.mapsInfo.push(mapInfo);
-    server.mapsInfoForClients.push(mapInfoForClients);
-});
 
 io.on('connection', function (socket: SocketIO.Socket) {
     server.welcome(socket);
@@ -128,7 +106,16 @@ io.on('connection', function (socket: SocketIO.Socket) {
         }
     });
 
+    // editor stuff
+    socket.on('saveMap', function (mapData) {
+        let filename = (mapData.gameType + '_' + mapData.name).replace(/[^a-z0-9]/gi, '_').toLowerCase() + '.json';
 
+        FileSystem.writeFileSync(__dirname + '/maps/' + filename, JSON.stringify(mapData));
+    });
+    socket.on('loadMaps', function () {
+        server.loadMaps(__dirname + '/maps/');
+        socket.emit('loadMaps', server.mapsInfo);
+    });
 
 
     // admin stuff
