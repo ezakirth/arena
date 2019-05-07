@@ -16,8 +16,7 @@ exports.Editor = {
         this.menuSetup();
         map.init(20, 20, false);
         input.view.set(map.width / 2, map.height / 2);
-        //        this.socket = io();
-        this.socket = io('http://192.168.1.21:3000');
+        this.socket = io(); //'http://192.168.1.21:3000');
         this.socket.on('loadMaps', function (mapsInfos) {
             console.log(mapsInfos);
             self.menu.show();
